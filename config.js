@@ -1,4 +1,4 @@
 window.RC_CONFIG = {
-  supabaseUrl: 'COLE_AQUI_A_URL_DO_PROJETO',
-  supabaseKey: 'COLE_AQUI_A_CHAVE_PUBLICA'
+  supabaseUrl: 'https://hnzaowfyztgqezpsortg.supabase.co/rest/v1/',
+  supabaseKey: 'sb_publishable_0wLVWm9jBYKYp18EEcJXDA_pLtMUZJ4'
 };
