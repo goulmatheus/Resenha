@@ -285,6 +285,10 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{outline-color:va
 .sheetov{animation:fadeIn .2s ease both}
 .bar .s,.bar .p{transition:width .5s ease}
 @media (prefers-reduced-motion:reduce){*,*:before,*:after{animation:none !important;transition:none !important}}
+.astf{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:0 10px}
+.ast-sum{background:var(--soft);border-left:4px solid var(--blue);padding:10px 12px;margin:8px 0 6px;font-size:15px;border-radius:0 8px 8px 0}
+.ast-line{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-top:1px solid var(--line)}
+.ast-line .pill{margin-top:2px;min-width:104px;text-align:center}
 /* modo escuro */
 html[data-theme=dark] .warn{background:#3a2f10;color:#f1e3b8}
 html[data-theme=dark] .pill.ok,html[data-theme=dark] .st.go{background:#10372a;color:#5fd69b}
@@ -690,6 +694,123 @@ function simStandings(c,group,sim){
   return standings(cc,group);
 }
 
+
+// ---- assistente de cenários (cálculo exato, sem IA) ----
+function standingsWith(c,group,scores){
+  const cc={...c,games:c.games.map(x=>scores[x.id]?{...x,hs:scores[x.id][0],as:scores[x.id][1],played:true,live:false,events:[]}:x)};
+  return standings(cc,group);
+}
+function astSetup(c,group){
+  const rows=standings(c,group),ids=rows.map(r=>r.id),inSet=new Set(ids);
+  const rem=c.games.filter(g=>g.phase==='liga'&&!counted(g)&&!g.bye&&inSet.has(g.home)&&inSet.has(g.away));
+  const base={};rows.forEach(r=>base[r.id]=r.p);
+  return{rows,ids,rem,base};
+}
+function addPts(c,p,g,o){
+  if(o===0){p[g.home]+=c.pts.w;p[g.away]+=c.pts.l}
+  else if(o===1){p[g.home]+=c.pts.d;p[g.away]+=c.pts.d}
+  else{p[g.away]+=c.pts.w;p[g.home]+=c.pts.l}
+}
+function rankBounds(p,ids,tid){let gt=0,eq=0;for(const j of ids){if(j===tid)continue;if(p[j]>p[tid])gt++;else if(p[j]===p[tid])eq++}return[1+gt,1+gt+eq]}
+// alvo: {mode:'top',n} (ficar entre os n primeiros) ou {mode:'pos',n} (ficar exatamente em n)
+function targetTest(t,best,worst){
+  if(t.mode==='top')return[worst<=t.n,best<=t.n];
+  return[best===t.n&&worst===t.n,best<=t.n&&t.n<=worst];
+}
+const digits=(x,k)=>{const o=[];for(let i=0;i<k;i++){o.push(x%3);x=Math.floor(x/3)}return o};
+function needFor(c,group,tid,target){
+  const{rows,ids,rem,base}=astSetup(c,group),me=rows.find(r=>r.id===tid);
+  const out={tid,target,group,rem:rem.length,rows,me};
+  if(!me){out.err='Time fora do grupo';return out}
+  if(rem.length>10){out.many=true;return out}
+  const own=rem.filter(g=>g.home===tid||g.away===tid),oth=rem.filter(g=>!(g.home===tid||g.away===tid));
+  const k=own.length,m=oth.length,K=Math.pow(3,k),M=Math.pow(3,m);
+  out.own=own;out.oth=oth;out.cases=[];
+  let bestAll=99,worstAll=0,minG=null,minC=null;
+  for(let a=0;a<K;a++){
+    const ao=digits(a,k),pa={...base};
+    own.forEach((g,i)=>addPts(c,pa,g,ao[i]));
+    let sure=0,poss=0;const rec=[];
+    for(let b=0;b<M;b++){
+      const bo=digits(b,m),p={...pa};
+      oth.forEach((g,i)=>addPts(c,p,g,bo[i]));
+      const[bs,ws]=rankBounds(p,ids,tid),[s,q]=targetTest(target,bs,ws);
+      if(s)sure++;if(q)poss++;
+      if(bs<bestAll)bestAll=bs;if(ws>worstAll)worstAll=ws;
+      rec.push({bo,s,q});
+    }
+    const status=sure===M?'garantido':poss===0?'impossivel':sure>0?'depende':'desempate';
+    let cond=[];
+    if(status==='depende'||status==='desempate'){
+      const key=status==='depende'?'s':'q';
+      oth.forEach((g,j)=>{
+        const set=[0,1,2].filter(o=>status==='depende'?rec.filter(r=>r.bo[j]===o).every(r=>r.s):rec.some(r=>r.bo[j]===o&&r.q));
+        if(set.length&&set.length<3)cond.push({gid:g.id,outs:set});
+      });
+      cond.sort((x,y)=>x.outs.length-y.outs.length);
+      if(status==='depende')cond=cond.slice(0,2);
+    }
+    const fin=pa[tid];
+    if(status==='garantido'&&(minG===null||fin<minG))minG=fin;
+    if(poss>0&&(minC===null||fin<minC))minC=fin;
+    out.cases.push({ao,fin,status,cond,pct:sure/M,sure,total:M});
+  }
+  out.best=bestAll;out.worst=worstAll;out.minGuarantee=minG;out.minChance=minC;
+  out.maxPts=me.p+own.reduce((s,g)=>s+c.pts.w,0);
+  return out;
+}
+function predTest(pred,pos,adv){return pred.mode==='top'?pos<=adv:pred.mode==='out'?pos>adv:pos===pred.n}
+// margens do resultado de UM jogo (do ponto de vista do mandante), outros jogos livres ou fixados
+function marginFor(c,group,gid,tid,pred,fixed){
+  const{rem}=astSetup(c,group),g=rem.find(x=>x.id===gid);
+  if(!g)return{err:'Jogo não encontrado ou já disputado'};
+  const adv=c.advance||0,others=rem.filter(x=>x.id!==gid),fx=fixed||{};
+  const free=others.filter(x=>!fx[x.id]);
+  if(free.length>5)return{many:true,free:free.length,game:g};
+  const mp={h:[1,0],d:[0,0],a:[0,1]},LIM=8,M=Math.pow(3,free.length),res=[];
+  for(let m=-LIM;m<=LIM;m++){
+    let yes=0,pmin=99,pmax=0;
+    for(let b=0;b<M;b++){
+      const scores={[gid]:[Math.max(m,0),Math.max(-m,0)]};
+      others.forEach(o=>{if(fx[o.id])scores[o.id]=mp[fx[o.id]]});
+      const dg=digits(b,free.length);
+      free.forEach((o,i)=>{scores[o.id]=[[1,0],[0,0],[0,1]][dg[i]]});
+      const rows=standingsWith(c,group,scores),pos=rows.findIndex(r=>r.id===tid)+1;
+      if(predTest(pred,pos,adv))yes++;
+      if(pos<pmin)pmin=pos;if(pos>pmax)pmax=pos;
+    }
+    res.push({m,status:yes===M?'sempre':yes===0?'nunca':'depende',pmin,pmax,yes,total:M});
+  }
+  return{game:g,res,free:free.length,fixed:others.length-free.length,LIM};
+}
+const golTxt=n=>n+(n===1?' gol':' gols');
+function marginPhrases(list,home,away,LIM){
+  const has=new Set(list);let allN=true,allP=true;for(let i=1;i<=LIM;i++){if(!has.has(-i))allN=false;if(!has.has(i))allP=false}
+  if(allN&&allP)return has.has(0)?['qualquer resultado']:['não terminar empatado'];
+  const segs=[];let s=null,p=null;
+  for(const m of list){if(s===null){s=m;p=m}else if(m===p+1)p=m;else{segs.push([s,p]);s=m;p=m}}
+  if(s!==null)segs.push([s,p]);
+  const out=[];
+  const rng=(a,b)=>a===b?`por exatamente ${golTxt(a)}`:b>=LIM?`por ${golTxt(a)} ou mais`:`por ${a} a ${golTxt(b)}`;
+  for(const[lo,hi]of segs){
+    const hasNeg=lo<=-1,hasZero=lo<=0&&hi>=0,hasPos=hi>=1;
+    const nl=hasNeg?lo:null,nh=hasNeg?Math.min(hi,-1):null,pl=hasPos?Math.max(lo,1):null;
+    const negFull=hasNeg&&nl<=-LIM&&nh===-1,posFull=hasPos&&hi>=LIM&&pl===1;
+    if(hasNeg&&hasZero&&hasPos&&negFull&&posFull){out.push('qualquer resultado');continue}
+    if(hasZero&&posFull&&!hasNeg){out.push(`${home} não perder (vitória ou empate)`);continue}
+    if(hasZero&&negFull&&!hasPos){out.push(`${away} não perder (vitória ou empate)`);continue}
+    if(negFull&&posFull&&!hasZero){out.push('não terminar empatado');continue}
+    if(hasNeg)out.push(`${away} vencer ${rng(-nh,-nl)}`);
+    if(hasZero)out.push('empate');
+    if(hasPos)out.push(`${home} vencer ${rng(pl,hi)}`);
+  }
+  return out;
+}
+function condText(c,cd){
+  const g=c.games.find(x=>x.id===cd.gid),h=(tmById(c,g.home)||{}).name,a=(tmById(c,g.away)||{}).name,s=cd.outs.join('');
+  return s==='0'?`${h} vencer ${a}`:s==='1'?`${h} e ${a} empatarem`:s==='2'?`${a} vencer ${h}`:s==='01'?`${a} não vencer ${h}`:s==='12'?`${h} não vencer ${a}`:`${h} × ${a} não terminar empatado`;
+}
+
 // ---- destaques estatísticos ----
 function statBest(T){
   const pl=T.filter(x=>x.j>0);
@@ -968,14 +1089,86 @@ function cenariosView(c){
     let sim='';
     if(rem.length){
       const proj=simStandings(c,gr,S.sim);
-      sim=`<div class="sep" style="margin:0;padding:10px 16px;background:#f7f9fd">Simulador <button class="btn ghost sm" data-act="simClear" data-g="${esc(gr)}">Limpar</button></div>${rem.map(g=>{
+      sim=`<div class="sep" style="margin:0;padding:10px 16px;background:var(--surf2)">Simulador <span style="display:inline-flex;gap:6px;flex-wrap:wrap"><button class="btn ghost sm" data-act="simFill" data-g="${esc(gr)}" data-v="d">Tudo empate</button><button class="btn ghost sm" data-act="simFill" data-g="${esc(gr)}" data-v="h">Mandantes vencem</button><button class="btn ghost sm" data-act="simFill" data-g="${esc(gr)}" data-v="a">Visitantes vencem</button><button class="btn ghost sm" data-act="simClear" data-g="${esc(gr)}">Limpar</button></span></div>${rem.map(g=>{
         const th=tmById(c,g.home),ta=tmById(c,g.away),v=S.sim[g.id]||'';
         return`<div class="simrow"><div class="t r"><span>${esc(th.name)}</span>${badge(th,'sm')}</div><div class="opt"><button class="${v==='h'?'on':''}" data-act="sim" data-id="${esc(g.id)}" data-v="h">1</button><button class="${v==='d'?'on':''}" data-act="sim" data-id="${esc(g.id)}" data-v="d">X</button><button class="${v==='a'?'on':''}" data-act="sim" data-id="${esc(g.id)}" data-v="a">2</button></div><div class="t">${badge(ta,'sm')}<span>${esc(ta.name)}</span></div></div>`;
-      }).join('')}<div class="sep" style="margin:0;padding:10px 16px;background:#f7f9fd">Tabela projetada</div><div style="overflow-x:auto"><table>${tableHead(false)}<tbody>${tableRows(c,proj,adv,false)}</tbody></table></div><div class="legend"><span>Resultados simulados contam como 1 × 0 / 0 × 0 / 0 × 1. Só para projeção, nada é salvo.</span></div>`;
+      }).join('')}<div class="sep" style="margin:0;padding:10px 16px;background:var(--surf2)">Tabela projetada</div><div style="overflow-x:auto"><table>${tableHead(false)}<tbody>${tableRows(c,proj,adv,false)}</tbody></table></div><div class="legend"><span>Resultados simulados contam como 1 × 0 / 0 × 0 / 0 × 1. Só para projeção, nada é salvo.</span></div>`;
     }
     return`<div class="card"><div class="th yl">${head}<small style="color:#333">${sc.rem} jogos restantes · ${adv} vaga${adv>1?'s':''}</small></div>${tbl}${sim}</div>`;
   }).join('');
-  return note+(out||emptyBlock('Sem dados','',''));
+  return astCard(c)+note+(out||emptyBlock('Sem dados','',''));
+}
+
+
+// ---- assistente de cenários ----
+function astCard(c){
+  const groups=groupsOf(c).filter(gr=>gr!==''||c.format!=='grupos');
+  const A=S.ast=S.ast||{kind:'need',grp:null,tid:null,tgt:'top',gid:null,pred:'top'};
+  if(!groups.includes(A.grp))A.grp=groups[0];
+  const rows=standings(c,A.grp);if(rows.length<2)return'';
+  const adv=c.advance||0;
+  if(!rows.some(r=>r.id===A.tid))A.tid=rows[0].id;
+  if(A.tgt!=='top'&&!(+A.tgt>=1&&+A.tgt<=rows.length))A.tgt='top';
+  if(!['top','out'].includes(A.pred)&&!(+A.pred>=1&&+A.pred<=rows.length))A.pred='top';
+  const rem=astSetup(c,A.grp).rem;
+  if(!rem.some(g=>g.id===A.gid))A.gid=(rem.find(g=>g.home===A.tid||g.away===A.tid)||rem[0]||{}).id||null;
+  const T=tmById(c,A.tid),nm=id=>(tmById(c,id)||{}).name||'?';
+  const pos=Array.from({length:rows.length},(_,i)=>i+1);
+  const opt=(v,l,cur)=>`<option value="${esc(v)}" ${String(v)===String(cur)?'selected':''}>${esc(l)}</option>`;
+  const fld=(l,k,html)=>`<label>${l}<select data-ast="${k}">${html}</select></label>`;
+  let f=fld('Pergunta','kind',opt('need','O que o time precisa para…',A.kind)+opt('margin','Por quantos gols… (resultado de um jogo)',A.kind));
+  if(c.format==='grupos')f+=fld('Grupo','grp',groups.map(g=>opt(g,'Grupo '+g,A.grp)).join(''));
+  f+=fld('Time','tid',rows.map(r=>opt(r.id,nm(r.id),A.tid)).join(''));
+  if(A.kind==='need')f+=fld('Objetivo','tgt',(adv?opt('top',`se classificar (${adv} primeiro${adv>1?'s':''})`,A.tgt):'')+pos.map(p=>opt(p,`ficar em ${p}º`,A.tgt)).join(''));
+  else{
+    f+=fld('Jogo',  'gid',rem.map(g=>opt(g.id,`${roundLabel(c,g.round)}: ${nm(g.home)} × ${nm(g.away)}`,A.gid)).join(''));
+    f+=fld('Quero que o time','pred',(adv?opt('top','se classifique',A.pred)+opt('out','fique fora da classificação',A.pred):'')+pos.map(p=>opt(p,`fique em ${p}º`,A.pred)).join(''));
+  }
+  let res='';
+  const pill=(k,t)=>`<span class="pill ${k}">${t}</span>`;
+  if(A.kind==='need'){
+    const target=A.tgt==='top'?{mode:'top',n:adv}:{mode:'pos',n:+A.tgt};
+    const goal=A.tgt==='top'?'se classificar':`ficar em ${A.tgt}º`;
+    const r=needFor(c,A.grp,A.tid,target);
+    if(r.many)res=`<div class="ast-sum">Faltam ${r.rem} jogos neste grupo. A resposta automática aparece quando restarem 10 ou menos.</div>`;
+    else{
+      const sum=`<b>${esc(T.name)}</b> tem <b>${r.me.p} pts</b> e ${r.own.length} jogo${r.own.length===1?'':'s'} a disputar (máximo de ${r.maxPts} pts). Melhor posição possível: <b>${r.best}º</b> · pior: <b>${r.worst}º</b>.${r.minGuarantee!=null?` Garante o objetivo com <b>${r.minGuarantee} pts</b>.`:''}${r.minGuarantee==null&&r.minChance!=null?` Só tem chance com <b>${r.minChance} pts</b> ou mais.`:''}${c.extra&&A.tgt==='top'&&r.worst>adv?` <i>Obs.: a vaga como melhor ${adv+1}º colocado depende dos outros grupos e não entra aqui.</i>`:''}`;
+      let lines='';
+      if(r.own.length>2)lines=`<div class="meta" style="padding:8px 0">O time tem ${r.own.length} jogos a disputar. O detalhe por resultado aparece quando restarem 2 ou menos.</div>`;
+      else lines=r.cases.map(cs=>{
+        const lab=r.own.length?r.own.map((g,i)=>{const o=cs.ao[i],home=g.home===A.tid,opp=nm(home?g.away:g.home);const res=home?o:(o===0?2:o===2?0:1);return res===0?`vencer ${esc(opp)}`:res===1?`empatar com ${esc(opp)}`:`perder para ${esc(opp)}`}).join(' e '):'Sem jogos restantes';
+        let p,txt;
+        if(cs.status==='garantido'){p=pill('ok','Garantido');txt=A.tgt==='top'?'Está dentro em qualquer combinação de resultados.':`Fica em ${A.tgt}º em qualquer combinação de resultados.`}
+        else if(cs.status==='impossivel'){p=pill('no','Não alcança');txt=`Não consegue ${goal} desse jeito.`}
+        else if(cs.status==='depende'){p=pill('op','Depende');txt=`Garante ${goal} se ${cs.cond.map(q=>esc(condText(c,q))).join(' ou se ')||'outros resultados ajudarem'}. Em ${cs.sure} de ${cs.total} combinações dos outros jogos.`}
+        else{p=pill('op','Só no desempate');txt=`Só é possível com o desempate (saldo, gols...)${cs.cond.length?` e se ${cs.cond.map(q=>esc(condText(c,q))).join(' e se ')}`:''}.`}
+        return`<div class="ast-line">${p}<div><b>${esc(lab.charAt(0).toUpperCase()+lab.slice(1))}</b><div class="meta">${txt}</div></div></div>`;
+      }).join('');
+      res=`<div class="ast-sum">${sum}</div>${lines}<div class="meta" style="margin-top:6px">Conta feita pelos pontos de todas as combinações de resultado dos jogos que faltam. O desempate por gols só entra quando indicado.</div>`;
+    }
+  }else{
+    if(!rem.length)res=`<div class="ast-sum">Não há jogos restantes neste grupo.</div>`;
+    else{
+      const pred=A.pred==='top'?{mode:'top'}:A.pred==='out'?{mode:'out'}:{mode:'pos',n:+A.pred};
+      const r=marginFor(c,A.grp,A.gid,A.tid,pred,S.sim);
+      if(r.err)res=`<div class="ast-sum">${esc(r.err)}</div>`;
+      else if(r.many)res=`<div class="ast-sum">Ainda há ${r.free} outros jogos em aberto. Fixe o resultado de alguns no <b>simulador</b> abaixo (máximo de 5 em aberto) e a resposta aparece aqui.</div>`;
+      else{
+        const g=r.game,h=nm(g.home),a=nm(g.away);
+        const goalT=A.pred==='top'?'se classifique':A.pred==='out'?'fique fora da classificação':`fique em ${A.pred}º`;
+        const al=r.res.filter(x=>x.status==='sempre').map(x=>x.m),dp=r.res.filter(x=>x.status==='depende').map(x=>x.m);
+        let txt;
+        if(al.length)txt=`Para <b>${esc(T.name)}</b> ${goalT}: <b>${marginPhrases(al,esc(h),esc(a),r.LIM).join('; ou ')}</b>.`;
+        else txt=`Nenhum resultado de ${esc(h)} × ${esc(a)} garante, sozinho, que ${esc(T.name)} ${goalT}.`;
+        if(dp.length)txt+=` ${al.length?'Além disso, pode':'Pode'} acontecer, dependendo dos outros jogos, se: ${marginPhrases(dp,esc(h),esc(a),r.LIM).join('; ou ')}.`;
+        if(!al.length&&!dp.length)txt=`Em nenhum resultado de ${esc(h)} × ${esc(a)} o time ${esc(T.name)} consegue isso.`;
+        const sit=s=>s==='sempre'?pill('ok','Sim'):s==='nunca'?pill('no','Não'):pill('op','Depende');
+        const trs=r.res.filter(x=>Math.abs(x.m)<=5).map(x=>`<tr><td class="l">${x.m>0?`${esc(h)} vence por ${x.m}`:x.m<0?`${esc(a)} vence por ${-x.m}`:'Empate'}</td><td>${x.pmin===x.pmax?x.pmin+'º':x.pmin+'º a '+x.pmax+'º'}</td><td>${sit(x.status)}</td></tr>`).join('');
+        res=`<div class="ast-sum">${txt}</div><div style="overflow-x:auto"><table><thead><tr><th class="l">Resultado</th><th>Posição de ${esc(T.name)}</th><th>Atinge?</th></tr></thead><tbody>${trs}</tbody></table></div><div class="meta" style="margin-top:6px">Usa o placar mínimo para cada diferença de gols (ex.: 3 de diferença = 3×0). Nos outros jogos, vale 1×0, 0×0 ou 0×1.${r.fixed?` ${r.fixed} jogo${r.fixed>1?'s':''} fixado${r.fixed>1?'s':''} no simulador.`:''}</div>`;
+      }
+    }
+  }
+  return`<div class="card"><div class="th yl">Assistente de cenários<small style="color:#333">cálculo exato, sem chute</small></div><div class="pad"><div class="astf">${f}</div>${res}</div></div>`;
 }
 
 function jogosView(c){
@@ -1649,6 +1842,7 @@ const actions={
   roundsModal,
   sim:d=>{S.sim[d.id]=S.sim[d.id]===d.v?undefined:d.v;if(!S.sim[d.id])delete S.sim[d.id];render()},
   simClear:()=>{S.sim={};render()},
+  simFill:d=>{const c=cur();astSetup(c,d.g).rem.forEach(g=>{S.sim[g.id]=d.v});render()},
   // painel da partida
   pAct:d=>{S.panel.step='pick';S.panel.side=d.side;S.panel.kind=d.kind;S.panel.scorer=undefined;refreshPanel()},
   pCancel:()=>{S.panel.step=null;S.panel.scorer=undefined;refreshPanel()},
@@ -1680,6 +1874,7 @@ document.addEventListener('click',e=>{
 document.addEventListener('change',e=>{
   const d=e.target.dataset||{};
   if(d.flt){S.flt[d.flt]=e.target.value;render()}
+  else if(d.ast){S.ast=S.ast||{};S.ast[d.ast]=e.target.value;if(d.ast==='grp'){S.ast.tid=null;S.ast.gid=null}render()}
   else if(d.chg==='askAst'){S.askAst=e.target.checked}
 });
 document.addEventListener('input',e=>{
