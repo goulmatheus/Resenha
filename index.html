@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Resenha Canguçu · Central de Campeonatos</title>
+<link rel="icon" id="favi" href="data:,">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -19,7 +20,7 @@ button{font:inherit;cursor:pointer}
 /* topo */
 .top{background:var(--blue);color:#fff;border-bottom:4px solid var(--yellow);position:sticky;top:0;z-index:20}
 .top-in{max-width:1100px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:12px}
-.logo{width:40px;height:40px;border-radius:50%;background:#fff;color:var(--blue);display:grid;place-items:center;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:20px;border:3px solid var(--red);flex:none}
+.logo{height:44px;width:auto;flex:none;display:block}
 .brand{line-height:1.05;cursor:pointer;display:flex;align-items:center;gap:10px;background:none;border:0;color:#fff;text-align:left;padding:0}
 .brand b{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:800;text-transform:uppercase;display:block}
 .brand small{opacity:.8;font-size:12px;letter-spacing:.08em;text-transform:uppercase;display:block}
@@ -91,6 +92,7 @@ tbody tr:nth-child(even){background:#fbfcfe}
 td.l,th.l{text-align:left}
 td.pos{width:34px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:18px;color:var(--mut)}
 td.pts{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:22px;color:var(--blue)}
+tr.q3 td.pos{box-shadow:inset 5px 0 0 var(--yellow);color:var(--blue)}
 tr.q td.pos{box-shadow:inset 5px 0 0 var(--blue);color:var(--blue)}
 .tn{display:flex;align-items:center;gap:9px;font-weight:600;min-width:0}
 .tn span.nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -280,30 +282,32 @@ body.tv .wrap{padding:0;max-width:none}
 .sheettools{position:sticky;top:0;z-index:2;display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap;background:#0f1b33;padding:10px;color:#fff;font-weight:600}
 .sheetpage{width:210mm;min-height:297mm;margin:14px auto;background:#fff;color:#0f1b33;font-family:'Barlow',sans-serif;box-shadow:0 8px 30px rgba(0,0,0,.4);padding:0 0 10mm;position:relative}
 .sheetpage *{border-radius:0 !important}
-.sh-head{background:var(--blue);color:#fff;padding:9mm 10mm 5mm;border-bottom:3mm solid var(--yellow);border-left:4mm solid var(--red)}
+.sh-head{background:#fff;color:#000;padding:8mm 10mm 4mm;border-bottom:1.2mm solid #000;display:flex;align-items:center;gap:6mm}
+.sh-head img{height:20mm;width:auto}
+.sh-head .tx{flex:1;min-width:0}
 .sh-head h1{font-family:'Barlow Condensed',sans-serif;font-size:11mm;line-height:1;text-transform:uppercase;font-weight:800}
 .sh-head .m{margin-top:2mm;font-size:4.2mm;opacity:.95}
 .sh-vs{display:grid;grid-template-columns:1fr 14mm 1fr;gap:0;margin:7mm 10mm 0;align-items:stretch}
-.sh-team{border:.5mm solid var(--blue);padding:4mm;text-align:center}
+.sh-team{border:.6mm solid #000;padding:4mm;text-align:center}
+.sh-tags{margin-top:2mm;display:flex;flex-direction:column;gap:1mm;align-items:center}
+.sh-tags span{border:.35mm solid #000;font-weight:700;font-size:3.2mm;padding:.6mm 2mm;text-transform:uppercase;letter-spacing:.03em}
 .sh-team .bd{min-width:22mm;height:22mm;font-size:6mm}
-.sh-team h2{font-family:'Barlow Condensed',sans-serif;font-size:9mm;text-transform:uppercase;line-height:1;margin:2mm 0 1mm;color:var(--blue);font-weight:800}
+.sh-team h2{font-family:'Barlow Condensed',sans-serif;font-size:9mm;text-transform:uppercase;line-height:1;margin:2mm 0 1mm;color:#000;font-weight:800}
 .sh-team .pos{font-size:4mm;color:#5d6779;font-weight:600}
-.sh-x{display:grid;place-items:center;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:12mm;color:var(--red)}
+.sh-x{display:grid;place-items:center;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:12mm;color:#000}
 .sh-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 4mm;margin:4mm 10mm 0}
 .sh-kp{display:grid;grid-template-columns:repeat(5,1fr);gap:1.5mm;margin-bottom:3mm}
-.sh-kp div{background:#eaf1fb;text-align:center;padding:2mm 0;border-bottom:1.2mm solid var(--blue)}
-.sh-kp div:nth-child(2){border-color:var(--yellow)} .sh-kp div:nth-child(3){border-color:var(--red)}
-.sh-kp b{display:block;font-family:'Barlow Condensed',sans-serif;font-size:8mm;line-height:1;color:var(--blue);font-weight:800}
+.sh-kp div{background:#fff;text-align:center;padding:2mm 0;border:.35mm solid #000}
+.sh-kp b{display:block;font-family:'Barlow Condensed',sans-serif;font-size:8mm;line-height:1;color:#000;font-weight:800}
 .sh-kp small{font-size:2.7mm;text-transform:uppercase;letter-spacing:.04em;color:#5d6779;font-weight:700}
-.sh-sec{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:5mm;background:var(--blue);color:#fff;padding:1mm 3mm;margin:3mm 0 0;border-left:2mm solid var(--yellow)}
-.sh-sec.r{border-left-color:var(--red)}
+.sh-sec{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:5mm;background:#111;color:#fff;padding:1mm 3mm;margin:3mm 0 0}
 .sh-li{display:flex;gap:2mm;align-items:center;font-size:3.8mm;padding:1.3mm 2mm;border-bottom:.25mm solid #d6dce8;min-height:7mm}
-.sh-li .tg{width:5.5mm;height:5.5mm;display:inline-grid;place-items:center;color:#fff;font-weight:800;font-size:3.3mm;flex:none}
-.sh-li .tg.V{background:var(--ok)} .sh-li .tg.E{background:#9aa4b6} .sh-li .tg.D{background:var(--red)} .sh-li .tg.N{background:var(--blue)}
+.sh-li .rs{width:6.5mm;height:6.5mm;display:inline-grid;place-items:center;color:#000;background:#fff;border:.4mm solid #000;font-weight:800;font-size:4mm;flex:none}
+.sh-li .rs.V{background:#000;color:#fff}
 .sh-li .n{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.sh-li .v{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:5mm;color:var(--blue)}
-.sh-li .s{color:#5d6779;font-size:3.2mm}
-.sh-none{font-size:3.5mm;color:#5d6779;padding:2mm}
+.sh-li .v{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:5mm;color:#000}
+.sh-li .s{color:#222;font-size:3.2mm;text-align:right}
+.sh-none{font-size:3.5mm;color:#333;padding:2mm}
 .sh-foot{position:absolute;left:10mm;right:10mm;bottom:5mm;font-size:3mm;color:#5d6779;display:flex;justify-content:space-between;border-top:.3mm solid #d6dce8;padding-top:1.5mm}
 @media print{
   @page{size:A4;margin:0}
@@ -326,7 +330,7 @@ body.tv .wrap{padding:0;max-width:none}
   .brand small{display:none}
   .top-in{padding:8px 12px;gap:8px}
   .brand b{font-size:18px;white-space:nowrap}
-  .logo{width:34px;height:34px;font-size:17px}
+  .logo{height:36px}
   .chip{font-size:11.5px;padding:3px 8px;max-width:130px;overflow:hidden;text-overflow:ellipsis}
   th,td{padding:9px 4px;font-size:14px}
   .g3{grid-template-columns:1fr 1fr 1fr}
@@ -339,7 +343,7 @@ body.tv .wrap{padding:0;max-width:none}
 </head>
 <body>
 <header class="top"><div class="top-in">
-  <button class="brand" data-act="home" aria-label="Início"><span class="logo">RC</span><span><b>Resenha Canguçu</b><small>Central de campeonatos</small></span></button>
+  <button class="brand" data-act="home" aria-label="Início"><img class="logo" id="brandlogo" alt="" src=""><span><b>Resenha Canguçu</b><small>Central de campeonatos</small></span></button>
   <span class="sp"></span>
   <span id="top-right" style="display:flex;gap:8px;align-items:center"></span>
 </div></header>
@@ -366,9 +370,10 @@ function newChamp(o){
   return{id:o.id,name:o.name,sport:o.sport||SPORTS[0],season:o.season||'',format:o.format,turns:o.turns===2?2:1,logo:o.logo||'',
     pts:{w:o.pw??3,d:o.pd??1,l:o.pl??0},tiebreak:[...TB_DEFAULT],
     groups:o.format==='grupos'?Array.from({length:gc},(_,i)=>String.fromCharCode(65+i)):[],
-    advance:o.advance??(o.format==='grupos'?2:0),teams:[],games:[],createdAt:Date.now(),updatedAt:Date.now()};
+    advance:o.advance??(o.format==='grupos'?2:0),extra:0,roundNames:{},teams:[],games:[],createdAt:Date.now(),updatedAt:Date.now()};
 }
 function mkGame(o){return Object.assign({id:uid('g'),phase:'liga',round:1,group:'',kr:0,ks:0,home:null,away:null,bye:false,hs:null,as:null,ph:null,pa:null,played:false,live:false,date:'',time:'',venue:'',events:[]},o)}
+const roundLabel=(c,r)=>((c.roundNames&&c.roundNames[r])||('Rodada '+r));
 const counted=g=>!!(g.played||g.live);
 const teamsOf=(c,g)=>c.teams.filter(t=>(t.group||'')===(g||''));
 const tmById=(c,id)=>c.teams.find(t=>t.id===id)||null;
@@ -494,9 +499,20 @@ function champStatus(c){
   if(!played&&!live)return{k:'',t:'Aguardando início',played,total:real.length,live};
   return{k:'go',t:'Em andamento',played,total:real.length,live};
 }
+
+// ---- melhores N-ésimos colocados (ex.: 2 melhores 3ºs entre os grupos) ----
+function extraList(c){
+  const n=c.format==='grupos'?(c.extra||0):0,pos=c.advance||0;
+  if(!n||!pos)return{pos:pos+1,n:0,ranked:[],ids:new Set()};
+  const cands=[];c.groups.forEach(g=>{const r=standings(c,g);if(r[pos])cands.push({...r[pos],group:g})});
+  const crit=(Array.isArray(c.tiebreak)?c.tiebreak:TB_DEFAULT).filter(k=>TB[k]&&!/^h2h/.test(k));
+  const sorted=[...cands].sort((a,b)=>b.p-a.p),out=[];let i=0;
+  while(i<sorted.length){let j=i;while(j<sorted.length&&sorted[j].p===sorted[i].p)j++;out.push(...tieBreak(c,sorted.slice(i,j),crit,[]));i=j}
+  return{pos:pos+1,n,ranked:out,ids:new Set(out.slice(0,n).map(r=>r.id))};
+}
 function seedList(c,q,shuf){
   let ids=[];
-  if(c.format==='grupos'){const tb=c.groups.map(g=>standings(c,g).map(r=>r.id));for(let i=0;i<q;i++)tb.forEach(t=>{if(t[i])ids.push(t[i])})}
+  if(c.format==='grupos'){const tb=c.groups.map(g=>standings(c,g).map(r=>r.id));for(let i=0;i<q;i++)tb.forEach(t=>{if(t[i])ids.push(t[i])});if(q===(c.advance||0)){const ex=extraList(c);ex.ranked.slice(0,ex.n).forEach(r=>ids.push(r.id))}}
   else if(c.format==='liga')ids=standings(c,'').slice(0,q).map(r=>r.id);
   else ids=c.teams.slice(0,q).map(t=>t.id);
   return shuf?shuffled(ids):ids;
@@ -609,7 +625,25 @@ function simStandings(c,group,sim){
   const cc={...c,games:c.games.map(g=>sim&&sim[g.id]&&!counted(g)?{...g,played:true,hs:mp[sim[g.id]][0],as:mp[sim[g.id]][1],events:[]}:g)};
   return standings(cc,group);
 }
+
+// ---- destaques estatísticos ----
+function statBest(T){
+  const pl=T.filter(x=>x.j>0);
+  const best=(fn,dir=1)=>[...pl].sort((a,b)=>dir*(fn(b)-fn(a))||b.j-a.j)[0];
+  return{pl,atk:best(x=>x.gp),def:best(x=>x.gc,-1),win:best(x=>x.v),fp:best(x=>x.ama+3*x.ver,-1),bad:best(x=>x.ama+3*x.ver),inv:pl.filter(x=>x.d===0)};
+}
+function leaders(c){
+  const{T}=totals(c),b=statBest(T),out={};
+  const add=(x,l)=>{if(x){(out[x.id]=out[x.id]||[]).push(l)}};
+  if(b.atk&&b.atk.gp>0)add(b.atk,`Melhor ataque (${b.atk.gp} gols)`);
+  if(b.def)add(b.def,`Melhor defesa (${b.def.gc} sofridos)`);
+  if(b.win&&b.win.v>0)add(b.win,`Mais vitórias (${b.win.v})`);
+  if(b.fp&&b.pl.length>1&&b.pl.some(x=>x.ama+x.ver>0))add(b.fp,'Melhor fair play');
+  b.inv.forEach(x=>add(x,'Invicto'));
+  return out;
+}
 // </logic>
+const RC_LOGO='data:image/webp;base64,UklGRk40AABXRUJQVlA4WAoAAAAQAAAApAAAxwAAQUxQSIQJAAAB8Ib/kyHJ/v+9InJmfWz7nDl7bNu2bbxtHNu2bdu2bZtr70TE60b39M50VebtiJgA1KUm9DhwqV1PvOmJl56996wdZwRUUI4qgMy11t7/P/WS21/8nT36O4fPB6RSEAWGHvbEj84ewz3CneT3/5saqkWgwApXDSdJdzPzYM/u5EsbA6q5k6SY+czRpFsEe9Gdky5cAlDJmSQAK7xGWrDXnRx+zkKAZksUGLzVJcNowb4MJ38+YQZopgSY7Z9vkHT2dRj56upQyZEC+3xGhgXbMIwj9oRKfhQz3kC6s12N3X9Gyo5gtqfpzjZ2du8OzYzIoIfZHWxr57BloJnBMTS2u/HeJFlRLDU6ou0iJq2LlJdTaWx/4zWQjAiGvBVeAee3s0HzoVh8FKMCQd8QKR8Jm0cl6DwwL3sxWEXjYXnZm16Rk6E52Y7VNJ6aE8Wy4xjVOB4pJwv8VpXToPlIuuDvVblEsyFJsfS4qtyApFkQBbD+UwxWMfjtaoBq7UkCZN1bjdUdcf5QQLXWJAGy+UNGemWCHHbh4oBqfSmgmz9A0oLVDSOHnd0FqNaTCmS9+0hasNph5C8nzgeo1o8KsOED3aQHqx9G/nDqAoBqvagA691ppAXrMZz88ZSFANX6UAVWunkyacH6DCN/Om4uQLUmFFjuxnGkBes1jPzmuHkBrQXB8leMIi1Yv+Hk96fMB6kBxZ9GkRas5zDym+0hlVPsRlqwvqOb49eCVkww+A0a672bN4tUTDHfb4ya8/h0OkjVFhpee8FvZ5fKLTIiAz/PilQ8jLhhTqTiYfD95aBSOjT+sjMgVVo4C3TGiR3QCi2SB3rw5iHQ6nSNzAPD+Ngc0NIhu/ni3NCqLDoqGzS+Mj9S8dD4zqJIxUPjG/NDi4fG12eHVmHo6KzQ+OS0IhVYamxe2M1LJEnbyZITMhPGv6Cj3RL+wmBeI8asB20vxWZjIjd0frkQpJ0UC33PYHadT/RXaR/R/g/SmGHjSUg9SN8lHEdjjsMnbwAFJCUASfpGscEEjyzR+f500qEA0AlA+0Jk5g/ozLTzCgDTbXj0PS8+cNjckD5QnExjriO4x1qXfxhs/GQZ9L5ixdEe2SI5yUiauU3mY/17TVTvpjHv5kGS4WNW6DXFNubMegSbBydv2lsiA19h5loMjlm1txL2oLMQnV/M1ksiU79TDsb7tZcU+9JZDkejd0Wmeaccgr5+LyiAhAPpLEXn1zNPWf8ZAcGgNwvCeB+mVNA1G0SxC4PF6PwX0hRgwPqDINL5JK0YghNXmhLFoqtDOnXViRHF4Hx7CKQ1wX5LJwEuobEYjRdB0bLIbHsB/Vc/c0ywHIO7IbUiKWGmRZb493PGkgwO74L2IEkBzHHYi2NIWhSE8ZlOSBNVALNuftG3JN2DJWk8EQkARIHB61z0FcnwYGEGt24iwNCj3jKSFixP5z8aBNOePYKkebBEjY8qBDLkHtI8WKjOT6eDANvSnOUaHLcMFDg8jCUb3BUJ+Bu9aIxHNWzgjLK5AQJM+xG9bJ5SiOJMWsk4P54GkrDGZEbRfD8HVDDgJXrBBIctAoXiP4Uzdpkmi41kFM2yUEDkHlrJjFy0IWEfRrk4v58dAijm+oFRMO9M1QDFpbSCeUqbJGziUSzGeyAAIJj2Q3q53NgMipNK5jJok4TlxjGK5dQeRDqfohWK8zCkJkg4lF4sf+tJMf/vjOKByJ20UvlDCwmnlsseLSguKJXgli1dUSjBiStDW7i2WH6ev6XrCsX5xcyQAvpw6pYuL5a3B7eQcFaxPNvZguKiQjHeBkFzQXqSXiTO5zshzRTz/8YokuDoJaHNEnZisEydJ/akOItWLO8OhjQIBrxCLxRy8lpIDYolxzBKxXg+tCHhIDpL1fnBIDQKbqEVS3D0Eg2CGb+gF4yt1qBYq5tRLjFiwYaEw+gsVuctKoCg40lasQR/HQoFFF3DGcVifAQCIGE3BgvmIlEAigtp5RLcFQkQDHmXXizB4QtAAcUqExnF4nypHwRI+B+dxWq8EAkQyAO0cglu36CY6wdGsTi/mQUCJGzFKBfjNVAAinNoLNbgdkgAMORderE4P5wG0rDSREbBHAlF43/oLNXgsIWa6QO0YjFeD0XjfN8zSiVi0npITXZyFqvxTlE0PZ3emlsUQ0T3BkjNbotW3IIF6bxZBM2vZA/hTvLjSz9jlEHE2GWgPWxv7hHhTvLLy3adBVu5RxEYz4CiR72czcc9fdDsAFLH/bQS8PhqTmkBQ479asLk358+bPl+gCZRDP09In/h3AWKlmddcY2FOgAkAQDFH2n5c97dqdKKKBqTCpqKdtxKz13ELwtC0bqoqqBFwSwf0jNnPBgJfaxYeWRE1ox3dKj0FRIOoUXGnJ/OAUWfS8KVtHwFR68NRRuKTP0MLVfhfgAS2lIxz0e0PIXxJCS0qWKxL2lZMl7WodIuSFjhF1qGjDd0QtC+CWv9Qs9NGK8dAEE7J6z+NS0vYbx1ABTtnbDUJ7SchPPagVC0e0LXK4x8OHl2JwTtnzDjLYxcGCf9ExBUsQPLTmZkIYzfbA0RVFJlxQl5cPKZRZAEFcEKWQijnTUYCVVVLDU2A0F+vCWgqNCSYzLAiZfOChVUaan6C47cBkiosmKJ0bXnfL+fKCrWNaL+4sX+kGoJpv3Erea6eTYUFVf8k7SosejmyGWqB+k8aRzpdRVGDtsZijpc5Y5u0uoojJx4/TIQ1KAosM49ZHjdhJFjr1gNUNSjCrD1Y2R4nYSR465aARBFbSrQsf0LZHhdhJHdd6wGiKJWEzBgx+fJ8Fpw0u5aF1BF3UoCBuz7JuleOQ/a/RsBoqhjScBUB35IulfKg3xiEwEUdS0JmP6PH5IelfEgn9qmE1DUuSRgxn9/TlpUwoN8dvt+QBLUvCRgtsO/Jy3azp18eecBQBJkUBIw79HfkxZt5U6+tPsgIAkyKQrMf/LPpEXbuJNv7zMISIKMagIWPvd30qIt3Ml3/zQdkASZVQW6zhxBWvSZO/neodMBSZBhVWDJC0eSFn0SRn76jxmAJMi0KrDsDeNJi14LI785fBYgCTKuCqx85RjSolfCyG+PmQtIgsyrACtcNZa0mKIw8ofj5waSoABVgVVumUBatBRG/nLa/IAKClEFWOW6SaRFD2HkTycvCKiiIFWAtW+dRHqQdCN/PXUBQBWFqQKs+xBJd5LDzusCVFGgKtBN75tA8pPjugBVFGoCZIPjTt5zdkAVtQpWUDggpCoAADCGAJ0BKqUAyAA+MRSIQqIhIRdLNjQgAwS1BDgAy6cs3t40/Yv7F+tf7sf7D5Xqm/V/7H+f/7L/5/8/z6tZeWt47+nf6D+9fub/mv/////ov6pvzD/1vcF/TT/S/3T/Lf9T+5fFB+wHuM/s3oB/nf+D/83+e933+v/73/G+5r+zf5P/pf27/YfIH/SP7n/xvay/5nsH/tr7BX7N+rh/yf2w+Dn+q/67/4f7f4C/5n/df+3+5n/37gD0AOx9/mf4tfrH8sfEn7r+QX7eetP4v88/b/yJ/rH/m/1nyAfzvkl6v/4Pop/Ifth92/wH98/2P9v/eL5f/1X5DflH7k/Jr+v/Kr4Avxv+Sf2b+sftB/ev24+nqIZox/kPUF9dPn39//tv+Q/1v9+/dv2zf6z0R+wf+h/Jj+4fYB/M/6l/kf7v+5396///1b/lv9r40/3j/k/6j7o/sE/lX9F/2/9t/xP/b/z/0q/y3/Q/w/+g/cv21/nH96/5/+G/z3/n/132C/yP+if6X+6/5b/y/47///9T7zfZ7+2vs1/s04rQojKio37lkr215rldXsSbAkuicusm6bUOC1diuA/71+H+OZwF1xuMdXrg43Ux5rlDmxCnS/FTEN9mEIT1sdjSzfHxJ8wZQ820MieLT0TqpD3wBfCVbMIPMrEkFX04Uwwn1NukqEK53teoiCZTRHVYpJc6g+mOU0xybFOK0687NBZV2eTr9P0Wqa/9ljenHg+S0LAIAAcuMCo4ZbCeo/xbYVzR92W7WOQtGPzI8qf0UE1LZF+bh5dzas/rSvpKJghB+Cx2K5vpFdABm5qcf9prNDpm9xjf//0Mx8826xiwohotiX/lqvsLbgyIrf+50536A3dvKIRgg4PCx2pjGP+wG9tRm8Iu2f/jnQdr/oIbLsHrj9Vjv+wjTI0o9f8o/sn/icDwe5eWOkkxXY5LPAna4ECu5Vs1uGJqCw8j7AbF/+/gf2eULRnnX7TDkUfoRcS5fYLYoVVpG55U4+70gHvXJsuSVjXM9aTD/MFTa1IXph5FzWdFYRx16GutdGYw5hEyiEAycsjrVKRB1Rb8DiJA3wHA+4W6JekVWaNcJnGYunHcZfvv/gjgY/61DPp+xNF9EZ+Mh15ZmUaBk2V4GmvXPHVUuSdD1RnJLeoJAV6nPsPlxf//7HeH//gFplfzqCCI1izHga9hzSPlTVCKbFHgTCiwK6n2mZgR9VJa39MyrnPeuoH+yrTMZzRyjcFs92Icm8pLtZkw+l2nxvt5ZZJMw5oXkFcFgQnRLG63VgtrVVHJw5lrf0tkpSHW5s/XZQbQgLcf5MCQ53CWZ74SrwqwL8609sdWIdLagfw/E//FVg6uFsrNxDZTLMLHDwFsl6tw0/cMb4Zf2B1Vv52GK+Eaib//iQgaRg0fB4PA7qskTqJRusmY1wuEY5IRFenAAP75R44MV1z9+Ve6PL+Th+bijnrN7kjyUvP9XLY/tBjF7/UVI0/MFeoq/NhRj+eHKjepfuJpAwDxEh9UlazVOPtXp7y4fLiScdScbER/5B56bCqcu0Z7j/ZEXBSp+DaRoriKVwikDJsn1VJnyEt2PZRDA5pG2x3I0YfwdNf4tYi1OdqxVhmmzvTjYa35RQVdhZKbogog3J98RCTSaC4pVRoWuNf3Qg+NPyb8ioS7TMW6tDdPLo0rpSUN4qwZO/yRW6hupGy209DE6hu+Zh62PAToyddXkLQzFGxjFCdw0aUAAZjICKg1LC3MYfVkih+H438FQ3sCNiqxFPQYG2ZqJCZWsddnD1ek8T0tSIGMlPElv0KPZj5DWa9eUCloxtAfALUMNUCfUOBIHmx3liLmIOYMX3L4QQ9YS/5H+1GCdjJUTWfp600v58/KGjufgOCqcCKdU9+rQaKLgsXnztkNdVNDI0TZj/3NqiVGRdIsyNgRuWRzapsP7bef7AAAbBMXYit947OF0iAWS7xgJGXb7T0oYZWu3oxH/MjlrE3ZmqrKtE3z7Jlbqd3T2tDwTJlavtrs8f15EkaC7duZnp+hfqYXmgPWsGNr20XL5vLJyJRjbiGJlB88c43YWUZn+Akemc9z0wkb8Bev++q6QT+veOTb8xyx+k4O23eGXEz+FfB50d9r5lMflkvFwaNKJLZ4pR1ITUrWsMThslfeY6yki+4hlhYfI6IyyTMSRL2BZ35UutUaun6m/BkKFLx67jXAOWeRW3lFXCRAvJKHkEpswF5w5ntZcRSzzgglVTqmd2HqJjouVMUrggFiYrReDy4lCeeOAPouM67ykjPnnlTL4YO7mb1iAgE1DJxHe0Hl9hfK9XpUuZ7nuUI5aFBE29zeZ/w6X4zf5nwcbQ/OPdySTpunlymapJ3JOVT5jlg8kNKMF8vBWCn8BSVn36C7S1449lldphYQvXciz6ethxbo5UxcWueiJk9IeS5Z+5Wi9n1XUJTwYAjCHm+oJGvyaCDWlsXLCQBazApcGUjJgCu425JnC7+0zV6eiJnMKwN13TboVjTTA86L/d7j7QKe8jmgFDYyRiHnp5RieNwasec34c5sldu6NvFBpsIAJ0aKz0gyDyvf5GbFCaMFkbVmjoiIaOuYkzBTsY2c7tgctG93XFTmkyE9jw0vjlSA8PA1cCtWGIoN3n9S1q0w47ebqnRucy4bmsTv5gREjP0O0GrxLpgIpIHKDydpxIoLNPSx5XHKYrAWmodXWTYnFuGgViBX8MFrXLNxZs5wlr22eYt/2N4gBY/+CttB7YBHA31TfGzsoskLk46dIYzxbiQ6cT9B1f3GMsgLW52QL1xRz/Pr9n/waJmHHRrkoUYxEMBn//TaCRMOEFl5bO6/6QLFk4ZXAP74g6pkgWcCEFmbBKmdlARlWgMXNDjqt9X0C7iR4VfciWBYuUb3I1SWXrNQyLDdMtBulB4+iCyphsIk1UW2PngLMaIIxT2kPlJDaLQdCoF0ZPBnJb/9uu/ODK0hmKJdjqWQcVHqS37nAHTx7XfeikcmRpKApV1x4M7K97l0DiZehpXvFe59eB4/lEz1d2M+QJpNz4DH9nkDlQNxTFrEY1nt/MaMPeKqzRYnJQV+S6QXfsZjUhUgjtqYAn0ozoCMM440GZqLas9lsTHtVa2p7nATrXg8pjL+v/Y5k99QvjgwtZEDxkDkh9FmN5HOvKE08NNBA0jBi6kEACnwrFyx20sU9E9D29JWcO5qKocE/JchB3s4K7lZSU5XksOsIV7NjEdzYVtYn+DC+CIwo5z3baFOYHNeybCZzt+yBXWA0kYB8RV9KlTvU58fon2bxFmRjr10l5fxhv2d/1PzeW9sejQAvRv+ZChI240U9YbCY61o/IcpB7scXKZVOCrhTfzKYaa878Gy323W5oB6p2psJoZAoadedu+47sBB+hkEXXY+rvfm4xjLMl1Pkw1lb1yTolHnrnLM96LOD95tK8DVLD7EW6VrXcj5hME/ybNfrYzpaqAFDcO3+6LL1D5w6PH/hw3x+or2JjV3i/wU0t4b8w/wZNifxH9XT4RSycrfH3012gMUZqtyr3rFOJlBkjomkR8rf0Ux3gUIyxwjzAvzPLvUGxDCUVYgpCICNjAofGX1aqo7ka8Dbnl8AzEGA65uNzaSQO8xJzZS9/4oQchlbDwzZvMSWNferiw+xHoPR7ftLmGwNCs/DReV6dYoThQiv1YWEUtumR7kwpFNHBTwbtogWUWN4FWZLlWINrhUEXxNvWlZwIKrFDg0dpOjI/GBkpgG97/LrgNVgToGWHO3kq+woJqokHqGOFqP5pEakr8C/GhnY1FfQet1TmTpeT5Dx5FYHipNn6B/vBIJW97BHhe/mmKMA1Gttr1ZMXDVY+0OY9dp+GYs23ILevimJ6QBEyEHwe4XQKf6lO3QUzjTTdYkAe5gRAYb8uO4I3epKLK79+rUyeRQDa3F1qIbBPlnbDjLhlEr1maeabCIz3Lc02HcQgU2f/U0ohXlhk+BnBIKpmSjj/129KyR/bm2ai8hJJLcdbmtATfGZnxgvog3Gg+SbDxlvI4atXbdOua+00P2CSjzakm5hBrblMjtr4cUtf6IPnG3HwsuZciHoftVqT4eB4uK/PTZm2oXuqPA1mCK4Wufc9j53K8sCTTA29NxVz+WFIAaQqXJ4tUO+ctVALzQ7q4ZBy9AUMh7BQMUziszYCBBnGsJcLSWtZHW1mPv75utNAVd33Biy/O6fpk4ndYF3NjmOzAQxOUdGWUEYxcJ0pZ2KgLrkXp2t4fz0UhSmzCSzTD0PR0CzCVC5B/szhXu1kyLDGA8+MWaPid+n+EN0VDLwWjA3XHkqqGHiZDTfhF9IOP68pV9Canu6NNQhdceWYCn57o/eN1t2xlvtbnyWEkzDy2iD8dZwanVjv7BPxKc4wqcF22S6LYPYv1uyOoqLilesrxVOym+G9c904SzFNX/1oPFaktH+OcAmKVUmu8wSqiYQGHuZR4q77QMdMTvQDzr+6c+0x2MknmvBU91z97P0RvodvQlkCHmSR6aHbSifYMWy4fg2AfZm9+Cj0GfN9WTCkk0i2t3R//e1kXiOgTDUB4erhuCusYFc2C1/+NqqF7QqrpCKPaOaeQTJo7dc5k+skdusDZX/IDv5yfsne/dMmAL0AaFoWR0ucn/zH/0RTnvoc9BpPH83Hdkq2wD6f+3Kg3tHUnPffXmeRgEsygECwwm9qUCDCqCOrmmTyGNUhD26pafCm9DYaTOnEh8D0UnQ2CgDcdUAmBb9geYJV7U76RX//SszE6MxWzJt1ohv4E2uR8JK6y6iCFygu9lwWjh4R+SuxrnWlAPqIRZSwfegmeFYQZyqn7Z1wb83K4Afp6q94csO8z4CviJ3qBNfMh9V5EGlyZTUlW2UamNZn4eHkBqIAjjrA/+GGjfiThrVujXPl5XUa9Y1flnaFFYwcaIkl+k51FrsTOfc2KBn2ngCQubT8U/qg6ReT6oFsHY0ytPb9EtUq59gAuspUDykWIaKPUKTW7naJSfySeFpID6CHinQX5Dp8Q1N+GSFyEcId8Qnb6GfGg/360GCs7uoG+8vOrwXojuvQogmx0d8G49TDkjUjIpFVJUWmKOgGZTK5kmGoS7+s9TztDQqM7mT53OPLGnjFvw/G4fPjPV98pFXdCK/VdeBblMV0+fpHg2pNbxiGSUqHujQfhr7rR0WNYOoNymKbB7OaawbiffkO6C65RAEPNwaYDiS7v1veDrjbBxdoqdBvZf5LZmxbd7dg4Q7r9KYkGa6Ms0ZXhu6GjRQCIeZLTePhosL5PGBrgo1lzcpbTjp1A6W0o4SX1l+csGKHwxh4sAMo97rWKFgpTMhDCUPq9WrVCShlax7qu7lwyAmty7h0S0Hr9lP2ASxFF9tcu7ETKMsEwumZFbXkU2J7lNnaBXuy41MXNkq0l1A5TQC3fZW/Pdvy03yR90doCGClK7ags877XdDZrcLrB44AkGmm84Q/M3M8GOQ7Rl4+HGiLEW2opK6MIo+gAq+Veb+lzTCxtysMGdCuUZLuO6inTUK/58/2e9wEfZzSChqz/lWCWgddegdCAx9Mzvm9ubhF+lfksUuLEnK1jqUBHpuvCHNbitMgZ6awQuTjEZ1MXGDcZ/9UC0h6sk0JSKRwusiQKJHwK03sTWxf8MaucEhEyx8AiCSldX3Bi+ouMwnLJ88PW7F6+El46zBM4093HSTvvjm3tiaSWYZGCGh+rhIQYEKgfSxFlxvkbl2kXgFD5c0GVhwqYLkRISdEEz0qzJBAzKbHa+1wGdrQVs3YCynw2G8/XQwXp0St8Bsj+tyoytKprIwJYgyXwhi2WxnShbKVhs+IFlKbONcdZrCfxuagKBt4yh2UXXOpZx37iGFVVHp7v6tqzW8d7Tn4ZD7Asr4PgMf0ICQXxA2+jIyQ8JTiyYyY1Y8lW2eRpJZd3Qza1GNSPrGWNuBLOgidsVyPRI5B8HZaO4f3GQL2hHgaGs0SR5ns8zhZVSaAAfvpn+Cp4CsNz+Mj9mSsD1ykYH3SkPX0fBQdAPugyW9k5knIZMX+zQhF5lq6nIqXIhh8gLvvme5WKTZ1LpYqEZiNzkzHbRySOBVBHDEl8LH5pnRPl6EOVUPDVHf9A1bl+PVCBz9bQNMvRpD/4QFFWntuujvQzY9zyTdsbxm3aaR+FNiR2vWfkAGKDV2gLPkHQYxzurkFTMZsIZXja7OyzpfWFWSRZcAXE5+s/pld4SpCyyeSw0HsmTyl9HVuzFDmLIH6Tqv9c831OwN304OkpfE+xDxpgTnKbwxObaAx/QukHYX7U13cXOgkFqP2g2DWvzRE7cZPmW10pjgJJySF0nHGdhRHCsH+YfyswnXBs6oSg0t6AlKoLwCAamdvrs/VLA3zeDzz09Q7rMVQYM4Y5QM8yGHj694iayZe+lApcxZsNUz15dLbtLli20dz9L+OPoLiYzonyVt1O3ygGiM023yXZQbFF7OUdyuD87l6NwdfAAjPTmAXHmU6wkFi4spdEv5Z8/nPBffKsN5tpv/os8ruXzPY1q3v1fw0gyHS0CfiqzAaRant1z/5Xg2NRgUzxQgxDjx3UhdwP6d2GBWT6JDVrjBMD6m3EJcPEFqZj7HHndzzKxK4MOaiLlK8f98LI43JJCVhDI9qCndKb9BzYgLUpzw9mC7Wjee0FG9lrS1+vpQgJ6J5UYqvdShD5vPj5ausr/fV3d16/eyUtkwphAE9rMY+wdVbp1BGn72tQe5PQafCfZc4cXiUwp2cHoIkA5C4hvcycNYClLQUAGVRQ8YW224gyiRWU7Lv684mliXyU0iVBUTmjS4rV0F1SmTdcdlZIUObr+LsnlIY93Gs6HnILhsBeNofANYf5X6crjNTrra3PakrkyuBJelQ+YMFVAtgyIsZkvtrZ+ARWop8/pI5zRt0Yv14AG7xTTEwefXo0P8qbM9C3tiZpmhgd1UXvkMN9hTIQGj8Q7FZ3sfSS1ENeijYxonlFYayHG9rapnoy8h8LaSEoRHcuKMLKBGm8ad0ZSJGk3YdGe3r4M/KOdqPbLM40z6xvz+JdmNm2p5F/5ntOp/DAYaieDioEn27oFRxrNn/19sfUcDclvjBzdo+j4W/9tHLcT2PMF9AJN+yfE4xOErlMyJHniXIFW8EG9dkVJwnOxyOQu493AsMg7bYPi/2T033b7Yty+ZhDdopfseTIGr3iP2PJrJY/eDldbZe/qpDxy9D4vgUFv2E1rAv9dLj9MyNRht+F/t8FaxYGXZcHB9IbkwId3M4rk/Thf1fhSpZvKrPhwex+0K3Qpe+dIrUZqm+n+GcmFxaIMHHjA8usUOaCEocuaHiNA+PkO1wo9QGiFE2RQ+4qP4yeGW4I5cK+jxywR/wKCIPAlRSgY5xpUEmjGPwF64JDtC5BpPVi0lNMycrO5aljC7Qjxf4XW3HTK0zGVq1aBI64JUL59C2uEXUsmOXanFbwK8qbv/Gw8D4iJltGD4ISr9Nwr7KqT/cgrT7vK+ldsMqybUkd4aP8mWv7iVgTKUoGVclSKdQf+LIPfstJO0Bjcim8VBKsqekkiyMBtzS70j/Z+bO7YmFLwB//8/7WRExRDShkKFe1uUZVOJZVxd+mtxjVTgVl5c7g+OlmeikM0tIpvjSqzngFNDWoWoQeVbJbNMUiunWz/wcbRCaYgepHes2+Oq0QkRGyHsplmhAAEoZ9HStyNcSs6O3jlEVw+lJqPyHaCFjmhCGBzi3VssmVhhHa516ObvojoldKgMMsdEDP9InjF+wHgsYC5CNdWqZNJZppmukgod9omTFRDBNw62RcT/s/2Hf+uY70VSCpQeT4BP+BuQBBLE0gWFMHtxClgcQ82g5+F/MllizeYsInnDKvhDVuIkBBSkE0V+QJ/a/bWpxhIL+ut3liqFgU94Zxw8iOJ53M7DLkHlL7yDyVyjayNtWnuVRnstdngHyNjWYIOln6JQP3Yeyj61N2ZW5l3qj6C6mF1xqFK3a6j9xfWwYQE6wsUigfcuJBUom+npTrwN3KyyAklDgJRAx6ZLpz1OOJLfryilIuSIMpYjkmliBB1eHOeaDrpJE8rmxaAA/JL5SaCB29yCsHT2hQCY0m1zqABnhYfuqVb9D15f2VpsBQWIQS0vPKMMiNRMv1kMe7WoSCgMeYX2XZ/JDwITSk8JJkIGarBbhTpLaL/e8anHSJ6hkCKZYrhgbGRAhu9FDUvJn3Sz6z2I8BrkVbArUPgtVqf3vYHuwmNPoodF4NqIoXZ/Y2pGFgbNXnKpwpAzoo4olSQRPCZ7HuEnNybml1sIWU4egOWmISm0w5XwZjSpgHFApZ86rKQF4nEEHkKiX8uogiAxUN0CV54ibQDgV02dt6KmODBA9gBoI/GZPGvBrFm7ueJmNem2Ng9GgmUQfCve0eVoor2NOqmJgAXV56yNF/gIJY/Fpo8yzlAcOCF6+lt1rjqHnEL3u3sVpfm98NDCTx9rIwV74EfkbCR+6/GLB/FI3kKsXq2Khe+RyCzyqth3URZAP1fqRRhABU65ZQPC2l4L6gKRCGNL9LVyGl8q58/Ks5qnIRhMwmgxSlgLVERrDMhTXf4ntn+tkbEEVLHTGyH3JjGSYUMZLSIfXKjSLt2XpcL25lsCQdhiXURm/kYB00oSZWpVocuCh0XsfB7RzOvoCCuoZWvmM+MgblUsbeUmvP/Dk38KuFenU0t7XLSjACwmdTQddYe8WSWaa/VlvzsGaIKxN1JHINcBo3pv6jRKPwOaBxUD9fO/A421njtGZZmgVWbAj7paKvu+UymfTo+7GU1UbJpD4UbfDxIPwudMlHcaFSz7hQwmmRrCy6Q9jAHY1RoLuHhhGU68PDKkmHVEj6bsKXXiD4ygI6+Kdj012HKayqLRzRSZct8e0UeuAdf3mJeQ75UHQcD3pMqrcHIAYgfBgqLfipixTENx2nUNxrdJMNc/8GCmp2OBi/ij8lSbRneY2JGLAy8Rkqe/j179vvMEcaCl+b6U0s3ic4xwjw/DOIDaZbtdZpJ4ZMb1ub5qfY8hApVVaCn2GzSaIwQmrXST9NPwFYGnvzzlA6Ed2DTciXmIZPTCixgjWC8/ER51SosNqR8uuZc4XfHlOtNun18+Oh+F7pYVTI4cCGdaFGGUE10gtoLXFuznr38xIA0shNUmSqTKJw/kHYW9qnE5/gzrHLFaAOYAN9yYtKy5+Hw9sIsDXik3nkOC3ODiFD/mRHETg9fJzw+ZTa0EZfRD5T37UyVnrcmjto5c/S8WmlcDrEw6SyfFR91dqXs6mrRE0sOY9X0ICOyMGynYt4V2x3T0LiB54stO7GYxgH5fj6R66KCZ0Ol75JgEHRqYrlappn961B1mtW1SSYvjYHSCvGeP1sGwdmmFV7XkIOqRPtsmPPq0RZKwiLTv1z4IJVXpMAI6KbJV7NFal4gSoPj1lKkV/wzt2kxc+u5fNqZ2MyN5pATaw5We+2t0tgQTXYJWTPj3dmeXZD5XJZvtwmfGwAKwC8kBhzpP9//wMUZTv6cCglKF5M0PvxXVCn82Ntg9J58S/e04GN7vMw94/Kajia8n5CoJsQME+JzeA7cxQrYyGy8BaWysk+LqdA50vk/IzhERJTpCh91aXbtCMTDqLWg7DxafOxcmWB5t5no6BdhJpuXCFGlz1qtJ4X3zy8tRloFr4emp5C6+3xlvyHSKU5NUhOWKLs04b+zzI5QWPoIJ1JD0hAlpfXzq7YYJvKuMKyxLjXA6txM/OLTEer5eJx1JnQ/p/KQ6JPq8i26RrjQ3uVOcLH675nH/w+zIZZO8Erf7ZGexU/MvZLR4VWTWRzkoRtzd+DfVI1wnmkPrQpJY5mp0pFSzXo5qsjx3wAsFYDfOc/y2VlKdl2S02jY1IidbjZIecQGxLx3wMcmhGg9BGAJ3kJ/C3MtqcBgNuH4g+JYgBqpJV5tfiTHOTBPJbZNNBBn0hrcAZee1/WAtpLR1dnUDaXoZVmHJVKRjrKdDf3FjlmI2f26H4qjYsSVwhdMaqBhac8/kbfRbrWktKCqc3KwpIUjFcL+ICjP7WQpYolqHwXNwKY3htwIu6Wa/pDV9kASfPS+YHPYQGwcQ3UnfKwKmI32PlhMD2B3ta7KiycaaumNCIsGq2UuIZ7vOV9OmDaMKF2W8adEGMKs7unTDLffQkl6D3HdJmeE62hMHDe5bX13vpR6pP04uGBbpczSKqqPV3r8Yt+FlEWMnIL1PP/mXq+E/Dnib3tBFfaXJqObi450K1/0vciOULosbHIlTemoytkygZatz3A+1yLyQEeAQ1zZlKDKrW8Xj7AxqPYsi+XC+J5uqQZ6xwLhp92/IDFT7+NaXWo1wCU7R16bwYDePHQRJ2Rk9/r7hSPYSdcurgjP/ii/0eYmJxOqYKVW94wJYTh9s/6Dq5kVQ4z965KJzZeO6OFnuyq1xaHIn4fS8lo2mrCKSiI5IHoTXFOf7XucwhaZfALMJg1hnydkFDvI7G+vb8Tx2Glp/WWtd61+5WqFPc29jmDqt/YkvADj1J9z30sVnbZDW0pvZU86oQtlNpc6+iM+tqRdhiVPyzc43YmrNNFSOnu8U05Pr9Kzrl7NUXF58l3XEZPDA7kcPkOL3wzn5KJ9qv+d4eCZdAkJggOb3UGJgTcVKjIwx1Xz/gLiJrzpY6CWwREv3phA8uMnMyhNEIf49SE44MDKqtmBumFgiegc8KT34W5szuZp0C3x+K76uYypdvErYDTJMaYiv2vIAj/WSPjQgisjP4jv2fnCZCj/S2jpBoTGzhOUqCtkmqW9e6MWVoexoJd9OthizdOrIrTuZoY9BpFEXquBIHRDhzUqGBzjcRPy7HdZNi9GTsZQtXA/ndVYhCtm1ydeXl8JhO3je7zM6BQIF73O9RCuGjqwP0IJfBOUcTQJfV2LbKxYFi+DYOvH50EMYDQv8qneEqp/N7Td8MsWABQNlGiZ8yb7bYgcXp6KC//66hLG8TMMuw5IhdSbDVIBpYTnGCg/NjRgNyiKtliE1FAQqui+UByPouCS/b4VvzlE8/HkYCjWet4DL7/L0MzhdL/JMuL6KCLEKiAaWu3OlEbvla0BgfqIQsuonJ+KPQYnJco4kqPypdsdMj5HY9uxMKilT1pMt33X9toDVGCYGP/OqWyqNLrznzxd8lhtiAzzc7FEDh9ZoGsulGIiYK1K5xmYzuZfMBonMwYTvXSbEubsEIJcT/eIlr+Sd7WTXBCrs9fufo1WVEuApKySCNOwxcX9UUY2Tbyv+Sj2/7K1US06kYm7tHnxonBvZS4ofyVbHCtaT1YuUAPqwlhGJJVHz5zA7iQrRN4CHuLQBiWfFTWnyq+qG7nM9HRk2Bz6z5qHgmra18jvM47TPyNiRo1DtfyoAleS+etZzdcdDIvRF4FosvIa1HgpyL+YUR3LGzGX5HPfXNW7soRb+A1cDQm9IS1aSbXukKXGW31aU/SNHbnJIUWZYVzo+NO6jvTtgfALzLmFLhFQra1QLTrQUHcfMQUXNY1Xt/rhg2kcuhJtfQqz2+tkSYAVhOPOmszqGd1h0NKd4gjvZxwe0y/upQoM8StVILR/VvN0cpTYCOwKcSTPEZR0AhiJPOsv+dEsEpau1yXAEHvKfpCxwcJOKvU4iR8g7MMGOMH1oFUSSTJ7tLDljLYCR/tk6qHpEKXQ0AOf2KuPJ9FOydYSvTb98hSFPgXIkl0LIq+SZwkn30XFwrinMJhtYovYvjmocli27h1DkyuwugfTL0bfkzjZ2Pi6irXL0dfGVhKSwI9rmYrn4delkbUykpQHfY/gDmhtuIP9zcQnKA/8C/j38UoRhwLZ48wlBbfaiACctOiFUaLUbFG5I0+hdm3KDsLn9LsDr5KhXs7ot9hl/QicgdvrddGt7WXsfZBFY1I89SvdibCVHoFFmecK/RWg/XjDiMFkovkDe7aFAc2QTO1CiFsRgHj8Vj4yHqC7QumU0kM4yADek/Zx6GQY3Zx+rQiDgqBRgiI93cNtligLDNTbtcC+osETfodQfeO4+Gcf4FQJUbwSZBHn1H0mzz6zjisDGVAJjwtOa3aLKfYE1YAJUBiiOek3wWexAbn+TyjZy1SB7348LvSuRUVtCwEhuCrBbo4GNlvppQpw/SHe7cMldX0oIM4+ChDj+mQAVRgb4we7XjAZkpiCiY5FcGs7jgQI68+wuoo+t7H+owD15tNFZ/26F1DHhpaqj8wx8hFFkP5UPo19sY33tmM9Vz31qzcM2/X+zgdRV5FtZLkNDPEFiyg/nu0/yJ2vSO++py4uuMv98IYFJ7Qtvsh95rqEicTt7yWlvLLcahvEk+q5Xo322XUMlM9lnvE8pNuus4VUIxYdKKTpdEGDVV7Kiom7NghRAwsTtmxPtPjVeux/Gj1NGRHuczDKb3THUFovXcaMWu25O5bpumOL3YsVfuvTT3Z0frIDtmeVal8FsUbJlYrG9NFj2Jv/3toqL/A8egIGJj44ztI265A7FmdYADL3wwTLdsSrpu1WbR89Y0cmjIAkuUXUNK9jaXohJQqQ1E/ppTf0/B/K2MUhWfUF5Qj018vFsC2Rc76qpa+YBeZsAFesZss6YqmvDFEAaePL44qz7EHbP76POEPmG2Q6wSfKsz49jY27+51dJCW7LFbGpd3fIOrAzYlbyMZs6RbO9Z7KgjJ01/RlSchUAm4UyyrVMxodDRMMz9ff5iWDie3uSulsFFdTf/HK3mzBuyWjiKjaEgeBEHr8HL9cIo8b8420/H8oKVJwnem37a4TMs3qI5UykL2+HAvIUAgne8qguKlssuePanCBo3ZMAXu8brKjVUs09YyJcyI/GkjSPmVs6RtnXzNL5uWlQ9VunhxXGnJaAmQxxcTWPXk7GCdoamZTr4B2OM34ax4MNQ+cbF8zMjDWH5c7FxnqINOECs5h5gPqFByYwi4xZNZqYC3KVJHqkdBf9RnG10Z07pQNF8B7ThHrBTLRo4CXvoVmF6RYH9bgM5TH/kI6vhGQOxIf6r+dc/P/R/2EG3yRNN/ZegqsY6TPe9fFRmUkzhfu/E7Ab+IbCuKxWwvlBKMWVOiuHwgqs5xlimnOdqdACxb2JEmtT8f4zSsQrt8kYfmqwruvhbqi/3f1ddur6QbC5mx6huT4HCJl6E8X5U3QPX+rO6VYY9+zFj2PsUeB9BRycD9UucljTgs1dErmhofMYA75WbF/IOc5uDZkEpM2IN60Rt6pjnFIrze+0Cev7PtStT1mKgWBB16ePuDOYs7fVUZ1UlBtUDKU8EducZe1tyUpvHfZJzI2NCHGOFJ2L2iOxhne+wbQiHoki2gY8cml1T4lQyfmHaEgs2IAVGSiNaK0muvUffHn6D3Ps/4TfEYzOw6hD8quDHKOTY3ejpwOX+esIrcKVJowwUzmbWVntGUS2zIlZs9xOWzy7G338wCEeTdoH6yXWgCJeedpJLpTXArG/ZMx9L05XudJYy7KMuHJjoDAwtZ+IjypgHn2s73WOm5TJM2ga4Hv9H6Jbu+OhU73EtKiOSRBCJqhPmzzIAjMYf6KFVpC99DICwrTh+8QLfmyMCPiBJx7x0CWzXWfbkPW1oa5kilewUdF15gspUfIkEH1aDDRhFoJUBmYUACIAeQmYriUfReeL+K2xJDDSvLsKFpIjCupGYrte4ZcqvPbcLV1UlMa49R7ryHB6yt6SQ8JIMVGwGPSkLVf5B+NFO5GegNZ0VxTh+z/bfUKQWK2tZtarn9FG76L4ZD4XvIWv06ZMW/PUxtJZtbjPHkTmaPY4YNyVaIXQMt+l6sVhRjyQkcoMozsM5FpB25TZeFtzOjTMMw9jRcZ/wpD5wXb22rJVUXpnNT8xKKq35gi+X50Tzued5SVVGGyqVANBAQmq0prHDfR/HOi3P0ycKoL9dqoaZ5pm+ZxQzL1UgULdwqWaM+FBYV0Uv5MLEcYih8a9Yns8KW5xrYBXEiIaL8F5laZFWe7qnZzKdiAhzjSfaVn62GekTOQfMvUh+1/uc1fweBPzzXMjmAmcqmASVNkM74I6G4MBvFH1KTeCIrV528HX9Nv2/ngYo/MeVQRt10GV2ikzmBPUtr7e6howu+r7SwnrPt1yjdtyj9sqxR5Sar7VqivPeijYjvnhNjgzOnxnNtOudW/iGPaUIDA5vSEyKVUbk5Wri33kNQNdc0s4vqyfl8I0gEpeduQKHRLNaPMoAcVi23oURjcSPWB44gG/0dkWtY6ErsG/HaHsVqZmj3aEHZFD/um5iFWTyq+hyAoQe2O2H1djCpRU/kpl5x/cpp9QFP4c5I4bweby7z32M3H3GXMhGHfHvipQa4PuPJUlIXjkVxL7Q56cJe87Z3di58XTPu5RB42Isl6qhdJrAAAACCizX//97hpiEjgqcHbw7yqXo8gftXXfZZwbVuEpAbEq4X9bJ0L1ZkHjJOMOPZ7AX8UVRTxJ1/99aYpK7bKi5RSfuw0PJitVL3RLJX4su/XX04ARwWZIqtHyZpNBjf4+1pXzDC+YMhRDys5/m14ZBBwAp/BuWSgFZiYkxQn+36TbDCxMEM9zQdDSXzcAAAAAAAA';
 
 // ============ ESTADO / PERSISTÊNCIA (Supabase) ============
 const S={champs:{},loaded:false,cloud:false,canEdit:true,edit:false,sync:'Carregando…',route:{id:null,tab:null},tv:null,flt:{r:'all',t:'all'},deleting:{},fn:null,session:null,sig:'',panel:null,sim:{},lastMin:'',askAst:false,syncErr:''};
@@ -737,12 +771,17 @@ function badge(t,cls=''){
   return`<span class="bd ${cls}" style="--c:${safeColor(t.color)};--t:${txtOn(t.color)}">${esc(code)}</span>`;
 }
 function logoBadge(logo,cls='',txt='RC'){
-  const l=safeImg(logo);
-  return l?`<span class="bd has ${cls}"><img src="${l}" alt=""></span>`:`<span class="bd ${cls}" style="--c:#fff;--t:#004AAB">${esc(txt)}</span>`;
+  const l=safeImg(logo)||RC_LOGO;
+  return`<span class="bd has ${cls}"><img src="${l}" alt=""></span>`;
 }
 function fmtDate(g){
   if(!g.date)return'';const d=new Date(g.date+'T12:00:00');if(isNaN(d))return'';
   return d.toLocaleDateString('pt-BR',{weekday:'short',day:'2-digit',month:'2-digit'}).replace('.','')+(g.time?' · '+g.time:'');
+}
+function fmtDateLong(g){
+  if(!g.date)return'';const d=new Date(g.date+'T12:00:00');if(isNaN(d))return'';
+  const s=d.toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'2-digit',year:'numeric'});
+  return s.charAt(0).toUpperCase()+s.slice(1)+(g.time?' · '+g.time:'');
 }
 const koTitle=(c,g)=>koRoundName(koRounds(c),g.kr);
 const critText=c=>['Pontos',...(Array.isArray(c.tiebreak)?c.tiebreak:TB_DEFAULT).filter(k=>TB[k]).map(k=>TB[k]),'Ordem manual / alfabética'].join(' › ');
@@ -794,10 +833,10 @@ function champView(c){
   return`<button class="back" data-act="home">← Todos os campeonatos</button><div class="cbanner">${logoBadge(c.logo,'xl',(c.name||'RC').slice(0,2).toUpperCase())}<div style="min-width:0"><h1>${esc(c.name)}</h1><div class="meta">${esc(c.sport)}${c.season?' · '+esc(c.season):''} · ${FORMATS[c.format]} · <span class="st ${st.k}">${st.t}</span>${st.live?` <span class="live">${st.live} ao vivo</span>`:''}</div></div></div>${tools}<nav class="tabs">${tabs.map(([k,l])=>`<button class="${k===tab?'on':''}" data-act="tab" data-tab="${k}">${l}</button>`).join('')}</nav>${views[tab](c)}`;
 }
 
-function tableRows(c,rows,adv,withForm){
+function tableRows(c,rows,adv,withForm,ex){
   return rows.map((r,i)=>{
     const t=tmById(c,r.id);
-    return`<tr class="${adv&&i<adv?'q':''}"><td class="pos">${i+1}</td><td class="l"><div class="tn">${badge(t,'sm')}<span class="nm">${esc(t.name)}</span></div></td><td class="pts">${r.p}</td><td>${r.j}</td><td>${r.v}</td><td>${r.e}</td><td>${r.d}</td><td class="hm">${r.gp}</td><td class="hm">${r.gc}</td><td>${r.sg>0?'+':''}${r.sg}</td><td class="hm">${r.apr}%</td>${withForm?`<td class="hm"><span class="form">${r.form.map(f=>`<i class="${f}">${f}</i>`).join('')}</span></td>`:''}</tr>`;
+    return`<tr class="${adv&&i<adv?'q':(ex&&ex.ids.has(r.id)?'q3':'')}"><td class="pos">${i+1}</td><td class="l"><div class="tn">${badge(t,'sm')}<span class="nm">${esc(t.name)}</span></div></td><td class="pts">${r.p}</td><td>${r.j}</td><td>${r.v}</td><td>${r.e}</td><td>${r.d}</td><td class="hm">${r.gp}</td><td class="hm">${r.gc}</td><td>${r.sg>0?'+':''}${r.sg}</td><td class="hm">${r.apr}%</td>${withForm?`<td class="hm"><span class="form">${r.form.map(f=>`<i class="${f}">${f}</i>`).join('')}</span></td>`:''}</tr>`;
   }).join('');
 }
 const tableHead=withForm=>`<thead><tr><th>#</th><th class="l">Time</th><th>P</th><th>J</th><th>V</th><th>E</th><th>D</th><th class="hm">GP</th><th class="hm">GC</th><th>SG</th><th class="hm">%</th>${withForm?'<th class="hm">Últimos</th>':''}</tr></thead>`;
@@ -806,22 +845,27 @@ function groupsOf(c){return c.format==='grupos'?[...c.groups,...(c.teams.some(t=
 
 function tabelaView(c){
   if(c.teams.length<2)return emptyBlock('Cadastre os times','A classificação aparece quando houver pelo menos dois times e jogos com resultado.',ED()?`<button class="btn" data-act="newTeam">+ Adicionar time</button>`:'');
-  const adv=c.advance||0;
+  const adv=c.advance||0,ex=extraList(c);
   const anyLive=c.games.some(g=>g.live&&!g.played&&g.phase==='liga');
   const tools=ED()?`<div class="tools"><button class="btn ghost sm" data-act="tbModal">Critérios de desempate</button></div>`:'';
   const blocks=groupsOf(c).map(gr=>{
     const rows=standings(c,gr);if(!rows.length)return'';
     const head=c.format==='grupos'?(gr?`Grupo ${esc(gr)}`:'Sem grupo'):'Classificação';
     const q=gr===''&&c.format==='grupos'?0:adv;
-    return`<div class="card"><div class="th">${head}<small>${rows.length} times${anyLive?' · inclui jogos ao vivo':''}</small></div><div style="overflow-x:auto"><table>${tableHead(true)}<tbody>${tableRows(c,rows,q,true)}</tbody></table></div><div class="legend">${q?`<span><i></i>${c.format==='grupos'?`Classificam-se ${q} por grupo`:`Top ${q} avançam ao mata-mata`}</span>`:''}<span>Desempate: ${esc(critText(c))}</span></div></div>`;
+    return`<div class="card"><div class="th">${head}<small>${rows.length} times${anyLive?' · inclui jogos ao vivo':''}</small></div><div style="overflow-x:auto"><table>${tableHead(true)}<tbody>${tableRows(c,rows,q,true,gr===''?null:ex)}</tbody></table></div><div class="legend">${q?`<span><i></i>${c.format==='grupos'?`Classificam-se ${q} por grupo`:`Top ${q} avançam ao mata-mata`}</span>`:''}${ex.n&&gr!==''?`<span><i style="border-left-color:var(--yellow)"></i>${ex.n} melhor${ex.n>1?'es':''} ${ex.pos}º colocado${ex.n>1?'s':''} também avança${ex.n>1?'m':''}</span>`:''}<span>Desempate: ${esc(critText(c))}</span></div></div>`;
   }).join('');
-  return tools+(blocks||emptyBlock('Sem dados','Adicione times aos grupos.',''));
+  return tools+(blocks||emptyBlock('Sem dados','Adicione times aos grupos.',''))+extraCard(c,ex);
+}
+function extraCard(c,ex){
+  if(!ex.n||!ex.ranked.length)return'';
+  const rows=ex.ranked.map((r,i)=>{const t=tmById(c,r.id);return`<tr class="${i<ex.n?'q3':''}"><td class="pos">${i+1}</td><td class="l"><div class="tn">${badge(t,'sm')}<span class="nm">${esc(t.name)}</span></div></td><td>${esc(r.group)}</td><td class="pts">${r.p}</td><td>${r.j}</td><td>${r.v}</td><td class="hm">${r.gp}</td><td class="hm">${r.gc}</td><td>${r.sg>0?'+':''}${r.sg}</td></tr>`}).join('');
+  return`<div class="card"><div class="th yl">Melhores ${ex.pos}º colocados<small style="color:#333">${ex.n} vaga${ex.n>1?'s':''} · compara os grupos</small></div><div style="overflow-x:auto"><table><thead><tr><th>#</th><th class="l">Time</th><th>Gr.</th><th>P</th><th>J</th><th>V</th><th class="hm">GP</th><th class="hm">GC</th><th>SG</th></tr></thead><tbody>${rows}</tbody></table></div><div class="legend"><span><i style="border-left-color:var(--yellow)"></i>Classificados como melhores ${ex.pos}º colocados</span><span>Critério: pontos e depois ${esc(critText(c).split(' › ').slice(1,-1).filter(x=>!/Confronto/.test(x)).join(' › ')||'ordem alfabética')}</span></div></div>`;
 }
 
 function cenariosView(c){
   const adv=c.advance||0;
   if(c.teams.length<2||!adv)return emptyBlock('Sem cenários','Cadastre os times e defina quantos se classificam nos ajustes do campeonato.','');
-  const note=`<p class="hint" style="margin:0 0 12px">As porcentagens consideram todas as combinações possíveis de vitória, empate e derrota nos jogos que faltam, contando só os <b>pontos</b>. A faixa listrada mostra onde o desempate decide.</p>`;
+  const note=`<p class="hint" style="margin:0 0 12px">As porcentagens consideram todas as combinações possíveis de vitória, empate e derrota nos jogos que faltam, contando só os <b>pontos</b>.${c.extra?` Os melhores ${(c.advance||0)+1}º colocados dependem dos outros grupos e não entram nesta análise.`:''} A faixa listrada mostra onde o desempate decide.</p>`;
   const out=groupsOf(c).filter(gr=>gr!==''||c.format!=='grupos').map(gr=>{
     const sc=scenarioCalc(c,gr),rows=sc.rows;if(!rows.length)return'';
     const head=c.format==='grupos'?`Grupo ${esc(gr)}`:'Classificação';
@@ -832,7 +876,7 @@ function cenariosView(c){
     else{
       tbl=`<div style="overflow-x:auto"><table><thead><tr><th>#</th><th class="l">Time</th><th>Pts</th><th class="hm">Mín–Máx</th><th>Situação</th><th class="l">Chance de classificar</th></tr></thead><tbody>${sc.list.map(o=>{
         const t=tmById(c,o.id),st=o.status;
-        const pill=st==='classificado'?'<span class="pill ok">Classificado</span>':st==='eliminado'?'<span class="pill no">Eliminado</span>':'<span class="pill op">Na briga</span>';
+        const pill=st==='classificado'?'<span class="pill ok">Classificado</span>':st==='eliminado'?(c.extra?`<span class="pill op">Só como melhor ${(c.advance||0)+1}º</span>`:'<span class="pill no">Eliminado</span>'):'<span class="pill op">Na briga</span>';
         const s=Math.round((o.sure||0)*100),p=Math.round((o.poss||0)*100);
         return`<tr><td class="pos">${o.pos}</td><td class="l"><div class="tn">${badge(t,'sm')}<span class="nm">${esc(t.name)}</span></div></td><td class="pts">${o.p}</td><td class="hm">${o.min}–${o.max}</td><td>${pill}</td><td class="l"><div class="bar" title="Garantida: ${s}% · Pode chegar a ${p}%"><i class="s" style="width:${s}%"></i><i class="p" style="width:${Math.max(0,p-s)}%"></i></div><small class="meta">${s}%${p>s?` (até ${p}%)`:''}</small></td></tr>`;
       }).join('')}</tbody></table></div>`;
@@ -854,18 +898,18 @@ function jogosView(c){
   const real=c.games.filter(g=>!g.bye);
   const lgRounds=[...new Set(c.games.filter(g=>g.phase==='liga').map(g=>g.round))].sort((a,b)=>a-b);
   const R=koRounds(c);
-  const tools=ED()?`<div class="tools">${c.format!=='mata'?`<button class="btn sm" data-act="genFix">Gerar tabela de jogos</button>`:''}<button class="btn ghost sm" data-act="newGame">+ Novo jogo</button></div>`:'';
+  const tools=ED()?`<div class="tools">${c.format!=='mata'?`<button class="btn sm" data-act="genFix">Gerar tabela de jogos</button>`:''}<button class="btn ghost sm" data-act="newGame">+ Novo jogo</button>${lgRounds.length?`<button class="btn ghost sm" data-act="roundsModal">Nomear rodadas</button>`:''}</div>`:'';
   if(!real.length)return tools+emptyBlock('Nenhum jogo cadastrado',c.format==='mata'?'Gere o chaveamento na aba Mata-mata.':'Gere a tabela automaticamente a partir dos times, ou adicione jogos um a um.','');
   const f=S.flt;
   const teamOpts=`<option value="all">Todos os times</option>`+c.teams.map(t=>`<option value="${esc(t.id)}" ${f.t===t.id?'selected':''}>${esc(t.name)}</option>`).join('');
-  const roundOpts=`<option value="all">Todas as fases</option>`+lgRounds.map(r=>`<option value="r${r}" ${f.r==='r'+r?'selected':''}>Rodada ${r}</option>`).join('')+(R?Array.from({length:R},(_,r)=>`<option value="k${r}" ${f.r==='k'+r?'selected':''}>${koRoundName(R,r)}</option>`).join(''):'');
+  const roundOpts=`<option value="all">Todas as fases</option>`+lgRounds.map(r=>`<option value="r${r}" ${f.r==='r'+r?'selected':''}>${esc(roundLabel(c,r))}</option>`).join('')+(R?Array.from({length:R},(_,r)=>`<option value="k${r}" ${f.r==='k'+r?'selected':''}>${koRoundName(R,r)}</option>`).join(''):'');
   const mine=g=>f.t==='all'||gTeams(c,g).includes(f.t);
   let out='';
   const sorter=(a,b)=>String(a.date||'9').localeCompare(String(b.date||'9'))||String(a.time||'').localeCompare(String(b.time||''));
   for(const r of lgRounds){
     if(f.r!=='all'&&f.r!=='r'+r)continue;
     const gs=c.games.filter(g=>g.phase==='liga'&&g.round===r&&mine(g)).sort(sorter);if(!gs.length)continue;
-    out+=`<div class="card"><div class="th">Rodada ${r}</div>${gs.map(g=>gameRow(c,g)).join('')}</div>`;
+    out+=`<div class="card"><div class="th">${esc(roundLabel(c,r))}</div>${gs.map(g=>gameRow(c,g)).join('')}</div>`;
   }
   for(let r=0;r<R;r++){
     if(f.r!=='all'&&f.r!=='k'+r)continue;
@@ -896,10 +940,8 @@ function statsView(c){
   const{T,goals,games,big,most}=totals(c),P=pstats(c);
   if(!games)return emptyBlock('Sem estatísticas ainda','As estatísticas aparecem a partir do primeiro jogo com resultado ou ao vivo. Gols, assistências e cartões são lançados no painel de cada partida.','');
   const pl=T.filter(x=>x.j>0);
-  const best=(fn,dir=1)=>[...pl].sort((a,b)=>dir*(fn(b)-fn(a))||b.j-a.j)[0];
   const avg=(n,j)=>(n/j).toFixed(2).replace('.',',');
-  const atk=best(x=>x.gp),def=best(x=>x.gc,-1),win=best(x=>x.v),fp=best(x=>x.ama+3*x.ver,-1),bad=best(x=>x.ama+3*x.ver);
-  const inv=pl.filter(x=>x.d===0);
+  const{atk,def,win,fp,bad,inv}=statBest(T);
   const sc=P.list.filter(x=>x.gol>0).sort((a,b)=>b.gol-a.gol||a.player.localeCompare(b.player,'pt-BR'));
   const as=P.list.filter(x=>x.ast>0).sort((a,b)=>b.ast-a.ast||a.player.localeCompare(b.player,'pt-BR'));
   const cd=P.list.filter(x=>x.ama||x.ver).sort((a,b)=>b.ver-a.ver||b.ama-a.ama||a.player.localeCompare(b.player,'pt-BR'));
@@ -951,7 +993,7 @@ function overlayHtml(c,kind,arg){
   if(kind==='tabela'){
     const gr=c.format==='grupos'?(arg&&c.groups.includes(arg)?arg:c.groups[0]):'';
     const rows=standings(c,gr),adv=c.format==='mata'?0:(c.advance||0);
-    return`<div class="o-card o-tbl"><div class="oh">${c.format==='grupos'?'Classificação · Grupo '+esc(gr):'Classificação'}</div><div class="ob"><table>${tableHead(false)}<tbody>${tableRows(c,rows,adv,false)}</tbody></table></div></div>`;
+    return`<div class="o-card o-tbl"><div class="oh">${c.format==='grupos'?'Classificação · Grupo '+esc(gr):'Classificação'}</div><div class="ob"><table>${tableHead(false)}<tbody>${tableRows(c,rows,adv,false,c.format==='grupos'?extraList(c):null)}</tbody></table></div></div>`;
   }
   if(kind==='artilharia'){
     const sc=pstats(c).list.filter(x=>x.gol>0).sort((a,b)=>b.gol-a.gol||a.player.localeCompare(b.player,'pt-BR')).slice(0,5);
@@ -991,6 +1033,7 @@ function teamLine(c,t){
   return{row,pos};
 }
 function sheetTeam(c,g,id,other){
+  
   const t=tmById(c,id),{row,pos}=teamLine(c,t);
   const mine=c.games.filter(x=>!x.bye&&gTeams(c,x).includes(id)&&gTeams(c,x).every(Boolean));
   const last=mine.filter(x=>x.played).sort(gCmp).slice(-5).reverse();
@@ -1001,9 +1044,9 @@ function sheetTeam(c,g,id,other){
     const h=x.home===id,gf=(h?x.hs:x.as)||0,ga=(h?x.as:x.hs)||0;
     let r=gf>ga?'V':gf<ga?'D':'E';
     if(gf===ga&&x.ph!=null&&x.pa!=null){const pf=h?x.ph:x.pa,pa=h?x.pa:x.ph;r=pf>pa?'V':'D'}
-    return`<div class="sh-li"><span class="tg ${r}">${r}</span><span class="n">${h?'':'@ '}${esc((opp(x)||{}).name||'?')}</span><span class="v">${gf} × ${ga}</span></div>`;
+    return`<div class="sh-li"><span class="rs ${r}">${r}</span><span class="n">${h?'':'@ '}${esc((opp(x)||{}).name||'?')}</span><span class="v">${gf} × ${ga}</span></div>`;
   }).join(''):'<div class="sh-none">Ainda sem jogos disputados.</div>';
-  const nextH=next.length?next.map(x=>`<div class="sh-li"><span class="tg N">${x.phase==='ko'?'M':x.round}</span><span class="n">${esc((opp(x)||{}).name||'?')}</span><span class="s">${esc(fmtDate(x)||'a definir')}</span></div>`).join(''):'<div class="sh-none">Sem próximos jogos cadastrados.</div>';
+  const nextH=next.length?next.map(x=>`<div class="sh-li"><span class="n"><b>${esc((opp(x)||{}).name||'?')}</b><br><span class="s">${esc(x.phase==='ko'?koTitle(c,x):roundLabel(c,x.round))}</span></span><span class="s">${esc(fmtDate(x)||'data a definir')}</span></div>`).join(''):'<div class="sh-none">Sem próximos jogos cadastrados.</div>';
   const scH=scorers.length?scorers.map(p=>`<div class="sh-li"><span class="n">${esc(p.player)}</span><span class="v">${p.gol}</span></div>`).join(''):'<div class="sh-none">Sem gols com autor lançado.</div>';
   const sg=row.sg??((row.gp||0)-(row.gc||0));
   return`<div>
@@ -1015,10 +1058,11 @@ function sheetTeam(c,g,id,other){
 }
 function sheetHtml(c,g){
   const[h,a]=gTeams(c,g),th=tmById(c,h),ta=tmById(c,a);
-  const ph=g.phase==='ko'?koTitle(c,g):`Rodada ${g.round}`+(c.format==='grupos'&&g.group?` · Grupo ${g.group}`:'');
-  const meta=[ph,fmtDate(g),g.venue].filter(Boolean).map(esc).join(' · ');
-  const head=t=>{const{pos}=teamLine(c,t);return`<div class="sh-team">${badge(t)}<h2>${esc(t.name)}</h2><div class="pos">${pos&&g.phase!=='ko'?pos+'º colocado'+(c.format==='grupos'&&t.group?' · Grupo '+esc(t.group):''):''}&nbsp;</div></div>`};
-  return`<div class="sheetpage" id="sheetpage"><div class="sh-head"><h1>${esc(c.name)}${c.season?' · '+esc(c.season):''}</h1><div class="m">${meta}</div></div>
+  const ph=g.phase==='ko'?koTitle(c,g):roundLabel(c,g.round)+(c.format==='grupos'&&g.group?` · Grupo ${g.group}`:'');
+  const meta=[ph,fmtDateLong(g),g.venue].filter(Boolean).map(esc).join(' · ');
+  const LD=leaders(c);
+  const head=t=>{const{pos}=teamLine(c,t);const tags=(LD[t.id]||[]).map(x=>`<span>★ ${esc(x)}</span>`).join('');return`<div class="sh-team">${badge(t)}<h2>${esc(t.name)}</h2><div class="pos">${pos&&g.phase!=='ko'?pos+'º colocado'+(c.format==='grupos'&&t.group?' · Grupo '+esc(t.group):''):''}&nbsp;</div><div class="sh-tags">${tags}</div></div>`};
+  return`<div class="sheetpage" id="sheetpage"><div class="sh-head"><img src="${safeImg(c.logo)||RC_LOGO}" alt=""><div class="tx"><h1>${esc(c.name)}${c.season?' · '+esc(c.season):''}</h1><div class="m">${meta}</div></div></div>
   <div class="sh-vs">${head(th)}<div class="sh-x">×</div>${head(ta)}</div>
   <div class="sh-grid">${sheetTeam(c,g,h,a)}${sheetTeam(c,g,a,h)}</div>
   <div class="sh-foot"><span>Resenha Canguçu · ${esc(c.sport)}</span><span>Gerado em ${new Date().toLocaleDateString('pt-BR')} ${new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}</span></div></div>`;
@@ -1132,18 +1176,18 @@ function champModal(id){
   <div class="g2"><label>Modalidade${sel('sport',SPORTS.map(s=>[s,s]),c?c.sport:SPORTS[0])}</label><label>Temporada / ano<input name="season" maxlength="30" value="${esc(c?c.season:new Date().getFullYear())}"></label></div>
   ${c?`<p class="hint">Formato: <b>${FORMATS[c.format]}</b> (definido na criação)</p>`:`<label>Formato${sel('format',Object.entries(FORMATS),fmt)}</label>`}
   <div class="g2" id="r-turns"><label>Jogos na fase de pontos/grupos${sel('turns',[[1,'Só ida'],[2,'Ida e volta']],c?c.turns:1)}</label><label id="r-adv"><span id="advl">Classificados por grupo</span><input name="advance" type="number" min="0" max="32" value="${c?c.advance:2}"></label></div>
-  <label id="r-gc" style="${fmt==='grupos'?'':'display:none'}">Número de grupos<input name="gc" type="number" min="2" max="8" value="${c&&c.groups.length?c.groups.length:2}"></label>
+  <div class="g2" id="r-gc" style="${fmt==='grupos'?'':'display:none'}"><label>Número de grupos<input name="gc" type="number" min="2" max="8" value="${c&&c.groups.length?c.groups.length:2}"></label><label>Vagas extras (melhores colocados seguintes)<input name="extra" type="number" min="0" max="8" value="${c?(c.extra||0):0}"></label><p class="hint" style="grid-column:1/-1;margin:0">Ex.: com 3 grupos, 2 classificados por grupo e 2 vagas extras, avançam os 2 primeiros de cada grupo e os 2 melhores terceiros.</p></div>
   <div class="g3"><label>Pontos por vitória<input name="pw" type="number" min="0" max="9" value="${c?c.pts.w:3}"></label><label>Empate<input name="pd" type="number" min="0" max="9" value="${c?c.pts.d:1}"></label><label>Derrota<input name="pl" type="number" min="0" max="9" value="${c?c.pts.l:0}"></label></div>`;
   let lg;
   const f=formModal(c?'Editar campeonato':'Novo campeonato',body,c?'Salvar':'Criar campeonato',fd=>{
     const name=(fd.get('name')||'').trim();if(!name)return'Informe o nome do campeonato.';
-    const o={name,sport:fd.get('sport'),season:(fd.get('season')||'').trim(),turns:+fd.get('turns')===2?2:1,pw:num(fd.get('pw'))??3,pd:num(fd.get('pd'))??1,pl:num(fd.get('pl'))??0,advance:num(fd.get('advance'))??0,groupsCount:num(fd.get('gc'))||2,logo:lg.val};
+    const o={name,sport:fd.get('sport'),season:(fd.get('season')||'').trim(),turns:+fd.get('turns')===2?2:1,pw:num(fd.get('pw'))??3,pd:num(fd.get('pd'))??1,pl:num(fd.get('pl'))??0,advance:num(fd.get('advance'))??0,groupsCount:num(fd.get('gc'))||2,extra:num(fd.get('extra'))||0,logo:lg.val};
     if(!c){
       o.format=fd.get('format')||'grupos';o.id=uid();
-      const n=newChamp(o);n.advance=o.format==='mata'?0:o.advance;
+      const n=newChamp(o);n.advance=o.format==='mata'?0:o.advance;n.extra=o.format==='grupos'?o.extra:0;
       S.champs[n.id]=n;commit(n);go(n.id,null);
     }else{
-      Object.assign(c,{name:o.name,sport:o.sport,season:o.season,turns:o.turns,logo:o.logo,pts:{w:o.pw,d:o.pd,l:o.pl},advance:c.format==='mata'?0:o.advance});
+      Object.assign(c,{name:o.name,sport:o.sport,season:o.season,turns:o.turns,logo:o.logo,pts:{w:o.pw,d:o.pd,l:o.pl},advance:c.format==='mata'?0:o.advance,extra:c.format==='grupos'?o.extra:0});
       if(c.format==='grupos'){
         const gcount=Math.min(8,Math.max(2,o.groupsCount));
         c.groups=Array.from({length:gcount},(_,i)=>String.fromCharCode(65+i));
@@ -1190,9 +1234,9 @@ function gameModal(id){
   const[dh,da]=ko?koTeams(c,g):[g.home,g.away];
   const topts=(val,blank)=>`${blank?'<option value="">— Folga (BYE) —</option>':'<option value="">Selecione…</option>'}${c.teams.map(t=>`<option value="${esc(t.id)}" ${t.id===val?'selected':''}>${esc(t.name)}</option>`).join('')}`;
   const teamsBlock=editable?`<div class="g2"><label>Mandante<select name="home">${topts(g.home,false)}</select></label><label>Visitante<select name="away">${topts(g.away,ko)}</select></label></div>`:`<p class="hint">Confronto definido pelos vencedores da fase anterior: <b>${esc((tmById(c,dh)||{name:'A definir'}).name)}</b> × <b>${esc((tmById(c,da)||{name:'A definir'}).name)}</b></p>`;
-  const where=ko?`<p class="hint"><b>${koTitle(c,g)}</b>${g.bye?' · sem adversário, o time avança automaticamente.':''}</p>`:`<div class="g2"><label>Rodada<input name="round" type="number" min="1" max="99" value="${g.round||1}"></label>${c.format==='grupos'?`<label>Grupo${sel('group',c.groups.map(x=>[x,'Grupo '+x]),g.group)}</label>`:'<span></span>'}</div>`;
-  const body=`${where}${teamsBlock}<div class="g3"><label>Data<input name="date" type="date" value="${esc(g.date)}"></label><label>Hora<input name="time" type="time" value="${esc(g.time)}"></label><label>Local<input name="venue" maxlength="40" value="${esc(g.venue)}"></label></div><p class="hint">O placar, gols e cartões são lançados no <b>painel da partida</b>.</p>`;
-  formModal(isNew?'Novo jogo':'Dados do jogo',body,'Salvar',fd=>{
+  const where=ko?`<p class="hint"><b>${koTitle(c,g)}</b>${g.bye?' · sem adversário, o time avança automaticamente.':''}</p>`:`<div class="g2"><label>Nº da rodada (define a ordem)<input name="round" type="number" min="1" max="999" value="${g.round||1}"></label>${c.format==='grupos'?`<label>Grupo${sel('group',c.groups.map(x=>[x,'Grupo '+x]),g.group)}</label>`:'<span></span>'}</div><label>Nome da rodada ou categoria (opcional)<input name="rname" maxlength="40" value="${esc((c.roundNames&&c.roundNames[g.round||1])||'')}" placeholder="Ex.: Sub-15, Feminino, Master"></label><p class="hint" style="margin-top:-6px">O nome vale para todos os jogos desta rodada. Para uma categoria nova, use um número de rodada ainda não usado.</p>`;
+  const body=`${where}${teamsBlock}<div class="g3"><label>Data<input name="date" type="date" value="${esc(g.date)}"><span class="hint" id="wd" style="display:block;margin:2px 0 0">${esc(fmtDateLong({date:g.date}))}</span></label><label>Hora<input name="time" type="time" value="${esc(g.time)}"></label><label>Local<input name="venue" maxlength="40" value="${esc(g.venue)}"></label></div><p class="hint">O placar, gols e cartões são lançados no <b>painel da partida</b>.</p>`;
+  const gf=formModal(isNew?'Novo jogo':'Dados do jogo',body,'Salvar',fd=>{
     if(editable){
       const h=fd.get('home')||null,a=fd.get('away')||null;
       if(!h)return'Escolha o time mandante.';
@@ -1200,12 +1244,22 @@ function gameModal(id){
       if(h===a)return'Mandante e visitante não podem ser o mesmo time.';
       g.home=h;g.away=a;if(ko)g.bye=!a;
     }
-    if(!ko){g.round=num(fd.get('round'))||1;g.group=c.format==='grupos'?(fd.get('group')||c.groups[0]):''}
+    if(!ko){g.round=num(fd.get('round'))||1;{const nm=(fd.get('rname')||'').trim();c.roundNames=c.roundNames||{};if(nm)c.roundNames[g.round]=nm;else delete c.roundNames[g.round]}g.group=c.format==='grupos'?(fd.get('group')||c.groups[0]):''}
     g.date=fd.get('date')||'';g.time=fd.get('time')||'';g.venue=(fd.get('venue')||'').trim();
     if(isNew)c.games.push(g);
     commit(c);
     if(isNew)setTimeout(()=>openPanel(g.id),50);
   },!isNew&&!ko?`<button type="button" class="btn danger" data-act="delGame" data-id="${esc(g.id)}">Excluir jogo</button>`:'');
+  const di=gf.querySelector('[name=date]'),wd=gf.querySelector('#wd');
+  if(di&&wd)di.addEventListener('input',()=>{wd.textContent=fmtDateLong({date:di.value})});
+  const ri=gf.querySelector('[name=round]'),rn=gf.querySelector('[name=rname]');
+  if(ri&&rn)ri.addEventListener('input',()=>{const n=c.roundNames&&c.roundNames[num(ri.value)];if(n)rn.value=n});
+}
+function roundsModal(){
+  const c=cur(),rs=[...new Set(c.games.filter(g=>g.phase==='liga').map(g=>g.round))].sort((a,b)=>a-b);
+  formModal('Nomear rodadas',`<p class="hint" style="margin-top:0">Dê um nome a cada rodada (por exemplo, a categoria). Deixe em branco para usar "Rodada N".</p>${rs.map(r=>`<label>Rodada ${r}<input name="r${r}" maxlength="40" value="${esc((c.roundNames&&c.roundNames[r])||'')}" placeholder="Rodada ${r}"></label>`).join('')}`,'Salvar',fd=>{
+    c.roundNames={};rs.forEach(r=>{const v=(fd.get('r'+r)||'').trim();if(v)c.roundNames[r]=v});commit(c);
+  });
 }
 
 // ---- painel da partida (marcação rápida) ----
@@ -1225,7 +1279,7 @@ function panelHtml(c,g){
   const ko=g.phase==='ko';
   if(!th||!ta)return`<div class="mh"><h2>Partida</h2><button type="button" class="x" data-act="close">×</button></div><p>Os dois times desta partida ainda não estão definidos.</p>`;
   const state=g.played?'<span class="st end">Encerrada</span>':g.live?'<span class="live">Ao vivo</span>':'<span class="st">Agendada</span>';
-  const title=ko?koTitle(c,g):`Rodada ${g.round}${c.format==='grupos'&&g.group?' · Grupo '+g.group:''}`;
+  const title=ko?koTitle(c,g):roundLabel(c,g.round)+(c.format==='grupos'&&g.group?' · Grupo '+g.group:'');
   const side=s=>{
     const t=s==='h'?th:ta;
     return`<div class="pn-col"><h4>${esc(t.name)}</h4><button type="button" class="big" data-act="pAct" data-side="${s}" data-kind="gol">Gol</button><button type="button" class="big y" data-act="pAct" data-side="${s}" data-kind="ama">Cartão amarelo</button><button type="button" class="big r" data-act="pAct" data-side="${s}" data-kind="ver">Cartão vermelho</button><button type="button" class="big g" data-act="pAct" data-side="${s}" data-kind="gc">Gol contra</button></div>`;
@@ -1297,7 +1351,7 @@ function viewGame(id){
   const[h,a]=gTeams(c,g),th=tmById(c,h),ta=tmById(c,a),show=counted(g);
   const ev=[...(g.events||[])].sort((x,y)=>(x.min??999)-(y.min??999));
   const lab={gol:'Gol',gc:'Gol contra',ama:'Cartão amarelo',ver:'Cartão vermelho'};
-  const meta=[g.phase==='ko'?koTitle(c,g):`Rodada ${g.round}${g.group&&c.format==='grupos'?' · Grupo '+g.group:''}`,fmtDate(g),g.venue].filter(Boolean).map(esc).join(' · ');
+  const meta=[g.phase==='ko'?koTitle(c,g):roundLabel(c,g.round)+(g.group&&c.format==='grupos'?' · Grupo '+g.group:''),fmtDate(g),g.venue].filter(Boolean).map(esc).join(' · ');
   const pens=(g.played&&g.hs===g.as&&g.ph!=null&&g.pa!=null)?`<div class="meta" style="margin-top:6px">Pênaltis: ${g.ph} × ${g.pa}</div>`:'';
   infoModal('Partida',`<div class="vh"><div class="meta" style="margin-bottom:10px">${meta}${g.live&&!g.played?' <span class="live">Ao vivo</span>':''}</div><div class="row"><div style="text-align:center">${badge(th,'lg')}<div class="nm">${esc(th?th.name:'A definir')}</div></div><div class="sc ${show?(g.live&&!g.played?'lv':''):'pend'}">${show?`${g.hs??0}<i>×</i>${g.as??0}`:(g.time||'vs')}</div><div style="text-align:center">${badge(ta,'lg')}<div class="nm">${esc(ta?ta.name:(g.bye?'Folga':'A definir'))}</div></div></div>${pens}</div>${ev.length?`<ul class="tl">${ev.map(e=>{const t=tmById(c,e.team);return`<li><span class="mn">${e.min!=null?e.min+"'":''}</span><span class="pill">${lab[e.type]}</span><b>${esc(e.player||'(sem autor)')}</b>${e.ast?`<span class="meta">ass. ${esc(e.ast)}</span>`:''}<span class="meta">${esc(t?t.name:'')}</span></li>`}).join('')}</ul>`:'<p class="meta" style="text-align:center">Sem lances registrados.</p>'}`,S.canEdit&&S.edit?`<button class="btn sm" data-act="game" data-id="${esc(g.id)}">Abrir painel</button>`:'');
 }
@@ -1310,7 +1364,7 @@ function koModal(){
   const max=c.format==='grupos'?Math.max(1,...c.groups.map(g=>teamsOf(c,g).length)):c.teams.length;
   const lbl=c.format==='grupos'?'Classificados por grupo':'Quantos times entram';
   const body=`${hasKo?'<div class="warn">Já existe um chaveamento. Gerar um novo <b>apaga o atual</b>, com resultados.</div>':''}
-  ${c.format==='grupos'?'<div class="warn">Confira se a fase de grupos terminou: os classificados saem da tabela atual.</div>':''}
+  ${c.format==='grupos'?`<div class="warn">Confira se a fase de grupos terminou: os classificados saem da tabela atual.${c.extra?` Os ${c.extra} melhores ${(c.advance||0)+1}º colocados entram automaticamente (se você mantiver o número padrão de classificados por grupo).`:''}</div>`:''}
   <div class="g2"><label>${lbl}<input name="q" type="number" min="${c.format==='grupos'?1:2}" max="${max}" value="${Math.min(def,max)}"></label><label class="chk" style="margin-top:22px"><input type="checkbox" name="shuf" ${c.format==='mata'?'checked':''}> Sortear confrontos</label></div>
   <div class="sep">Cabeças de chave</div><div id="seedprev" class="meta"></div>
   <p class="hint">Com número de times que não é potência de 2, os melhores colocados avançam direto na 1ª fase (folga). Você pode ajustar os confrontos da 1ª fase depois.</p>`;
@@ -1395,6 +1449,7 @@ const actions={
     if(ex)confirmModal(`Gerar a tabela substitui os ${ex} jogos atuais da fase de pontos/grupos, incluindo resultados. Continuar?`,'Substituir',run);else run();
   },
   genKo:koModal,
+  roundsModal,
   sim:d=>{S.sim[d.id]=S.sim[d.id]===d.v?undefined:d.v;if(!S.sim[d.id])delete S.sim[d.id];render()},
   simClear:()=>{S.sim={};render()},
   // painel da partida
@@ -1440,6 +1495,7 @@ document.addEventListener('keydown',e=>{
 });
 window.addEventListener('hashchange',()=>{const o=JSON.stringify([S.route,S.tv]);parseHash();if(JSON.stringify([S.route,S.tv])!==o)render()});
 
+{const bl=$('#brandlogo');if(bl)bl.src=RC_LOGO;const fv=$('#favi');if(fv)fv.href=RC_LOGO}
 parseHash();renderTop();initStore();
 </script>
 </body>
