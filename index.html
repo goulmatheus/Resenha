@@ -289,6 +289,8 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{outline-color:va
 .ast-sum{background:var(--soft);border-left:4px solid var(--blue);padding:10px 12px;margin:8px 0 6px;font-size:15px;border-radius:0 8px 8px 0}
 .ast-line{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-top:1px solid var(--line)}
 .ast-line .pill{margin-top:2px;min-width:104px;text-align:center}
+/* sem cantos arredondados */
+*,*:before,*:after{border-radius:0 !important}
 /* modo escuro */
 html[data-theme=dark] .warn{background:#3a2f10;color:#f1e3b8}
 html[data-theme=dark] .pill.ok,html[data-theme=dark] .st.go{background:#10372a;color:#5fd69b}
@@ -809,6 +811,47 @@ function marginPhrases(list,home,away,LIM){
 function condText(c,cd){
   const g=c.games.find(x=>x.id===cd.gid),h=(tmById(c,g.home)||{}).name,a=(tmById(c,g.away)||{}).name,s=cd.outs.join('');
   return s==='0'?`${h} vencer ${a}`:s==='1'?`${h} e ${a} empatarem`:s==='2'?`${a} vencer ${h}`:s==='01'?`${a} não vencer ${h}`:s==='12'?`${h} não vencer ${a}`:`${h} × ${a} não terminar empatado`;
+}
+
+
+// ---- chaveamento: olímpico entre grupos e manual ----
+const nextPow2=n=>{let s=2;while(s<n)s*=2;return s};
+function genBracketPairs(c,pairs){
+  c.games=c.games.filter(g=>g.phase!=='ko');
+  const size=pairs.length*2,R=Math.log2(size);
+  for(let r=0;r<R;r++){
+    const cnt=size/2**(r+1);
+    for(let s=0;s<cnt;s++){
+      const g=mkGame({phase:'ko',kr:r,ks:s,round:0});
+      if(r===0){const p=pairs[s];g.home=p[0]||null;g.away=p[1]||null;g.bye=!g.away}
+      c.games.push(g);
+    }
+  }
+}
+// 1º de um grupo contra o último classificado do outro (grupos pareados A-B, C-D...)
+function crossPairs(c,q){
+  if(c.format!=='grupos')return{err:'O modo olímpico vale para campeonatos com grupos.'};
+  const G=c.groups.length;
+  if(G<2||G%2)return{err:'O modo olímpico precisa de um número par de grupos (2, 4...).'};
+  if(q===(c.advance||0)&&c.extra)return{err:'Com vagas extras (melhores terceiros), use "Por campanha" ou "Manual".'};
+  const tb=c.groups.map(g=>standings(c,g).map(r=>r.id));
+  const qq=Math.min(q,...tb.map(t=>t.length));
+  if(qq<1)return{err:'Os grupos ainda não têm times.'};
+  const n=G*qq;
+  if(n<4||(n&(n-1)))return{err:`O modo olímpico precisa de 4, 8 ou 16 classificados (agora seriam ${n}).`};
+  const list=[];
+  for(let k=0;k<G/2;k++){
+    const X=tb[2*k],Y=tb[2*k+1],lx=c.groups[2*k],ly=c.groups[2*k+1];
+    for(let i=1;i<=Math.floor(qq/2);i++){
+      const j=qq+1-i;
+      list.push({key:[i,k,0],h:X[i-1],a:Y[j-1],lh:`${i}º ${lx}`,la:`${j}º ${ly}`});
+      list.push({key:[i,k,1],h:Y[i-1],a:X[j-1],lh:`${i}º ${ly}`,la:`${j}º ${lx}`});
+    }
+    if(qq%2){const m=(qq+1)/2;list.push({key:[m,k,0],h:X[m-1],a:Y[m-1],lh:`${m}º ${lx}`,la:`${m}º ${ly}`})}
+  }
+  list.sort((p,q2)=>p.key[0]-q2.key[0]||p.key[1]-q2.key[1]||p.key[2]-q2.key[2]);
+  const m=list.length,ord=bracketOrder(m),slots=ord.map(o=>list[o-1]);
+  return{pairs:slots.map(p=>[p.h,p.a]),labels:slots,n,qq};
 }
 
 // ---- destaques estatísticos ----
@@ -1745,21 +1788,69 @@ function koModal(){
   const def=c.format==='grupos'?(c.advance||2):c.format==='liga'?(c.advance||4):c.teams.length;
   const max=c.format==='grupos'?Math.max(1,...c.groups.map(g=>teamsOf(c,g).length)):c.teams.length;
   const lbl=c.format==='grupos'?'Classificados por grupo':'Quantos times entram';
+  const q0=Math.min(def,max);
+  const crossOk=c.format==='grupos'&&!crossPairs(c,q0).err;
+  const defMode=crossOk?'cross':'seed';
   const body=`${hasKo?'<div class="warn">Já existe um chaveamento. Gerar um novo <b>apaga o atual</b>, com resultados.</div>':''}
   ${c.format==='grupos'?`<div class="warn">Confira se a fase de grupos terminou: os classificados saem da tabela atual.${c.extra?` Os ${c.extra} melhores ${(c.advance||0)+1}º colocados entram automaticamente (se você mantiver o número padrão de classificados por grupo).`:''}</div>`:''}
-  <div class="g2"><label>${lbl}<input name="q" type="number" min="${c.format==='grupos'?1:2}" max="${max}" value="${Math.min(def,max)}"></label><label class="chk" style="margin-top:22px"><input type="checkbox" name="shuf" ${c.format==='mata'?'checked':''}> Sortear confrontos</label></div>
-  <div class="sep">Cabeças de chave</div><div id="seedprev" class="meta"></div>
-  <p class="hint">Com número de times que não é potência de 2, os melhores colocados avançam direto na 1ª fase (folga). Você pode ajustar os confrontos da 1ª fase depois.</p>`;
+  <div class="g2"><label>${lbl}<input name="q" type="number" min="${c.format==='grupos'?1:2}" max="${max}" value="${q0}"></label>
+  <label>Como montar os confrontos<select name="mode">
+    ${c.format==='grupos'?`<option value="cross" ${defMode==='cross'?'selected':''}>Olímpico entre grupos (1º × último do outro)</option>`:''}
+    <option value="seed" ${defMode==='seed'?'selected':''}>Por campanha (melhores × piores)</option>
+    <option value="manual">Manual (escolho cada confronto)</option></select></label></div>
+  <label class="chk" id="shufbox" style="display:none"><input type="checkbox" name="shuf" ${c.format==='mata'?'checked':''}> Sortear confrontos</label>
+  <div class="sep" id="prevt">Confrontos</div><div id="seedprev" class="meta"></div>
+  <p class="hint" id="prevh"></p>`;
   const f=formModal('Gerar chaveamento',body,'Gerar',fd=>{
-    const q=num(fd.get('q'))||2,ids=seedList(c,q,!!fd.get('shuf'));
+    const q=num(fd.get('q'))||2,mode=fd.get('mode');
+    if(mode==='cross'){
+      const r=crossPairs(c,q);if(r.err)return r.err;
+      genBracketPairs(c,r.pairs);commit(c);go(c.id,'mata');return;
+    }
+    const ids=seedList(c,q,mode==='seed'&&!!fd.get('shuf'));
     if(ids.length<2)return'São necessários pelo menos 2 times classificados.';
+    if(mode==='manual'){setTimeout(()=>koManualModal(ids),0);return}
     genBracket(c,ids);commit(c);go(c.id,'mata');
   });
   const prev=()=>{
-    const q=num(f.querySelector('[name=q]').value)||2,shuf=f.querySelector('[name=shuf]').checked,ids=seedList(c,q,false);
-    f.querySelector('#seedprev').innerHTML=(shuf?'<i>A ordem será sorteada ao gerar.</i> ':'')+ids.map((id,i)=>`${i+1}º ${esc((tmById(c,id)||{}).name)}`).join(' · ');
+    const q=num(f.querySelector('[name=q]').value)||2,mode=f.querySelector('[name=mode]').value,shuf=f.querySelector('[name=shuf]').checked,ids=seedList(c,q,false);
+    f.querySelector('#shufbox').style.display=mode==='seed'?'':'none';
+    const box=f.querySelector('#seedprev'),hint=f.querySelector('#prevh'),title=f.querySelector('#prevt');
+    if(mode==='cross'){
+      const r=crossPairs(c,q);title.textContent='Confrontos da 1ª fase';
+      box.innerHTML=r.err?`<span style="color:var(--red);font-weight:600">${esc(r.err)}</span>`:r.labels.map(p=>`${esc(p.lh)} × ${esc(p.la)} <span class="meta">(${esc((tmById(c,p.h)||{}).name)} × ${esc((tmById(c,p.a)||{}).name)})</span>`).join('<br>');
+      hint.textContent='O 1º colocado de cada grupo enfrenta o último classificado do outro grupo. Os grupos são pareados na ordem (A com B, C com D...).';
+    }else if(mode==='manual'){
+      title.textContent='Classificados';box.innerHTML=ids.map((id,i)=>`${i+1}º ${esc((tmById(c,id)||{}).name)}`).join(' · ');
+      hint.textContent='Na próxima tela você escolhe os dois times de cada confronto da 1ª fase.';
+    }else{
+      title.textContent='Cabeças de chave';
+      box.innerHTML=(shuf?'<i>A ordem será sorteada ao gerar.</i> ':'')+ids.map((id,i)=>`${i+1}º ${esc((tmById(c,id)||{}).name)}`).join(' · ');
+      hint.textContent='Com número de times que não é potência de 2, os melhores colocados avançam direto na 1ª fase (folga). Você pode ajustar os confrontos da 1ª fase depois.';
+    }
   };
-  f.querySelector('[name=q]').addEventListener('input',prev);f.querySelector('[name=shuf]').addEventListener('change',prev);prev();
+  ['q'].forEach(n=>f.querySelector(`[name=${n}]`).addEventListener('input',prev));
+  f.querySelector('[name=mode]').addEventListener('change',prev);f.querySelector('[name=shuf]').addEventListener('change',prev);prev();
+}
+function koManualModal(ids){
+  const c=cur();
+  const size=nextPow2(ids.length),m=size/2,ord=bracketOrder(size);
+  const std=Array.from({length:m},(_,s)=>[ids[ord[2*s]-1]||'',ids[ord[2*s+1]-1]||'']);
+  const qs=new Set(ids);
+  const opts=(val,bye)=>`${bye?'<option value="">— Folga (BYE) —</option>':'<option value="">Selecione…</option>'}<optgroup label="Classificados">${ids.map(id=>`<option value="${esc(id)}" ${id===val?'selected':''}>${esc((tmById(c,id)||{}).name)}</option>`).join('')}</optgroup><optgroup label="Outros times">${c.teams.filter(t=>!qs.has(t.id)).map(t=>`<option value="${esc(t.id)}" ${t.id===val?'selected':''}>${esc(t.name)}</option>`).join('')}</optgroup>`;
+  const R=Math.log2(size),title=koRoundName(R,0);
+  const body=`<p class="hint" style="margin-top:0">${esc(title)}: escolha os dois times de cada confronto. A ordem dos confrontos define o chaveamento: os vencedores de confrontos vizinhos se enfrentam na fase seguinte. Já vem preenchido por campanha, e você pode trocar.</p>${std.map((p,i)=>`<div class="g2" style="align-items:end"><label>Confronto ${i+1}: mandante<select name="h${i}">${opts(p[0],false)}</select></label><label>Visitante<select name="a${i}">${opts(p[1],true)}</select></label></div>`).join('')}`;
+  formModal('Escolher confrontos',body,'Gerar chaveamento',fd=>{
+    const pairs=[],used=new Set();
+    for(let i=0;i<m;i++){
+      const h=fd.get('h'+i)||'',a=fd.get('a'+i)||'';
+      if(!h)return`Escolha o mandante do confronto ${i+1}.`;
+      if(h===a)return`No confronto ${i+1}, os dois times são o mesmo.`;
+      for(const x of [h,a])if(x){if(used.has(x))return`${(tmById(c,x)||{}).name} aparece em mais de um confronto.`;used.add(x)}
+      pairs.push([h,a||null]);
+    }
+    genBracketPairs(c,pairs);commit(c);go(c.id,'mata');
+  });
 }
 function exportModal(){
   const c=cur();
