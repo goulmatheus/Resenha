@@ -1583,15 +1583,20 @@ function teamModal(id){
   <div class="g2"><label>Nome do time<input name="name" required maxlength="40" value="${esc(t?t.name:'')}"></label><label>Sigla (até 4 letras)<input name="short" maxlength="4" value="${esc(t?t.short:'')}" placeholder="auto"></label></div>
   <div class="g2"><label>Cor (usada quando não há logo)<input name="color" type="color" value="${safeColor(t?t.color:'#004AAB')}" style="height:42px;padding:3px"></label>${grp}</div>
   <label>Ordem de desempate manual (opcional; 1 = melhor)<input name="seed" type="number" min="1" max="99" value="${t&&t.seed!=null?t.seed:''}" placeholder="vazio"></label>
-  <label>Jogadores (um por linha)<textarea name="players" rows="7" placeholder="Fulano&#10;Beltrano&#10;Ciclano">${esc(t?(t.players||[]).join('\n'):'')}</textarea></label>`;
+  <label>Jogadores (um por linha; Enter = novo jogador, Ctrl+Enter = salvar)<textarea name="players" rows="7" placeholder="Fulano&#10;Beltrano&#10;Ciclano">${esc(t?(t.players||[]).join('\n'):'')}</textarea></label>`;
   let lg;
   const f=formModal(t?'Editar time':'Novo time',body,'Salvar',fd=>{
     const name=(fd.get('name')||'').trim();if(!name)return'Informe o nome do time.';
     const short=((fd.get('short')||'').trim()||name.replace(/[^A-Za-zÀ-ÿ0-9]/g,'').slice(0,3)).toUpperCase().slice(0,4);
     const players=[...new Set((fd.get('players')||'').split('\n').map(s=>s.trim()).filter(Boolean))].slice(0,60);
     const data={name,short,color:safeColor(fd.get('color')),logo:lg.val,seed:num(fd.get('seed')),group:c.format==='grupos'?(fd.get('group')||c.groups[0]):'',players};
-    if(t)Object.assign(t,data);else c.teams.push({id:uid('t'),...data});
+    let removed=0;
+    if(t){
+      if(c.format==='grupos'&&(t.group||'')!==data.group){const n0=c.games.length;c.games=c.games.filter(g=>!(g.phase==='liga'&&(g.home===t.id||g.away===t.id)&&!counted(g)));removed=n0-c.games.length}
+      Object.assign(t,data);
+    }else c.teams.push({id:uid('t'),...data});
     commit(c);
+    if(removed)toast(`${removed} jogo${removed>1?'s':''} sem resultado da fase de grupos ${removed>1?'foram removidos':'foi removido'} porque o time mudou de grupo. Gere a tabela de novo.`);
   },t?`<button type="button" class="btn danger" data-act="delTeam" data-id="${esc(t.id)}">Excluir time</button>`:'');
   lg=wireLogo(f,t?t.logo:'',t?(t.short||t.name.slice(0,3)).toUpperCase():'?');
 }
@@ -1602,8 +1607,9 @@ function gameModal(id){
   if(isNew){const mr=Math.max(0,...c.games.filter(x=>x.phase==='liga').map(x=>x.round||0));g=mkGame({phase:'liga',round:mr||1,group:c.format==='grupos'?c.groups[0]:''})}
   const ko=g.phase==='ko',editable=!ko||g.kr===0;
   const[dh,da]=ko?koTeams(c,g):[g.home,g.away];
-  const topts=(val,blank)=>`${blank?'<option value="">— Folga (BYE) —</option>':'<option value="">Selecione…</option>'}${c.teams.map(t=>`<option value="${esc(t.id)}" ${t.id===val?'selected':''}>${esc(t.name)}</option>`).join('')}`;
-  const teamsBlock=editable?`<div class="g2"><label>Mandante<select name="home">${topts(g.home,false)}</select></label><label>Visitante<select name="away">${topts(g.away,ko)}</select></label></div>`:`<p class="hint">Confronto definido pelos vencedores da fase anterior: <b>${esc((tmById(c,dh)||{name:'A definir'}).name)}</b> × <b>${esc((tmById(c,da)||{name:'A definir'}).name)}</b></p>`;
+  const grpMode=c.format==='grupos'&&!ko;
+  const topts=(val,blank,grp)=>`${blank?'<option value="">— Folga (BYE) —</option>':'<option value="">Selecione…</option>'}${c.teams.filter(t=>grp===undefined||(t.group||'')===grp).map(t=>`<option value="${esc(t.id)}" ${t.id===val?'selected':''}>${esc(t.name)}</option>`).join('')}`;
+  const teamsBlock=editable?`<div class="g2"><label>Mandante<select name="home">${topts(g.home,false,grpMode?(g.group||c.groups[0]):undefined)}</select></label><label>Visitante<select name="away">${topts(g.away,ko,grpMode?(g.group||c.groups[0]):undefined)}</select></label></div>`:`<p class="hint">Confronto definido pelos vencedores da fase anterior: <b>${esc((tmById(c,dh)||{name:'A definir'}).name)}</b> × <b>${esc((tmById(c,da)||{name:'A definir'}).name)}</b></p>`;
   const where=ko?`<p class="hint"><b>${koTitle(c,g)}</b>${g.bye?' · sem adversário, o time avança automaticamente.':''}</p>`:`<div class="g2"><label>Nº da rodada (define a ordem)<input name="round" type="number" min="1" max="999" value="${g.round||1}"></label>${c.format==='grupos'?`<label>Grupo${sel('group',c.groups.map(x=>[x,'Grupo '+x]),g.group)}</label>`:'<span></span>'}</div><label>Nome da rodada ou categoria (opcional)<input name="rname" maxlength="40" value="${esc((c.roundNames&&c.roundNames[g.round||1])||'')}" placeholder="Ex.: Sub-15, Feminino, Master"></label><p class="hint" style="margin-top:-6px">O nome vale para todos os jogos desta rodada. Para uma categoria nova, use um número de rodada ainda não usado.</p>`;
   const body=`${where}${teamsBlock}<div class="g3"><label>Data<input name="date" type="date" value="${esc(g.date)}"><span class="hint" id="wd" style="display:block;margin:2px 0 0">${esc(fmtDateLong({date:g.date}))}</span></label><label>Hora<input name="time" type="time" value="${esc(g.time)}"></label><label>Local<input name="venue" maxlength="40" value="${esc(g.venue)}"></label></div><p class="hint">O placar, gols e cartões são lançados no <b>painel da partida</b>.</p>`;
   const gf=formModal(isNew?'Novo jogo':'Dados do jogo',body,'Salvar',fd=>{
@@ -1612,6 +1618,7 @@ function gameModal(id){
       if(!h)return'Escolha o time mandante.';
       if(!ko&&!a)return'Escolha o time visitante.';
       if(h===a)return'Mandante e visitante não podem ser o mesmo time.';
+      if(grpMode){const gr=fd.get('group')||c.groups[0],th=tmById(c,h),ta=a&&tmById(c,a);if((th&&(th.group||'')!==gr)||(ta&&(ta.group||'')!==gr))return'Na fase de grupos, os dois times precisam ser do mesmo grupo ('+gr+').'}
       g.home=h;g.away=a;if(ko)g.bye=!a;
     }
     if(!ko){g.round=num(fd.get('round'))||1;{const nm=(fd.get('rname')||'').trim();c.roundNames=c.roundNames||{};if(nm)c.roundNames[g.round]=nm;else delete c.roundNames[g.round]}g.group=c.format==='grupos'?(fd.get('group')||c.groups[0]):''}
@@ -1620,6 +1627,11 @@ function gameModal(id){
     commit(c);
     if(isNew)setTimeout(()=>openPanel(g.id),50);
   },!isNew&&!ko?`<button type="button" class="btn danger" data-act="delGame" data-id="${esc(g.id)}">Excluir jogo</button>`:'');
+  if(grpMode){
+    const gs=gf.querySelector('[name=group]'),hs=gf.querySelector('[name=home]'),as=gf.querySelector('[name=away]');
+    const refill=()=>{const gr=gs.value;const hv=hs.value,av=as.value;hs.innerHTML=topts(hv,false,gr);as.innerHTML=topts(av,false,gr)};
+    gs.addEventListener('change',refill);
+  }
   const di=gf.querySelector('[name=date]'),wd=gf.querySelector('#wd');
   if(di&&wd)di.addEventListener('input',()=>{wd.textContent=fmtDateLong({date:di.value})});
   const ri=gf.querySelector('[name=round]'),rn=gf.querySelector('[name=rname]');
@@ -1888,6 +1900,12 @@ document.addEventListener('keydown',e=>{
     return;
   }
   if((e.key==='Enter'||e.key===' ')&&t&&t.dataset&&t.dataset.act&&!/^(BUTTON|INPUT|SELECT|TEXTAREA|A)$/.test(tag)){e.preventDefault();t.click();return}
+  if(e.key==='Enter'&&t&&t.closest&&t.closest('#mf')&&!e.isComposing){
+    const f=t.closest('#mf');
+    if(tag==='TEXTAREA'){if(e.ctrlKey||e.metaKey){e.preventDefault();f.requestSubmit()}return}
+    if(tag==='INPUT'&&!['file','button','submit','reset'].includes(t.type)){e.preventDefault();f.requestSubmit();return}
+    if(tag==='SELECT')return;
+  }
   if(e.key==='Enter'&&t&&t.id==='pcustom'){e.preventDefault();actions.pCustom();return}
   if(e.key==='Enter'&&!e.shiftKey&&!/^(TEXTAREA|BUTTON|SELECT|A|INPUT)$/.test(tag||'')||e.key==='Enter'&&tag==='SELECT'&&false){
     const m=$('#modal');if(!m||!m.innerHTML)return;
