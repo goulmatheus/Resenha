@@ -539,26 +539,33 @@ select:focus,input:focus,textarea:focus{outline:0;border-color:var(--acc);box-sh
   .tvg{grid-template-columns:1fr}
 }
 @media (prefers-reduced-motion:reduce){.cc:after{display:none}}
+.ic{display:inline-block;vertical-align:-.14em;flex:none}
+.ic-g{color:#c99700}.ic-s{color:#8a95a8}
+html[data-theme=dark] .ic-g{color:#ffc93c}html[data-theme=dark] .ic-s{color:#aab4c6}
+.tprof .ic-g,.hrm-f .ic-g{color:var(--yellow)}.tprof .ic-s,.hrm-f .ic-s{color:#d5dbe6}
+.btn .ic,.tagbtn .ic,.libtag .ic,.libpick .ic{margin-right:2px}
+.totop .ic{font-size:20px}
+.tbr button .ic{font-size:16px}
+.mv .ic{font-size:13px;vertical-align:-.2em}
+.sh-tags .ic{font-size:3mm}
 
 /* ===== filtros em chips / busca / alternador ===== */
 .chipbar{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:2px 0 4px;margin:0 0 10px;-webkit-overflow-scrolling:touch}
 .chipbar::-webkit-scrollbar{display:none}
-.fchip{flex:none;border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:99px;padding:8px 14px;font-weight:600;font-size:14.5px;display:inline-flex;align-items:center;gap:6px;transition:transform 160ms var(--ease-out),background-color .15s ease,border-color .15s ease,color .15s ease;-webkit-user-select:none;user-select:none;touch-action:manipulation}
-.fchip small{font-size:12px;font-weight:700;color:var(--mut);background:var(--surf3);border-radius:99px;padding:1px 7px;transition:background-color .15s ease,color .15s ease}
-.fchip:active{transform:scale(.96)}
+.fchip{flex:none;border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:99px;padding:8px 14px;font-weight:600;font-size:14.5px;display:inline-flex;align-items:center;gap:6px;transition:background-color .2s ease,border-color .2s ease,color .2s ease;-webkit-user-select:none;user-select:none;touch-action:manipulation}
+.fchip small{font-size:12px;font-weight:700;color:var(--mut);background:var(--surf3);border-radius:99px;padding:1px 7px;transition:background-color .2s ease,color .2s ease}
 .fchip.on{background:var(--blue);border-color:var(--blue);color:#fff}
 .fchip.on small{background:rgba(255,255,255,.22);color:#fff}
 .chipbar.sm .fchip{padding:6px 12px;font-size:13.5px}
 .fchip.gold.on{background:#c99700;border-color:#c99700}.fchip.silver.on{background:#7b8798;border-color:#7b8798}.fchip.bronze.on{background:#a8642f;border-color:#a8642f}
 @media (hover:hover) and (pointer:fine){.fchip:not(.on):hover{border-color:var(--acc);color:var(--acc)}}
 .searchbar{position:relative;margin:0 0 12px}
-.searchbar .si{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:20px;color:var(--mut);pointer-events:none}
+.searchbar .si{position:absolute;left:15px;top:50%;transform:translateY(-50%);font-size:18px;color:var(--mut);pointer-events:none;display:flex}
 .searchbar input{padding-left:42px;min-height:48px;border-radius:99px;font-size:16px;background:var(--card)}
 .searchbar.sm input{min-height:42px}
 .seg{display:inline-flex;background:var(--surf3);border-radius:10px;padding:3px;gap:2px}
-.seg button{border:0;background:transparent;color:var(--mut);font-weight:700;padding:7px 14px;border-radius:8px;transition:background-color .15s ease,color .15s ease,transform 160ms var(--ease-out)}
+.seg button{border:0;background:transparent;color:var(--mut);font-weight:700;padding:7px 14px;border-radius:8px;transition:background-color .2s ease,color .2s ease}
 .seg button.on{background:var(--card);color:var(--acc);box-shadow:0 1px 3px rgba(0,0,0,.12)}
-.seg button:active{transform:scale(.96)}
 .tagbtn{border:1.5px solid var(--line);background:var(--card);color:var(--acc);font-weight:700;font-size:13px;border-radius:99px;padding:5px 12px;margin-top:6px;transition:transform 160ms var(--ease-out),background-color .15s ease}
 .tagbtn:active{transform:scale(.96)}
 @media (hover:hover) and (pointer:fine){.tagbtn:hover{background:var(--soft)}}
@@ -576,15 +583,14 @@ html[data-theme=dark] .dv.gold{background:#3a2f10;color:#ffd06a}html[data-theme=
 .hstats b{display:block;font-family:'Barlow Condensed',sans-serif;font-size:32px;line-height:1;color:var(--acc)}
 .hstats small{color:var(--mut);font-size:12.5px;text-transform:uppercase;letter-spacing:.05em}
 .podium{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0 0 16px;align-items:end}
-.pod{border:0;border-radius:var(--r);padding:14px 12px;text-align:left;display:flex;flex-direction:column;gap:2px;color:#fff;background:linear-gradient(135deg,var(--blue),var(--blue2));box-shadow:0 10px 24px -12px rgba(0,40,110,.6);transition:transform 200ms var(--ease-out);min-width:0}
+.pod{border:0;border-radius:var(--r);padding:14px 12px;text-align:left;display:flex;flex-direction:column;gap:2px;color:#fff;background:linear-gradient(135deg,var(--blue),var(--blue2));box-shadow:0 10px 24px -12px rgba(0,40,110,.6);min-width:0}
 .pod.p1{background:linear-gradient(135deg,#d9a400,#a87700);min-height:118px}
 .pod.p2{background:linear-gradient(135deg,#7b8798,#56627a);min-height:100px}
 .pod.p3{background:linear-gradient(135deg,#b46f38,#8a4a17);min-height:88px}
-.pod .pod-m{font-size:24px;line-height:1}
+.pod .pod-m{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.22);border:1.5px solid rgba(255,255,255,.55);font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:15px;line-height:1;margin-bottom:4px}
 .pod>b{font-family:'Barlow Condensed',sans-serif;font-size:21px;text-transform:uppercase;line-height:1.05;overflow-wrap:anywhere}
 .pod span:last-child{font-size:13px;opacity:.92}
-.pod:active{transform:scale(.97)}
-@media (hover:hover) and (pointer:fine){.pod:hover{transform:translateY(-3px)}}
+.pod{cursor:pointer}
 .tprof{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff;border-radius:var(--r);padding:16px;margin:0 0 16px;border-bottom:5px solid var(--yellow);box-shadow:0 10px 30px -14px rgba(0,40,110,.6)}
 .tprof-l{display:flex;gap:14px;align-items:center}
 .tprof-l small{opacity:.8;text-transform:uppercase;letter-spacing:.08em;font-size:12px}
@@ -596,7 +602,7 @@ html[data-theme=dark] .dv.gold{background:#3a2f10;color:#ffd06a}html[data-theme=
 .tprof-n b{display:block;font-family:'Barlow Condensed',sans-serif;font-size:30px;line-height:1}
 .tprof-n small{font-size:11.5px;opacity:.85;text-transform:uppercase;letter-spacing:.04em}
 .yrs{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:8px}
-.yrs .yl{font-size:16px;margin-right:2px}
+.yrs .yl{font-size:18px;margin-right:2px;display:inline-flex}
 .yr{background:rgba(255,255,255,.14);border-radius:99px;padding:3px 10px;font-size:13px;font-weight:600}
 .yr.g{background:var(--yellow);color:#1b1b1b}
 .hcard .hrank{margin-bottom:4px}
@@ -609,7 +615,7 @@ html[data-theme=dark] .dv.gold{background:#3a2f10;color:#ffd06a}html[data-theme=
 .hc-y{display:flex;align-items:center;gap:8px}
 .hc-y b{font-family:'Barlow Condensed',sans-serif;font-size:28px;line-height:1;color:var(--acc)}
 .hc-w,.hc-v{display:flex;align-items:center;gap:6px;min-width:0}
-.hc .ic{width:20px;text-align:center;flex:none}
+.hc .ic{font-size:17px}
 .hc-t{border:0;background:none;padding:2px 4px;margin:-2px -4px;border-radius:6px;color:var(--ink);font-weight:600;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;transition:background-color .15s ease,color .15s ease}
 .hc-t.w{font-family:'Barlow Condensed',sans-serif;font-size:21px;font-weight:800;text-transform:uppercase}
 .hc-t.me{background:var(--yellow);color:#1b1b1b}
@@ -771,6 +777,27 @@ const SPORTS=['Futebol de campo','Futsal','Society','Futebol 7','Handebol','Outr
 const TB={v:'Mais vitórias',sg:'Saldo de gols',gp:'Mais gols marcados',gc:'Menos gols sofridos',h2h:'Confronto direto: pontos',h2hsg:'Confronto direto: saldo de gols',h2hgp:'Confronto direto: gols marcados',fp:'Fair play (menos cartões)',seed:'Ordem definida pela organização'};
 const TB_DEFAULT=['v','sg','gp'];
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+// ---- ícones SVG (traço simples, herdam a cor do texto) ----
+const ICONS={
+  trophy:'<path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4z"/><path d="M17 5h3v1.5A3.5 3.5 0 0 1 17 10M7 5H4v1.5A3.5 3.5 0 0 0 7 10"/>',
+  medal:'<circle cx="12" cy="15" r="5.5"/><path d="M8.6 10.7 6 3h3.5l2.5 6M15.4 10.7 18 3h-3.5L12 9"/>',
+  ball:'<circle cx="12" cy="12" r="9"/><path d="m12 8 3.4 2.5-1.3 4h-4.2l-1.3-4z"/><path d="M12 8V3.5M15.4 10.5l4.2-1.4M14.1 14.5l2.6 3.6M9.9 14.5l-2.6 3.6M8.6 10.5 4.4 9.1"/>',
+  lib:'<path d="M4 4h4v16H4zM10 4h4v16h-4z"/><path d="m16 5.2 3.6-1 3 14.6-3.6 1z"/>',
+  dice:'<rect x="4" y="4" width="16" height="16" rx="3.5"/><circle cx="9" cy="9" r="1.3" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.3" fill="currentColor" stroke="none"/><circle cx="15" cy="15" r="1.3" fill="currentColor" stroke="none"/>',
+  users:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.6a3.5 3.5 0 0 1 0 6.8M18 14.3a6.5 6.5 0 0 1 3.5 5.7"/>',
+  sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M2.5 12h2M19.5 12h2M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/>',
+  moon:'<path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/>',
+  search:'<circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/>',
+  left:'<path d="M19 12H5M11 18l-6-6 6-6"/>',
+  up:'<path d="M12 19V5M6 11l6-6 6 6"/>',
+  down:'<path d="M12 5v14M6 13l6 6 6-6"/>',
+  cup:'<path d="M12 6.5 18.5 16h-13z" fill="currentColor" stroke="none"/>',
+  cdown:'<path d="M12 17.5 18.5 8h-13z" fill="currentColor" stroke="none"/>',
+  star:'<path d="m12 3.5 2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/>',
+  play:'<path d="M8 5.5 18.5 12 8 18.5z" fill="currentColor" stroke="none"/>'
+};
+function ic(n,cls=''){return`<svg class="ic ${cls}" viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${ICONS[n]||''}</svg>`}
 const uid=(p='')=>p+Math.random().toString(36).slice(2,8)+Date.now().toString(36).slice(-3);
 const safeColor=v=>/^#[0-9a-f]{6}$/i.test(v||'')?v:'#004AAB';
 const safeImg=v=>(typeof v==='string'&&v.length<260000&&/^data:image\/(png|jpeg|webp|gif);base64,[A-Za-z0-9+\/=]+$/.test(v))?v:'';
@@ -1403,7 +1430,7 @@ function serieView(s){
   const tools=ED()?`<div class="tools"><button class="btn sm" data-act="newChamp" data-serie="${esc(s.id)}">+ Nova categoria</button><button class="btn ghost sm" data-act="editSerie">Editar grupo</button><button class="btn danger sm" data-act="delSerie">Excluir grupo</button></div>`:'';
   const body=cs.length?`<div class="grid">${cs.map(champCard).join('')}${ED()?`<article class="cc new" data-act="newChamp" data-serie="${esc(s.id)}"><span style="font-size:34px;line-height:1">+</span>Nova categoria</article>`:''}</div>`:emptyBlock('Nenhuma categoria ainda','Cada categoria é um campeonato completo, com times, jogos e classificação próprios.',ED()?`<button class="btn red" data-act="newChamp" data-serie="${esc(s.id)}">+ Criar primeira categoria</button>`:'');
   const lv=cs.reduce((n,c)=>n+(champStatus(c).live||0),0);
-  return`<button class="back" data-act="home">← Todos os campeonatos</button><div class="cbanner">${logoBadge(s.logo,'xl',(s.name||'RC').slice(0,2).toUpperCase())}<div style="min-width:0"><h1>${esc(s.name)}</h1><div class="meta">Grupo de competições${s.season?' · '+esc(s.season):''} · ${cs.length} categoria${cs.length===1?'':'s'}${lv?` · <span class="live">${lv} ao vivo</span>`:''}</div></div></div>${tools}${body}`;
+  return`<button class="back" data-act="home">${ic('left')} Todos os campeonatos</button><div class="cbanner">${logoBadge(s.logo,'xl',(s.name||'RC').slice(0,2).toUpperCase())}<div style="min-width:0"><h1>${esc(s.name)}</h1><div class="meta">Grupo de competições${s.season?' · '+esc(s.season):''} · ${cs.length} categoria${cs.length===1?'':'s'}${lv?` · <span class="live">${lv} ao vivo</span>`:''}</div></div></div>${tools}${body}`;
 }
 
 function tabsOf(c){
@@ -1422,7 +1449,7 @@ function champView(c){
   const tools=ED()?`<div class="tools"><button class="btn ghost sm" data-act="editChamp">Editar dados e logo</button><button class="btn ghost sm" data-act="dupChamp">Duplicar como modelo</button><button class="btn ghost sm" data-act="exportChamp">Backup</button><button class="btn danger sm" data-act="delChamp">Excluir</button></div>`:'';
   const views={tabela:tabelaView,cenarios:cenariosView,jogos:jogosView,mata:mataView,stats:statsView,tv:tvTab,times:timesView};
   const sr=c.serie&&S.champs[c.serie]&&isSerie(S.champs[c.serie])?S.champs[c.serie]:null;
-  return`${sr?`<button class="back" data-act="openSerie" data-id="${esc(sr.id)}">← ${esc(sr.name)}</button>`:`<button class="back" data-act="home">← Todos os campeonatos</button>`}<div class="cbanner">${logoBadge(c.logo,'xl',(c.name||'RC').slice(0,2).toUpperCase())}<div style="min-width:0"><h1>${esc(c.name)}</h1><div class="meta">${esc(c.sport)}${c.season?' · '+esc(c.season):''} · ${FORMATS[c.format]} · <span class="st ${st.k}">${st.t}</span>${st.live?` <span class="live">${st.live} ao vivo</span>`:''}</div></div></div>${tools}<nav class="tabs">${tabs.map(([k,l])=>`<button class="${k===tab?'on':''}" data-act="tab" data-tab="${k}">${l}</button>`).join('')}</nav>${views[tab](c)}`;
+  return`${sr?`<button class="back" data-act="openSerie" data-id="${esc(sr.id)}">${ic('left')} ${esc(sr.name)}</button>`:`<button class="back" data-act="home">${ic('left')} Todos os campeonatos</button>`}<div class="cbanner">${logoBadge(c.logo,'xl',(c.name||'RC').slice(0,2).toUpperCase())}<div style="min-width:0"><h1>${esc(c.name)}</h1><div class="meta">${esc(c.sport)}${c.season?' · '+esc(c.season):''} · ${FORMATS[c.format]} · <span class="st ${st.k}">${st.t}</span>${st.live?` <span class="live">${st.live} ao vivo</span>`:''}</div></div></div>${tools}<nav class="tabs">${tabs.map(([k,l])=>`<button class="${k===tab?'on':''}" data-act="tab" data-tab="${k}">${l}</button>`).join('')}</nav>${views[tab](c)}`;
 }
 
 function tableRows(c,rows,adv,withForm,ex,kp){
@@ -1484,8 +1511,8 @@ function cenariosView(c){
       const nSim=rem.filter(g=>S.sim[g.id]).length;
       const code=t=>esc((t.short||t.name.slice(0,3)).toUpperCase());
       const projRows=proj.map((x,i)=>{const t=tmById(c,x.id),d=(posNow.get(x.id)||i+1)-(i+1);
-        return`<tr class="${adv&&i<adv?'q':''}" data-k="pj|${esc(gr)}|${esc(x.id)}"><td class="pos">${i+1}</td><td class="mv">${nSim&&d?`<span class="${d>0?'up':'dn'}">${d>0?'▲':'▼'}${Math.abs(d)}</span>`:'<span class="eq">–</span>'}</td><td class="l"><div class="tn">${badge(t,'sm')}<span class="nm">${esc(t.name)}</span></div></td><td class="pts">${x.p}</td><td>${x.j}</td><td>${x.v}</td><td>${x.e}</td><td>${x.d}</td><td>${x.sg>0?'+':''}${x.sg}</td></tr>`}).join('');
-      sim=`<div class="simhd"><div><b>Simulador</b><small>${nSim} de ${rem.length} jogo${rem.length>1?'s':''} simulado${nSim===1?'':'s'} · toque no vencedor</small><div class="simprog"><i data-w style="width:${(nSim/rem.length*100).toFixed(1)}%"></i></div></div><div class="simbtns"><button class="btn ghost sm" data-act="simFill" data-g="${esc(gr)}" data-v="h">Mandantes vencem</button><button class="btn ghost sm" data-act="simFill" data-g="${esc(gr)}" data-v="d">Tudo empate</button><button class="btn ghost sm" data-act="simFill" data-g="${esc(gr)}" data-v="a">Visitantes vencem</button><button class="btn ghost sm" data-act="simRand" data-g="${esc(gr)}" title="Sorteia um resultado para cada jogo">🎲 Sortear</button>${nSim?`<button class="btn danger sm" data-act="simClear" data-g="${esc(gr)}">Limpar</button>`:''}</div></div>${rem.map(g=>{
+        return`<tr class="${adv&&i<adv?'q':''}" data-k="pj|${esc(gr)}|${esc(x.id)}"><td class="pos">${i+1}</td><td class="mv">${nSim&&d?`<span class="${d>0?'up':'dn'}">${ic(d>0?'cup':'cdown')}${Math.abs(d)}</span>`:'<span class="eq">–</span>'}</td><td class="l"><div class="tn">${badge(t,'sm')}<span class="nm">${esc(t.name)}</span></div></td><td class="pts">${x.p}</td><td>${x.j}</td><td>${x.v}</td><td>${x.e}</td><td>${x.d}</td><td>${x.sg>0?'+':''}${x.sg}</td></tr>`}).join('');
+      sim=`<div class="simhd"><div><b>Simulador</b><small>${nSim} de ${rem.length} jogo${rem.length>1?'s':''} simulado${nSim===1?'':'s'} · toque no vencedor</small><div class="simprog"><i data-w style="width:${(nSim/rem.length*100).toFixed(1)}%"></i></div></div><div class="simbtns"><button class="btn ghost sm" data-act="simFill" data-g="${esc(gr)}" data-v="h">Mandantes vencem</button><button class="btn ghost sm" data-act="simFill" data-g="${esc(gr)}" data-v="d">Tudo empate</button><button class="btn ghost sm" data-act="simFill" data-g="${esc(gr)}" data-v="a">Visitantes vencem</button><button class="btn ghost sm" data-act="simRand" data-g="${esc(gr)}" title="Sorteia um resultado para cada jogo">${ic('dice')} Sortear</button>${nSim?`<button class="btn danger sm" data-act="simClear" data-g="${esc(gr)}">Limpar</button>`:''}</div></div>${rem.map(g=>{
         const th=tmById(c,g.home),ta=tmById(c,g.away),v=S.sim[g.id]||'';
         return`<div class="simrow ${v?'set':''}" data-k="sm|${esc(g.id)}"><div class="t r ${v==='h'?'win':v==='a'?'lose':''}"><span>${esc(th.name)}</span>${badge(th,'sm')}</div><div class="opt opt3"><button class="${v==='h'?'on':''}" data-act="sim" data-id="${esc(g.id)}" data-v="h" title="Vitória de ${esc(th.name)}" aria-label="Vitória de ${esc(th.name)}">${code(th)}</button><button class="${v==='d'?'on':''}" data-act="sim" data-id="${esc(g.id)}" data-v="d" aria-label="Empate">Empate</button><button class="${v==='a'?'on':''}" data-act="sim" data-id="${esc(g.id)}" data-v="a" title="Vitória de ${esc(ta.name)}" aria-label="Vitória de ${esc(ta.name)}">${code(ta)}</button></div><div class="t ${v==='a'?'win':v==='h'?'lose':''}">${badge(ta,'sm')}<span>${esc(ta.name)}</span></div></div>`;
       }).join('')}<div class="sep" style="margin:0;padding:10px 16px;background:var(--surf2)">Tabela projetada ${nSim?'<small class="meta" style="text-transform:none;font-family:Barlow,sans-serif;font-weight:500">setas = mudança em relação à tabela atual</small>':''}</div><div style="overflow-x:auto"><table class="proj"><thead><tr><th>#</th><th></th><th class="l">Time</th><th>P</th><th>J</th><th>V</th><th>E</th><th>D</th><th>SG</th></tr></thead><tbody>${projRows}</tbody></table></div><div class="legend"><span>Resultados simulados contam como 1 × 0 / 0 × 0 / 0 × 1. Só para projeção, nada é salvo.</span></div>`;
@@ -1642,9 +1669,9 @@ function statsView(c){
 
 function timesView(c){
   const nClubs=clubsAll().length;
-  const tools=ED()?`<div class="tools"><button class="btn red sm" data-act="clubAdd">📚 Adicionar da biblioteca${nClubs?` (${nClubs})`:''}</button><button class="btn sm" data-act="newTeam">+ Novo time</button>${c.teams.length?`<button class="btn ghost sm" data-act="clubSaveAll" title="Salva ou atualiza todas as equipes deste campeonato na biblioteca">Salvar todos na biblioteca</button>`:''}</div>`:'';
+  const tools=ED()?`<div class="tools"><button class="btn red sm" data-act="clubAdd">${ic('lib')} Adicionar da biblioteca${nClubs?` (${nClubs})`:''}</button><button class="btn sm" data-act="newTeam">+ Novo time</button>${c.teams.length?`<button class="btn ghost sm" data-act="clubSaveAll" title="Salva ou atualiza todas as equipes deste campeonato na biblioteca">Salvar todos na biblioteca</button>`:''}</div>`:'';
   if(!c.teams.length)return tools+emptyBlock('Nenhum time cadastrado',ED()&&nClubs?'Use <b>Adicionar da biblioteca</b> para trazer equipes já salvas (com logo e elenco) e só ajustar o que mudou.':'Adicione os times (com logo, se quiser) para gerar tabela e classificação.','');
-  return`${tools}<div class="tg">${c.teams.map(t=>{const lib=t.club&&isClub(S.champs[t.club]);return`<div class="tc" data-k="tm|${esc(t.id)}"><div class="top2">${badge(t,'lg')}<div><h3>${esc(t.name)}</h3><div class="meta">${c.format==='grupos'&&t.group?'Grupo '+esc(t.group)+' · ':''}${(t.players||[]).length} jogadores${lib?' · <span class="libtag">📚 na biblioteca</span>':''}</div></div></div>${(t.players||[]).length?`<ul>${t.players.slice(0,40).map(p=>`<li>${esc(p)}</li>`).join('')}</ul>`:''}${ED()?`<div class="acts"><button class="btn ghost sm" data-act="editTeam" data-id="${esc(t.id)}">Editar elenco</button><button class="btn ghost sm" data-act="clubSave" data-id="${esc(t.id)}">${lib?'Atualizar biblioteca':'Salvar na biblioteca'}</button></div>`:''}</div>`}).join('')}</div>`;
+  return`${tools}<div class="tg">${c.teams.map(t=>{const lib=t.club&&isClub(S.champs[t.club]);return`<div class="tc" data-k="tm|${esc(t.id)}"><div class="top2">${badge(t,'lg')}<div><h3>${esc(t.name)}</h3><div class="meta">${c.format==='grupos'&&t.group?'Grupo '+esc(t.group)+' · ':''}${(t.players||[]).length} jogadores${lib?' · <span class="libtag">'+ic('lib')+' na biblioteca</span>':''}</div></div></div>${(t.players||[]).length?`<ul>${t.players.slice(0,40).map(p=>`<li>${esc(p)}</li>`).join('')}</ul>`:''}${ED()?`<div class="acts"><button class="btn ghost sm" data-act="editTeam" data-id="${esc(t.id)}">Editar elenco</button><button class="btn ghost sm" data-act="clubSave" data-id="${esc(t.id)}">${lib?'Atualizar biblioteca':'Salvar na biblioteca'}</button></div>`:''}</div>`}).join('')}</div>`;
 }
 
 // ============ TRANSMISSÃO (aba + overlays OBS) ============
@@ -1736,7 +1763,7 @@ function sheetFront(c,g,cfg){
   const sr=c.serie&&S.champs[c.serie]&&isSerie(S.champs[c.serie])?S.champs[c.serie]:null;
   const meta=[lab,fmtDateLong(g),g.venue].filter(Boolean).map(esc).join(' · ');
   const LD=leaders(c);
-  const head=t=>{const{pos}=teamLine(c,t);const tags=(LD[t.id]||[]).map(x=>`<span>★ ${esc(x)}</span>`).join('');return`<div class="sh-team">${badge(t)}<h2>${esc(t.name)}</h2><div class="pos">${pos&&g.phase!=='ko'?pos+'º colocado'+(c.format==='grupos'&&t.group?' · Grupo '+esc(t.group):''):''}&nbsp;</div><div class="sh-tags">${tags}</div></div>`};
+  const head=t=>{const{pos}=teamLine(c,t);const tags=(LD[t.id]||[]).map(x=>`<span>${ic('star')} ${esc(x)}</span>`).join('');return`<div class="sh-team">${badge(t)}<h2>${esc(t.name)}</h2><div class="pos">${pos&&g.phase!=='ko'?pos+'º colocado'+(c.format==='grupos'&&t.group?' · Grupo '+esc(t.group):''):''}&nbsp;</div><div class="sh-tags">${tags}</div></div>`};
   const info=(cfg.info||'').trim();
   return`<div class="sh-head"><img src="${safeImg(c.logo)||RC_LOGO}" alt=""><div class="tx"><h1>${esc(sr?sr.name+' · ':'')}${esc(c.name)}${c.season?' · '+esc(c.season):''}</h1><div class="m">${meta}</div></div></div>
   <div class="sh-vs">${head(th)}<div class="sh-x">×</div>${head(ta)}</div>
@@ -1754,7 +1781,7 @@ function sheetVerso(c,g,cfg){
     const grs=[...new Set([th.group||'',ta.group||''])];
     out+=grs.map(gr=>{
       const rows=standings(c,gr);if(!rows.length)return'';
-      return`<div><div class="sh-sec" style="margin:0">Classificação${c.format==='grupos'&&gr?' · Grupo '+esc(gr):''}</div><table class="sh-tb"><thead><tr><th>#</th><th class="l">Time</th><th>P</th><th>J</th><th>V</th><th>E</th><th>D</th><th>GP</th><th>GC</th><th>SG</th></tr></thead><tbody>${rows.map((r,i)=>`<tr class="${r.id===h||r.id===a?'me':''}"><td>${i+1}</td><td class="l">${r.id===h||r.id===a?'► ':''}${esc((tmById(c,r.id)||{}).name)}</td><td>${r.p}</td><td>${r.j}</td><td>${r.v}</td><td>${r.e}</td><td>${r.d}</td><td>${r.gp}</td><td>${r.gc}</td><td>${r.sg>0?'+':''}${r.sg}</td></tr>`).join('')}</tbody></table></div>`;
+      return`<div><div class="sh-sec" style="margin:0">Classificação${c.format==='grupos'&&gr?' · Grupo '+esc(gr):''}</div><table class="sh-tb"><thead><tr><th>#</th><th class="l">Time</th><th>P</th><th>J</th><th>V</th><th>E</th><th>D</th><th>GP</th><th>GC</th><th>SG</th></tr></thead><tbody>${rows.map((r,i)=>`<tr class="${r.id===h||r.id===a?'me':''}"><td>${i+1}</td><td class="l">${r.id===h||r.id===a?ic('play')+' ':''}${esc((tmById(c,r.id)||{}).name)}</td><td>${r.p}</td><td>${r.j}</td><td>${r.v}</td><td>${r.e}</td><td>${r.d}</td><td>${r.gp}</td><td>${r.gc}</td><td>${r.sg>0?'+':''}${r.sg}</td></tr>`).join('')}</tbody></table></div>`;
     }).join('');
   }
   if(v.art){
@@ -1851,7 +1878,7 @@ function renderTop(){
     else if(S.canEdit)btns=`<button class="btn sm ${S.edit?'on':''}" data-act="toggleEdit">${S.edit?'Concluir edição':'Editar'}</button>${S.cloud?`<button class="btn sm" data-act="logout" title="Sair">Sair</button>`:''}`;
   }
   const dark=document.documentElement.dataset.theme==='dark';
-  t.innerHTML=`<span class="chip" title="${esc(S.syncErr||S.sync)}"><i class="dot ${ok?'':'off'}"></i>${esc(S.sync)}</span><button class="btn sm" data-act="sheetModal" title="Gerar ficha de jogo para impressão">Gerar ficha</button><button class="btn sm ${S.route&&S.route.eq?'on':''}" data-act="goClubs" title="Biblioteca de equipes">Equipes</button><button class="btn sm" data-act="theme" aria-label="Alternar modo claro e escuro" title="Alternar tema">${dark?'☀ Claro':'☾ Escuro'}</button>${btns}`;
+  t.innerHTML=`<span class="chip" title="${esc(S.syncErr||S.sync)}"><i class="dot ${ok?'':'off'}"></i>${esc(S.sync)}</span><button class="btn sm" data-act="sheetModal" title="Gerar ficha de jogo para impressão">Gerar ficha</button><button class="btn sm ${S.route&&S.route.eq?'on':''}" data-act="goClubs" title="Biblioteca de equipes">Equipes</button><button class="btn sm" data-act="theme" aria-label="Alternar modo claro e escuro" title="Alternar tema">${dark?ic('sun')+' Claro':ic('moon')+' Escuro'}</button>${btns}`;
   $('#bar').innerHTML=ED()?`<div class="editbar">Modo edição ativo · toque nos jogos, times e campeonatos para alterar</div>`:'';
 }
 function render(){
@@ -1982,7 +2009,7 @@ function teamModal(id){
   const c=cur(),t=id?tmById(c,id):null;
   const grp=c.format==='grupos'?`<label>Grupo${sel('group',c.groups.map(g=>[g,'Grupo '+g]),t?t.group:c.groups[0])}</label>`:'<span></span>';
   const clubs=clubsAll(),linked=t&&t.club&&isClub(S.champs[t.club]);
-  const pick=!t&&clubs.length?`<label class="libpick">📚 Usar equipe da biblioteca (opcional)<select id="clubpick"><option value="">— Equipe nova —</option>${clubs.map(x=>`<option value="${esc(x.id)}">${esc(x.name)}${(x.players||[]).length?` · ${x.players.length} atletas`:''}</option>`).join('')}</select></label><input type="hidden" name="club" value="">`:'';
+  const pick=!t&&clubs.length?`<label class="libpick">${ic('lib')} Usar equipe da biblioteca (opcional)<select id="clubpick"><option value="">— Equipe nova —</option>${clubs.map(x=>`<option value="${esc(x.id)}">${esc(x.name)}${(x.players||[]).length?` · ${x.players.length} atletas`:''}</option>`).join('')}</select></label><input type="hidden" name="club" value="">`:'';
   const libOpt=linked?`<label class="chk"><input type="checkbox" name="sync" checked> Atualizar também na biblioteca de Equipes</label>`:`<label class="chk"><input type="checkbox" name="tolib"> Salvar também na biblioteca de Equipes</label>`;
   const body=`${pick}${logoField(t?t.logo:'',t?(t.short||t.name.slice(0,3)).toUpperCase():'?')}
   <div class="g2"><label>Nome do time<input name="name" required maxlength="40" value="${esc(t?t.name:'')}"></label><label>Sigla (até 4 letras)<input name="short" maxlength="4" value="${esc(t?t.short:'')}" placeholder="auto"></label></div>
@@ -2137,7 +2164,7 @@ function tbModal(){
   const body=`<p class="hint" style="margin-top:0">Pontos sempre vêm primeiro. Em caso de empate, o sistema aplica os critérios marcados, de cima para baixo, até desempatar. Se ainda sobrar empate, vale a ordem manual do time (campo no cadastro) e depois a ordem alfabética.</p><div class="g2" style="gap:8px;margin-bottom:10px"><button type="button" class="btn ghost sm" data-pre="def">Padrão (vitórias, saldo, gols)</button><button type="button" class="btn ghost sm" data-pre="h2h">Confronto direto primeiro</button></div><div id="tbbox"></div>`;
   const f=formModal('Critérios de desempate',body,'Salvar',()=>{c.tiebreak=all.filter(k=>on.has(k));commit(c)});
   const box=f.querySelector('#tbbox');
-  const draw=()=>{box.innerHTML=all.map((k,i)=>`<div class="tbr ${on.has(k)?'':'off'}"><label class="chk"><input type="checkbox" data-k="${k}" ${on.has(k)?'checked':''}>${on.has(k)?`<b style="color:var(--blue)">${[...all].filter(x=>on.has(x)).indexOf(k)+1}º</b>`:''} ${esc(TB[k])}</label><span><button type="button" data-mv="-1" data-i="${i}" aria-label="Subir">↑</button> <button type="button" data-mv="1" data-i="${i}" aria-label="Descer">↓</button></span></div>`).join('')};
+  const draw=()=>{box.innerHTML=all.map((k,i)=>`<div class="tbr ${on.has(k)?'':'off'}"><label class="chk"><input type="checkbox" data-k="${k}" ${on.has(k)?'checked':''}>${on.has(k)?`<b style="color:var(--blue)">${[...all].filter(x=>on.has(x)).indexOf(k)+1}º</b>`:''} ${esc(TB[k])}</label><span><button type="button" data-mv="-1" data-i="${i}" aria-label="Subir">${ic('up')}</button> <button type="button" data-mv="1" data-i="${i}" aria-label="Descer">${ic('down')}</button></span></div>`).join('')};
   f.addEventListener('click',e=>{
     const b=e.target.closest('[data-mv]');
     if(b){const i=+b.dataset.i,j=i+(+b.dataset.mv);if(j>=0&&j<all.length){[all[i],all[j]]=[all[j],all[i]];draw()}return}
@@ -2530,7 +2557,7 @@ function histView(){
   const recs=scope.filter(r=>!f.team||hHasTeam(r,f.team));
   const acts=ED()?`<div class="acts">${all.length?'':`<button class="btn yel" data-act="histSeed">Carregar histórico 2013–2024 (do PDF)</button>`}<button class="btn red" data-act="histNew">+ Adicionar resultado</button></div>`:'';
   const first=all.length?Math.min(...all.map(r=>r.year)):null,last=all.length?Math.max(...all.map(r=>r.year)):null;
-  const head=`<button class="back" data-act="home">← Todos os campeonatos</button><section class="hero"><div><h1>Histórico</h1><p>Campeões, vices, finais e goleadores${first?` de ${first} a ${last}`:''}. Escolha a categoria e toque no nome de uma equipe para ver a campanha dela.</p></div>${acts}</section>`;
+  const head=`<button class="back" data-act="home">${ic('left')} Todos os campeonatos</button><section class="hero"><div><h1>Histórico</h1><p>Campeões, vices, finais e goleadores${first?` de ${first} a ${last}`:''}. Escolha a categoria e toque no nome de uma equipe para ver a campanha dela.</p></div>${acts}</section>`;
   if(!all.length)return head+emptyBlock('Nenhum campeonato antigo ainda',S.canEdit?'Ative o modo <b>Editar</b> e use <b>Carregar histórico 2013–2024</b> para trazer os dados do PDF dos campeões municipais, ou adicione resultados um a um.':'O histórico ainda não foi cadastrado.');
   const cnt=c=>all.filter(r=>r.cat===c).length;
   const chip=(k,v,l,on,n,cls='')=>`<button class="fchip ${cls} ${on?'on':''}" data-act="hfSet" data-k="${k}" data-v="${esc(v)}" aria-pressed="${on}">${esc(l)}${n!=null?` <small>${n}</small>`:''}</button>`;
@@ -2550,11 +2577,11 @@ function histView(){
     const scs=recs.filter(r=>(r.sc||[]).some(s=>String(s.t||'').split('/').some(n=>nk(n)===k)));
     const cl=clubByKey(k);
     const bd=cl?badge(cl,'xl'):`<span class="bd xl" style="--c:var(--blue);--t:#fff">${esc(tn.replace(/[^A-Za-zÀ-ÿ0-9]/g,'').slice(0,3).toUpperCase())}</span>`;
-    top=`<div class="tprof" data-k="tp|${esc(k)}"><div class="tprof-l">${bd}<div style="min-width:0"><small>Campanha${f.cat?' · '+esc(f.cat):''}${f.div?' · '+esc(f.div):''}</small><h2>${esc(tn)}</h2>${cl?`<button class="tagbtn" data-act="clubOpen" data-id="${esc(cl.id)}">📚 Ver na biblioteca</button>`:''}</div></div><div class="tprof-n"><div class="g"><b>${ti.length}</b><small>Títulos</small></div><div class="s"><b>${vi.length}</b><small>Vices</small></div><div><b>${ti.length+vi.length}</b><small>Finais</small></div><div><b>${scs.length}</b><small>Artilharias</small></div></div>${ti.length?`<div class="yrs"><span class="yl">🏆</span>${ti.map(r=>`<span class="yr g">${r.year}${r.div?' · '+esc(r.div):''}${f.cat?'':' · '+esc(r.cat)}</span>`).join('')}</div>`:''}${vi.length?`<div class="yrs"><span class="yl">🥈</span>${vi.map(r=>`<span class="yr">${r.year}${r.div?' · '+esc(r.div):''}${f.cat?'':' · '+esc(r.cat)}</span>`).join('')}</div>`:''}</div>`;
+    top=`<div class="tprof" data-k="tp|${esc(k)}"><div class="tprof-l">${bd}<div style="min-width:0"><small>Campanha${f.cat?' · '+esc(f.cat):''}${f.div?' · '+esc(f.div):''}</small><h2>${esc(tn)}</h2>${cl?`<button class="tagbtn" data-act="clubOpen" data-id="${esc(cl.id)}">${ic('lib')} Ver na biblioteca</button>`:''}</div></div><div class="tprof-n"><div class="g"><b>${ti.length}</b><small>Títulos</small></div><div class="s"><b>${vi.length}</b><small>Vices</small></div><div><b>${ti.length+vi.length}</b><small>Finais</small></div><div><b>${scs.length}</b><small>Artilharias</small></div></div>${ti.length?`<div class="yrs"><span class="yl">${ic('trophy','ic-g')}</span>${ti.map(r=>`<span class="yr g">${r.year}${r.div?' · '+esc(r.div):''}${f.cat?'':' · '+esc(r.cat)}</span>`).join('')}</div>`:''}${vi.length?`<div class="yrs"><span class="yl">${ic('medal','ic-s')}</span>${vi.map(r=>`<span class="yr">${r.year}${r.div?' · '+esc(r.div):''}${f.cat?'':' · '+esc(r.cat)}</span>`).join('')}</div>`:''}</div>`;
   }else if(scope.length){
     const rk=hRank(scope),yrs=new Set(scope.map(r=>r.year)).size;
     const pod=rk.slice(0,3);
-    top=`<div class="hstats"><div><b>${scope.length}</b><small>Títulos disputados</small></div><div><b>${yrs}</b><small>Temporadas</small></div><div><b>${teams.length}</b><small>Equipes finalistas</small></div></div>${pod.length?`<div class="podium">${pod.map((o,i)=>`<button class="pod p${i+1}" data-act="hfTeam" data-v="${esc(nk(o.n))}" data-k="pd|${esc(nk(o.n))}"><span class="pod-m">${['🥇','🥈','🥉'][i]}</span><b>${esc(o.n)}</b><span><b>${o.t}</b> título${o.t>1?'s':''}${o.v?` · ${o.v} vice${o.v>1?'s':''}`:''}</span></button>`).join('')}</div>`:''}`;
+    top=`<div class="hstats"><div><b>${scope.length}</b><small>Títulos disputados</small></div><div><b>${yrs}</b><small>Temporadas</small></div><div><b>${teams.length}</b><small>Equipes finalistas</small></div></div>${pod.length?`<div class="podium">${pod.map((o,i)=>`<button class="pod p${i+1}" data-act="hfTeam" data-v="${esc(nk(o.n))}" data-k="pd|${esc(nk(o.n))}"><span class="pod-m">${i+1}</span><b>${esc(o.n)}</b><span><b>${o.t}</b> título${o.t>1?'s':''}${o.v?` · ${o.v} vice${o.v>1?'s':''}`:''}</span></button>`).join('')}</div>`:''}`;
   }
   let body;
   if(!recs.length)body=emptyBlock('Nada encontrado','Mude os filtros para ver outros resultados.');
@@ -2569,7 +2596,7 @@ function histView(){
         const rows=rs.map(r=>`<tr data-act="hrec" data-id="${esc(r.id)}" data-k="ht|${esc(r.id)}"><td><b>${r.year}</b>${r.chk?'<span class="hchk" title="Ano a confirmar">confirmar</span>':''}</td>${hasDiv?`<td>${r.div?`<span class="dv ${hDivCls(r.div)}">${esc(r.div)}</span>`:''}</td>`:''}<td class="l"><b>${esc(r.champ)}</b></td><td class="l">${esc(r.vice||'—')}</td><td class="l">${hFinal(r)}</td><td class="l">${hScorers(r)}</td></tr>`).join('');
         inner=`<div style="overflow-x:auto"><table class="hist"><thead><tr><th>Ano</th>${hasDiv?'<th>Divisão</th>':''}<th class="l">Campeão</th><th class="l">Vice</th><th class="l">Final</th><th class="l">Goleador</th></tr></thead><tbody>${rows}</tbody></table></div>`;
       }else{
-        inner=`<div class="hcs">${rs.map(r=>{const sc=(r.sc||[]).filter(s=>s.p)[0];return`<article class="hc ${hDivCls(r.div)}" data-act="hrec" data-id="${esc(r.id)}" data-k="h|${esc(r.id)}"><div class="hc-y"><b>${r.year}</b>${r.div?`<span class="dv ${hDivCls(r.div)}">${esc(r.div)}</span>`:''}${r.chk?'<span class="hchk">confirmar</span>':''}</div><div class="hc-w"><span class="ic">🏆</span>${tb(r.champ,'w')}</div><div class="hc-v"><span class="ic">🥈</span>${tb(r.vice)}</div>${(x=>x?`<div class="hc-f">Final <b>${x.c} × ${x.v}</b>${x.pc!=null&&x.pv!=null?` <small>(pên. ${x.pc} × ${x.pv})</small>`:''}</div>`:'')(hCV(r))}${sc?`<div class="hc-s">⚽ ${esc(sc.p)}${sc.g!=null?` <b>${sc.g}</b>`:''}</div>`:''}</article>`}).join('')}</div>`;
+        inner=`<div class="hcs">${rs.map(r=>{const sc=(r.sc||[]).filter(s=>s.p)[0];return`<article class="hc ${hDivCls(r.div)}" data-act="hrec" data-id="${esc(r.id)}" data-k="h|${esc(r.id)}"><div class="hc-y"><b>${r.year}</b>${r.div?`<span class="dv ${hDivCls(r.div)}">${esc(r.div)}</span>`:''}${r.chk?'<span class="hchk">confirmar</span>':''}</div><div class="hc-w">${ic('trophy','ic-g')}${tb(r.champ,'w')}</div><div class="hc-v">${ic('medal','ic-s')}${tb(r.vice)}</div>${(x=>x?`<div class="hc-f">Final <b>${x.c} × ${x.v}</b>${x.pc!=null&&x.pv!=null?` <small>(pên. ${x.pc} × ${x.pv})</small>`:''}</div>`:'')(hCV(r))}${sc?`<div class="hc-s">${ic('ball')} ${esc(sc.p)}${sc.g!=null?` <b>${sc.g}</b>`:''}</div>`:''}</article>`}).join('')}</div>`;
       }
       return`<div class="card hcard"><div class="th">${esc(cat)}<small>${rs.length} registro${rs.length>1?'s':''}</small></div>${!f.team?`<div style="padding:10px 14px 0">${hRankHtml(rs)}</div>`:''}${inner}</div>`;
     }).join('');
@@ -2582,7 +2609,7 @@ function hRecModal(id){
   const li=(k,v)=>v?`<div class="sh-li" style="display:flex;justify-content:space-between;gap:12px;padding:6px 0;border-bottom:1px solid var(--line)"><span class="s">${k}</span><span style="text-align:right">${esc(v)}</span></div>`:'';
   const x=hCV(r);
   const html=`<div class="hrm"><div class="hrm-h"><b>${r.year}</b><span>${esc(hLabel(r))}</span>${r.chk?'<span class="hchk">ano a confirmar</span>':''}</div>
-  <div class="hrm-f"><div class="hrm-t w"><small>🏆 Campeão</small><b>${esc(r.champ)}</b></div><div class="hrm-sc">${x?`<span>${x.c}<i>×</i>${x.v}</span>`:'<i>×</i>'}${x&&x.pc!=null&&x.pv!=null?`<small>pên. ${x.pc} × ${x.pv}</small>`:''}</div><div class="hrm-t"><small>🥈 Vice</small><b>${esc(r.vice||'—')}</b></div></div></div>
+  <div class="hrm-f"><div class="hrm-t w"><small>${ic('trophy','ic-g')} Campeão</small><b>${esc(r.champ)}</b></div><div class="hrm-sc">${x?`<span>${x.c}<i>×</i>${x.v}</span>`:'<i>×</i>'}${x&&x.pc!=null&&x.pv!=null?`<small>pên. ${x.pc} × ${x.pv}</small>`:''}</div><div class="hrm-t"><small>${ic('medal','ic-s')} Vice</small><b>${esc(r.vice||'—')}</b></div></div></div>
   ${(r.sc||[]).filter(s=>s.p).length?li('Goleador(es)',hScorers(r,true)):''}
   ${li('Treinador destaque',ex.tr)}${li('Atleta destaque da final',ex.at)}${li('Melhor goleiro',ex.gk)}${li('Equipe disciplina',ex.di)}
   ${r.note?`<p class="hint" style="margin:10px 0 0">${esc(r.note)}</p>`:''}`;
@@ -2613,7 +2640,7 @@ function histForm(id,preset){
   <datalist id="dlC">${cats.map(c=>`<option value="${esc(c)}">`).join('')}</datalist><datalist id="dlD">${H_DIVS.map(c=>`<option value="${c}">`).join('')}</datalist>
   <div class="g3"><label>Ano<input name="year" type="number" min="1900" max="2100" required inputmode="numeric" value="${v(r.year)}"></label><label>Categoria<input name="cat" list="dlC" maxlength="30" required value="${v(r.cat)}" placeholder="Principal, Feminino…"></label><label>Divisão<input name="div" list="dlD" maxlength="20" value="${v(r.div)}" placeholder="opcional"></label></div>
   <p class="hint" id="dlhint"></p>
-  <div class="g2"><label>🏆 Campeão <small class="meta">· Time A</small><input name="champ" list="dlT" maxlength="50" value="${v(r.champ)}" autocomplete="off"></label><label>🥈 Vice-campeão <small class="meta">· Time B</small><input name="vice" list="dlT" maxlength="50" value="${v(r.vice)}" autocomplete="off"></label></div>
+  <div class="g2"><label>${ic('trophy','ic-g')} Campeão <small class="meta">· Time A</small><input name="champ" list="dlT" maxlength="50" value="${v(r.champ)}" autocomplete="off"></label><label>${ic('medal','ic-s')} Vice-campeão <small class="meta">· Time B</small><input name="vice" list="dlT" maxlength="50" value="${v(r.vice)}" autocomplete="off"></label></div>
   <div class="sh-sec" style="margin:8px 0 8px">Resultado da final <small style="opacity:.8;font-weight:500;text-transform:none">(opcional · as equipes vêm do campeão e do vice)</small></div>
   <div class="finbox"><div class="fb-t"><small>Time A</small><b id="fbA">${v(r.champ)||'Campeão'}</b></div><div class="fb-sc"><input name="fga" type="number" min="0" max="99" inputmode="numeric" aria-label="Gols do campeão" value="${v(gA)}"><span>×</span><input name="fgb" type="number" min="0" max="99" inputmode="numeric" aria-label="Gols do vice" value="${v(gB)}"></div><div class="fb-t r"><small>Time B</small><b id="fbB">${v(r.vice)||'Vice'}</b></div>
   <div class="fb-pen"><span>Pênaltis (se houve)</span><input name="fpa" type="number" min="0" max="99" inputmode="numeric" aria-label="Pênaltis do campeão" value="${v(pA)}"><span>×</span><input name="fpb" type="number" min="0" max="99" inputmode="numeric" aria-label="Pênaltis do vice" value="${v(pB)}"></div></div>
@@ -2737,22 +2764,22 @@ function clubsView(){
   const cats=[...new Set(all.flatMap(cl=>clubCatsOf(cl,hon)))].sort((a,b)=>hCatRank(a)-hCatRank(b)||a.localeCompare(b,'pt-BR'));
   if(fc&&!cats.includes(fc))S.ccat='';
   const acts=ED()?`<div class="acts"><button class="btn ghost" data-act="clubImport">Importar existentes</button><button class="btn red" data-act="clubNew">+ Nova equipe</button></div>`:'';
-  const head=`<button class="back" data-act="home">← Todos os campeonatos</button><section class="hero"><div><h1>Equipes</h1><p>Sua biblioteca de equipes: logo, cor, categorias e elenco salvos uma vez e reaproveitados em qualquer campeonato novo.${all.length?` <b>${all.length}</b> equipe${all.length>1?'s':''} salva${all.length>1?'s':''}.`:''}</p></div>${acts}</section>`;
+  const head=`<button class="back" data-act="home">${ic('left')} Todos os campeonatos</button><section class="hero"><div><h1>Equipes</h1><p>Sua biblioteca de equipes: logo, cor, categorias e elenco salvos uma vez e reaproveitados em qualquer campeonato novo.${all.length?` <b>${all.length}</b> equipe${all.length>1?'s':''} salva${all.length>1?'s':''}.`:''}</p></div>${acts}</section>`;
   if(!all.length)return head+emptyBlock('Nenhuma equipe salva',ED()?'Crie equipes aqui ou importe as que já estão nos seus campeonatos e no histórico. Depois, em qualquer campeonato, use <b>Times › Adicionar da biblioteca</b> e só ajuste o elenco.':'Ative o modo <b>Editar</b> para criar e importar equipes.',ED()?`<button class="btn red" data-act="clubImport">Importar dos campeonatos</button>`:(S.canEdit&&!S.edit?`<button class="btn" data-act="toggleEdit">Ativar modo edição</button>`:''));
   const list=all.filter(cl=>!S.ccat||clubCatsOf(cl,hon).includes(S.ccat));
   const card=cl=>{
     const h=hon.get(nk(cl.name))||{t:0,v:0},camps=clubCamps(cl).length,cs=clubCatsOf(cl,hon);
-    return`<article class="club" data-act="clubOpen" data-id="${esc(cl.id)}" data-k="cl|${esc(cl.id)}" data-q="${esc(nk(cl.name+' '+(cl.short||'')+' '+(cl.players||[]).join(' ')))}" style="--cc:${safeColor(cl.color)}"><div class="club-top">${badge(cl,'lg')}<div class="club-hd"><h3>${esc(cl.name)}</h3><div class="meta">${(cl.players||[]).length} atleta${(cl.players||[]).length===1?'':'s'}${camps?` · ${camps} campeonato${camps>1?'s':''}`:''}</div></div></div>${cs.length?`<div class="chips2">${cs.map(c=>`<span class="tag">${esc(c)}</span>`).join('')}</div>`:''}<div class="club-hon">${h.t?`<span class="hon g">🏆 <b>${h.t}</b> título${h.t>1?'s':''}</span>`:''}${h.v?`<span class="hon s">🥈 <b>${h.v}</b> vice${h.v>1?'s':''}</span>`:''}${!h.t&&!h.v?'<span class="meta">Sem finais no histórico</span>':''}</div></article>`;
+    return`<article class="club" data-act="clubOpen" data-id="${esc(cl.id)}" data-k="cl|${esc(cl.id)}" data-q="${esc(nk(cl.name+' '+(cl.short||'')+' '+(cl.players||[]).join(' ')))}" style="--cc:${safeColor(cl.color)}"><div class="club-top">${badge(cl,'lg')}<div class="club-hd"><h3>${esc(cl.name)}</h3><div class="meta">${(cl.players||[]).length} atleta${(cl.players||[]).length===1?'':'s'}${camps?` · ${camps} campeonato${camps>1?'s':''}`:''}</div></div></div>${cs.length?`<div class="chips2">${cs.map(c=>`<span class="tag">${esc(c)}</span>`).join('')}</div>`:''}<div class="club-hon">${h.t?`<span class="hon g">${ic('trophy','ic-g')} <b>${h.t}</b> título${h.t>1?'s':''}</span>`:''}${h.v?`<span class="hon s">${ic('medal','ic-s')} <b>${h.v}</b> vice${h.v>1?'s':''}</span>`:''}${!h.t&&!h.v?'<span class="meta">Sem finais no histórico</span>':''}</div></article>`;
   };
   const chips=cats.length?`<div class="chipbar"><button class="fchip ${!S.ccat?'on':''}" data-act="clubCat" data-v="">Todas <small>${all.length}</small></button>${cats.map(c=>`<button class="fchip ${S.ccat===c?'on':''}" data-act="clubCat" data-v="${esc(c)}">${esc(c)} <small>${all.filter(cl=>clubCatsOf(cl,hon).includes(c)).length}</small></button>`).join('')}</div>`:'';
-  const search=`<div class="searchbar"><span class="si" aria-hidden="true">⌕</span><input type="search" data-csearch placeholder="Buscar equipe ou atleta…" value="${esc(S.cq||'')}" aria-label="Buscar equipe ou atleta"></div>`;
+  const search=`<div class="searchbar"><span class="si" aria-hidden="true">${ic('search')}</span><input type="search" data-csearch placeholder="Buscar equipe ou atleta…" value="${esc(S.cq||'')}" aria-label="Buscar equipe ou atleta"></div>`;
   return`${head}${search}${chips}${list.length?`<div class="clubs">${list.map(card).join('')}</div><div class="empty" id="cnone" hidden>Nenhuma equipe encontrada para essa busca.</div>`:emptyBlock('Nenhuma equipe nesta categoria','','')}`;
 }
 function clubModal(id){
   const cl=S.champs[id];if(!isClub(cl))return;
   const hon=clubHonors(),k=nk(cl.name),h=hon.get(k)||{t:0,v:0,recs:[]};
   const camps=clubCamps(cl),recs=[...h.recs].sort(hCmp),cs=clubCatsOf(cl,hon);
-  const html=`<div class="cprof" style="--cc:${safeColor(cl.color)}">${badge(cl,'xl')}<div style="min-width:0"><div class="meta">${esc(cl.short||'')}${cs.length?' · '+esc(cs.join(', ')):''}</div><div class="club-hon">${h.t?`<span class="hon g">🏆 <b>${h.t}</b> título${h.t>1?'s':''}</span>`:''}${h.v?`<span class="hon s">🥈 <b>${h.v}</b> vice${h.v>1?'s':''}</span>`:''}<span class="hon">👥 <b>${(cl.players||[]).length}</b> atletas</span></div></div></div>
+  const html=`<div class="cprof" style="--cc:${safeColor(cl.color)}">${badge(cl,'xl')}<div style="min-width:0"><div class="meta">${esc(cl.short||'')}${cs.length?' · '+esc(cs.join(', ')):''}</div><div class="club-hon">${h.t?`<span class="hon g">${ic('trophy','ic-g')} <b>${h.t}</b> título${h.t>1?'s':''}</span>`:''}${h.v?`<span class="hon s">${ic('medal','ic-s')} <b>${h.v}</b> vice${h.v>1?'s':''}</span>`:''}<span class="hon">${ic('users')} <b>${(cl.players||[]).length}</b> atletas</span></div></div></div>
   ${recs.length?`<div class="sep">Finais no histórico</div><div class="tline">${recs.map(r=>{const w=nk(r.champ)===k;return`<div class="tl-i ${w?'w':''}"><b>${r.year}</b><span>${esc(hLabel(r))}</span><span class="pill ${w?'ok':''}">${w?'Campeão':'Vice'}</span></div>`}).join('')}</div>`:''}
   ${camps.length?`<div class="sep">Campeonatos no site</div><div class="chips2">${camps.map(c=>`<button class="tagbtn" data-act="clubGoCamp" data-id="${esc(c.id)}">${esc(c.name)}</button>`).join('')}</div>`:''}
   <div class="sep">Elenco <small class="meta" style="font-family:Barlow,sans-serif;text-transform:none">${(cl.players||[]).length}</small></div>${(cl.players||[]).length?`<ul class="roster">${cl.players.map(p=>`<li>${esc(p)}</li>`).join('')}</ul>`:'<p class="meta" style="margin:0">Sem atletas cadastrados.</p>'}`;
@@ -2794,7 +2821,7 @@ function wirePick(f){
   f.addEventListener('change',e=>{if(e.target.closest('.pick-row'))count()});
   count();
 }
-const pickHead=(ph,cats)=>`<div class="searchbar sm"><span class="si" aria-hidden="true">⌕</span><input type="search" data-psearch placeholder="${esc(ph)}" aria-label="${esc(ph)}"></div>${cats&&cats.length?`<div class="chipbar sm"><button type="button" class="fchip on" data-pcat="">Todas</button>${cats.map(x=>`<button type="button" class="fchip" data-pcat="${esc(x)}">${esc(x)}</button>`).join('')}</div>`:''}<div class="pick-tools"><span class="pick-count meta"></span><span class="sp"></span><button type="button" class="btn ghost sm" data-pall="1">Marcar visíveis</button><button type="button" class="btn ghost sm" data-pall="0">Desmarcar</button></div>`;
+const pickHead=(ph,cats)=>`<div class="searchbar sm"><span class="si" aria-hidden="true">${ic('search')}</span><input type="search" data-psearch placeholder="${esc(ph)}" aria-label="${esc(ph)}"></div>${cats&&cats.length?`<div class="chipbar sm"><button type="button" class="fchip on" data-pcat="">Todas</button>${cats.map(x=>`<button type="button" class="fchip" data-pcat="${esc(x)}">${esc(x)}</button>`).join('')}</div>`:''}<div class="pick-tools"><span class="pick-count meta"></span><span class="sp"></span><button type="button" class="btn ghost sm" data-pall="1">Marcar visíveis</button><button type="button" class="btn ghost sm" data-pall="0">Desmarcar</button></div>`;
 function clubImport(){
   const have=new Set(clubsAll().map(x=>nk(x.name)));
   const cand=new Map();
@@ -2872,7 +2899,7 @@ parseHash();renderTop();initStore();
   const setTopH=()=>root.style.setProperty('--top-h',top.offsetHeight+'px');
   setTopH();if(window.ResizeObserver)new ResizeObserver(setTopH).observe(top);
   const toTop=document.createElement('button');
-  toTop.className='totop';toTop.type='button';toTop.setAttribute('aria-label','Voltar ao topo');toTop.innerHTML='↑';
+  toTop.className='totop';toTop.type='button';toTop.setAttribute('aria-label','Voltar ao topo');toTop.innerHTML=ic('up');
   toTop.addEventListener('click',()=>window.scrollTo({top:0,behavior:reduced()?'auto':'smooth'}));
   document.body.appendChild(toTop);
   let ticking=false;
@@ -2977,7 +3004,8 @@ parseHash();renderTop();initStore();
     const r=S.route,changed=app.classList.contains('anim');
     const sameChamp=!!(last&&last.id&&last.id===r.id&&!r.sid&&!r.h&&!last.h&&!last.sid);
     setupTabs(prevTabs,changed&&sameChamp&&last.tab!==r.tab);
-    if(changed)enter(sameChamp);else playKeys(keys);
+    // Histórico e Equipes: filtros trocam o conteúdo sem movimento (só a cor dos chips muda)
+    if(changed)enter(sameChamp);else if(!r.h&&!r.eq)playKeys(keys);
     last={...r};
   };
 
