@@ -409,6 +409,17 @@ table.sh-tb tr.me td{font-weight:800;background:#f0f0f0}
   .pn-cols{grid-template-columns:1fr}
   .bd.xl{min-width:72px;height:72px}.bd.xl.has{width:72px}
 }
+
+.hrank{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px;align-items:center}
+.hrank .dv{font-weight:700;color:var(--acc);font-size:13px;text-transform:uppercase;margin-right:2px;min-width:52px}
+.hrank .pill{border:1px solid var(--line);background:var(--card);padding:3px 8px;font-size:13px}
+.hrank .pill b{color:var(--acc)}
+.hist .s,.hrank .s{color:var(--mut);font-size:12px}
+table.hist td{vertical-align:top}
+table.hist tr[data-act]{cursor:pointer}
+table.hist tr[data-act]:hover td{background:var(--hover)}
+.hchk{font-size:11px;font-weight:700;color:#6b5600;background:#ffe98a;padding:1px 5px;margin-left:6px;text-transform:uppercase}
+.hf{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 14px}.hf label{margin:0;min-width:150px;flex:1}
 </style>
 </head>
 <body>
@@ -882,9 +893,10 @@ const cfgOk=()=>!!(CFG.supabaseUrl&&CFG.supabaseKey&&!/COLE_AQUI/i.test(CFG.supa
 const $=s=>document.querySelector(s);
 const ED=()=>S.edit&&S.canEdit;
 const isSerie=x=>!!x&&x.kind==='serie';
-const champsAll=()=>Object.values(S.champs).filter(x=>!isSerie(x));
+const isHist=x=>!!x&&x.kind==='hist';
+const champsAll=()=>Object.values(S.champs).filter(x=>!isSerie(x)&&!isHist(x));
 const seriesAll=()=>Object.values(S.champs).filter(isSerie);
-const cur=()=>{const x=S.champs[S.route.id];return x&&!isSerie(x)?x:null};
+const cur=()=>{const x=S.champs[S.route.id];return x&&!isSerie(x)&&!isHist(x)?x:null};
 const curSerie=()=>{const x=S.champs[S.route.sid];return isSerie(x)?x:null};
 
 function persistLocal(){try{localStorage.setItem(LS_KEY,JSON.stringify(S.champs))}catch(e){}}
@@ -1044,7 +1056,7 @@ function homeView(){
   const all=champsAll(),ser=seriesAll().sort((a,b)=>(b.updatedAt||0)-(a.updatedAt||0));
   const sids=new Set(ser.map(s=>s.id));
   const solo=all.filter(c=>!c.serie||!sids.has(c.serie)).sort((a,b)=>(b.updatedAt||0)-(a.updatedAt||0));
-  const acts=ED()?`<div class="acts"><button class="btn ghost" data-act="import">Importar backup</button><button class="btn ghost" data-act="newSerie">+ Grupo de competições</button><button class="btn red" data-act="newChamp">+ Novo campeonato</button></div>`:'';
+  const acts=`<div class="acts"><button class="btn ghost" data-act="goHist">Histórico</button>${ED()?`<button class="btn ghost" data-act="import">Importar backup</button><button class="btn ghost" data-act="newSerie">+ Grupo de competições</button><button class="btn red" data-act="newChamp">+ Novo campeonato</button>`:''}</div>`;
   const local=(!S.cloud&&S.loaded)?`<div class="warn"><b>Modo local:</b> o site ainda não está ligado ao banco de dados (veja o arquivo config.js). Por enquanto, os dados ficam salvos só neste navegador.</div>`:'';
   let body;
   if(!solo.length&&!ser.length){
@@ -1411,6 +1423,7 @@ function sheetVerso(c,g,cfg){
     const hh=c.games.filter(x=>x.played&&!x.bye&&gTeams(c,x).includes(h)&&gTeams(c,x).includes(a)).sort(gCmp);
     out+=`<div><div class="sh-sec" style="margin:0">Confrontos diretos</div>${hh.length?hh.map(x=>{const[xh,xa]=gTeams(c,x);return`<div class="sh-li"><span class="n">${esc((tmById(c,xh)||{}).name)} <b>${x.hs??0} × ${x.as??0}</b> ${esc((tmById(c,xa)||{}).name)}</span><span class="s">${esc(x.phase==='ko'?koTitle(c,x):roundLabel(c,x.round))}${x.date?' · '+esc(fmtDate(x)):''}</span></div>`}).join(''):'<div class="sh-none">Sem confrontos anteriores neste campeonato.</div>'}</div>`;
   }
+  if(v.hist)out+=sheetHist(c,th,ta,cfg);
   const vi=(cfg.vinfo||'').trim();
   if(vi)out+=`<div class="sh-info" style="margin:0"><b>Anotações</b>${esc(vi)}</div>`;
   return out+'</div>';
@@ -1426,7 +1439,7 @@ function openSheet(cfg){
   const c=S.champs[cfg.cid];if(!c||isSerie(c))return;
   if(!tmById(c,cfg.a)||!tmById(c,cfg.b)||cfg.a===cfg.b)return toast('Escolha duas equipes diferentes.');
   S.sheetCfg=cfg;S.panel=null;
-  const g=sheetGameOf(c,cfg),verso=cfg.verso&&cfg.v&&(cfg.v.elenco||cfg.v.class||cfg.v.art||cfg.v.h2h||(cfg.vinfo||'').trim());
+  const g=sheetGameOf(c,cfg),verso=cfg.verso&&cfg.v&&(cfg.v.elenco||cfg.v.class||cfg.v.art||cfg.v.h2h||(cfg.v.hist&&histAll().length)||(cfg.vinfo||'').trim());
   const total=verso?2:1;
   $('#modal').innerHTML=`<div class="sheetov" id="sheetov"><div class="sheettools"><button class="btn yel" data-act="printSheet">Imprimir / Salvar PDF</button><button class="btn ghost" data-act="sheetEdit">Editar ficha</button><button class="btn ghost" data-act="close">Fechar</button><span style="font-weight:500;font-size:13px">Na janela de impressão, escolha “Salvar como PDF”, papel A4${verso?' (frente e verso: 2 páginas)':''}.</span></div>${sheetPage(c,sheetFront(c,g,cfg),1,total)}${verso?sheetPage(c,sheetVerso(c,g,cfg),2,total):''}</div>`;
   fitSheet();
@@ -1439,7 +1452,7 @@ function sheetModal(){
   if(!cs.length)return toast('Cadastre um campeonato com pelo menos 2 times para gerar fichas.');
   const prev=S.sheetCfg;
   let c0=(prev&&S.champs[prev.cid]&&!isSerie(S.champs[prev.cid])&&prev.cid)||(S.route.id&&cs.find(x=>x.id===S.route.id)&&S.route.id)||cs[0].id;
-  const cf=Object.assign({cid:c0,gid:'',a:'',b:'',date:'',time:'',venue:'',label:'',info:'',verso:false,vinfo:'',v:{elenco:true,class:true,art:true,h2h:true}},prev&&prev.cid===c0?prev:{});
+  const cf=Object.assign({cid:c0,gid:'',a:'',b:'',date:'',time:'',venue:'',label:'',info:'',verso:false,vinfo:'',v:{elenco:true,class:true,art:true,h2h:true,hist:true},hcat:''},prev&&prev.cid===c0?prev:{});
   const lab=c=>{const sr=c.serie&&S.champs[c.serie];return(sr&&isSerie(sr)?sr.name+' · ':'')+c.name};
   const body=`<label>Competição / categoria<select name="cid">${cs.map(c=>`<option value="${esc(c.id)}" ${c.id===cf.cid?'selected':''}>${esc(lab(c))}</option>`).join('')}</select></label>
   <label>Jogo cadastrado (opcional, preenche as equipes e a data)<select name="gid"></select></label>
@@ -1449,10 +1462,11 @@ function sheetModal(){
   <label>Informações adicionais (só aparece na ficha se tiver texto)<textarea name="info" rows="3" maxlength="700" placeholder="Ex.: Transmissão ao vivo às 15h. Narração: ...">${esc(cf.info)}</textarea></label>
   <label class="chk"><input type="checkbox" name="verso" ${cf.verso?'checked':''}> Incluir verso (2ª página)</label>
   <div id="vopts" style="display:${cf.verso?'block':'none'};padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;margin:4px 0 10px">
-    <div class="g2"><label class="chk"><input type="checkbox" name="v_elenco" ${cf.v.elenco?'checked':''}> Elencos</label><label class="chk"><input type="checkbox" name="v_class" ${cf.v.class?'checked':''}> Classificação</label><label class="chk"><input type="checkbox" name="v_art" ${cf.v.art?'checked':''}> Artilharia geral</label><label class="chk"><input type="checkbox" name="v_h2h" ${cf.v.h2h?'checked':''}> Confrontos diretos</label></div>
+    <div class="g2"><label class="chk"><input type="checkbox" name="v_elenco" ${cf.v.elenco?'checked':''}> Elencos</label><label class="chk"><input type="checkbox" name="v_class" ${cf.v.class?'checked':''}> Classificação</label><label class="chk"><input type="checkbox" name="v_art" ${cf.v.art?'checked':''}> Artilharia geral</label><label class="chk"><input type="checkbox" name="v_h2h" ${cf.v.h2h?'checked':''}> Confrontos diretos</label><label class="chk"><input type="checkbox" name="v_hist" ${cf.v.hist?'checked':''}> Histórico (títulos e finais)</label></div>
+    <label style="margin:8px 0 0">Categoria do histórico<select name="hcat"><option value="">Todas as categorias</option>${[...new Set(histAll().map(r=>r.cat))].sort((x,y)=>hCatRank(x)-hCatRank(y)).map(k=>`<option value="${esc(k)}" ${cf.hcat===k?'selected':''}>${esc(k)}</option>`).join('')}</select></label>
     <label style="margin:8px 0 0">Anotações do verso (só aparece se tiver texto)<textarea name="vinfo" rows="3" maxlength="900">${esc(cf.vinfo)}</textarea></label></div>`;
   const f=formModal('Gerar ficha',body,'Gerar ficha',fd=>{
-    const nc={cid:fd.get('cid'),gid:fd.get('gid')||'',a:fd.get('a'),b:fd.get('b'),date:fd.get('date')||'',time:fd.get('time')||'',venue:(fd.get('venue')||'').trim(),label:(fd.get('label')||'').trim(),info:fd.get('info')||'',verso:!!fd.get('verso'),vinfo:fd.get('vinfo')||'',v:{elenco:!!fd.get('v_elenco'),class:!!fd.get('v_class'),art:!!fd.get('v_art'),h2h:!!fd.get('v_h2h')}};
+    const nc={cid:fd.get('cid'),gid:fd.get('gid')||'',a:fd.get('a'),b:fd.get('b'),date:fd.get('date')||'',time:fd.get('time')||'',venue:(fd.get('venue')||'').trim(),label:(fd.get('label')||'').trim(),info:fd.get('info')||'',verso:!!fd.get('verso'),vinfo:fd.get('vinfo')||'',v:{elenco:!!fd.get('v_elenco'),class:!!fd.get('v_class'),art:!!fd.get('v_art'),h2h:!!fd.get('v_h2h'),hist:!!fd.get('v_hist')},hcat:fd.get('hcat')||''};
     if(!nc.a||!nc.b)return'Escolha as duas equipes.';
     if(nc.a===nc.b)return'As equipes precisam ser diferentes.';
     setTimeout(()=>openSheet(nc),0);
@@ -1505,7 +1519,8 @@ function render(){
   if(!S.loaded){app.innerHTML='<div class="loading">Carregando campeonatos…</div>';return}
   const r=S.route;
   const key=JSON.stringify(r);app.classList.toggle('anim',key!==S.lastKey);S.lastKey=key;
-  if(r.sid&&curSerie())app.innerHTML=serieView(curSerie());
+  if(r.h)app.innerHTML=histView();
+  else if(r.sid&&curSerie())app.innerHTML=serieView(curSerie());
   else if(r.sid)app.innerHTML=emptyBlock('Grupo não encontrado','Ele pode ter sido excluído.',`<button class="btn" data-act="home">Voltar ao início</button>`);
   else if(r.id&&cur())app.innerHTML=champView(cur());
   else if(r.id)app.innerHTML=emptyBlock('Campeonato não encontrado','Ele pode ter sido excluído ou você ainda não tem acesso.',`<button class="btn" data-act="home">Voltar ao início</button>`);
@@ -1517,7 +1532,7 @@ function render(){
 function parseHash(){
   const p=(location.hash||'').slice(1).split('-');
   if(p[0]==='tv'&&p[1]){S.tv={id:p[1],kind:p[2]||'tabela',arg:p[3]||''};S.route={id:null,tab:null,sid:null}}
-  else{S.tv=null;document.body.classList.remove('tv');S.route=(p[0]==='c'&&p[1])?{id:p[1],tab:p[2]||null,sid:null}:(p[0]==='s'&&p[1])?{id:null,tab:null,sid:p[1]}:{id:null,tab:null,sid:null}}
+  else{S.tv=null;document.body.classList.remove('tv');S.route=p[0]==='h'?{id:null,tab:null,sid:null,h:true}:(p[0]==='c'&&p[1])?{id:p[1],tab:p[2]||null,sid:null}:(p[0]==='s'&&p[1])?{id:null,tab:null,sid:p[1]}:{id:null,tab:null,sid:null}}
 }
 function goSerie(sid){
   S.route={id:null,tab:null,sid:sid};S.flt={r:'all',t:'all'};S.sim={};
@@ -1978,6 +1993,7 @@ document.addEventListener('change',e=>{
   const d=e.target.dataset||{};
   if(d.flt){S.flt[d.flt]=e.target.value;render()}
   else if(d.ast){S.ast=S.ast||{};S.ast[d.ast]=e.target.value;if(d.ast==='grp'){S.ast.tid=null;S.ast.gid=null}render()}
+  else if(d.hf){S.hf=S.hf||{cat:'',div:'',team:''};S.hf[d.hf]=e.target.value;if(d.hf==='cat')S.hf.div='';render()}
   else if(d.chg==='askAst'){S.askAst=e.target.checked}
 });
 document.addEventListener('input',e=>{
@@ -2008,6 +2024,236 @@ document.addEventListener('keydown',e=>{
 });
 window.addEventListener('hashchange',()=>{const o=JSON.stringify([S.route,S.tv]);parseHash();if(JSON.stringify([S.route,S.tv])!==o)render()});
 
+// ---- dados do PDF "Campeões Municipais desde 2013" (Campeonato Municipal de Futsal de Canguçu) ----
+const HIST_SEED=(()=>{
+  const out=[];let n=0;
+  const R=(year,cat,div,champ,vice,fin,sc,ex,note)=>{
+    const r={id:'hs'+String(++n).padStart(3,'0'),kind:'hist',name:'Campeonato Municipal de Futsal de Canguçu',year,cat,div:div||'',champ,vice:vice||'',
+      fin:fin?{a:fin[0],ga:fin[1],gb:fin[2],b:fin[3],pa:fin[4]??null,pb:fin[5]??null}:null,
+      sc:(sc||[]).map(s=>({p:s[0],t:s[1]||'',g:s[2]??null})),ex:ex||{},note:note||'',seed:true,createdAt:0,updatedAt:0};
+    out.push(r);return r;
+  };
+  // 2013 (só campeão)
+  R(2013,'Sub-17','', 'Canguçuense','',null,[['Hérick Ludtke','Escolinha do Neizinho']],{tr:'Mário Borges – Escolinha do Neizinho',at:'Hérick Ludtke – Escolinha do Neizinho',gk:'Talison de Castro Domingues – Canguçuense',di:'Rayo Vallecano'});
+  R(2013,'Veterano','','Trianon','',null,[['Marcelo Marques','Trianon']],{tr:'André Ramm – Rayo Vallecano',at:'Sélio Borges – Rayo Vallecano',gk:'Paulo Bergmann – Cruzeiro',di:'União Palmeiras'});
+  R(2013,'Principal','Prata','Restoio','',null,[['Felipe Porto','Napoli']],{tr:'Mauro Silveira – Nem Te Abala',at:'Alex Westfall – Restoio',gk:'Taison Michael Biehlke – Boca JN',di:'Olaria'});
+  R(2013,'Principal','Ouro','Não Bóca','',null,[['Rangel Lourençon','Gás e Cia']],{tr:'Bento Renato Schiavon – Trianon',at:'Bruno Grigoletti – Não Bóca',gk:'Oberdan Müller Peter – Trianon',di:'Rayo Vallecano'});
+  // 2014
+  R(2014,'Sub-17','','Cruzeiro','Trianon',null,[['Guilherme Vargas','Cruzeiro',8]],{tr:'Moacir Salvador – Canguçuense',gk:'Vinicius Storch – Cruzeiro (3 gols sofridos)',di:'Cruzeiro (3 amarelos)'});
+  R(2014,'Feminino','','Trianon','Cruzeiro',null,[['Josiane Ropke','Estância',8]],{tr:'Enilton Noremberg – Raio de Luz',gk:'Renata Fonseca – Trianon (7 gols sofridos)',di:'Raio de Luz (0 amarelo)'});
+  R(2014,'Veterano','','Rayo Vallecano','Casa do Estofador',null,[['Emerson Radtke','Rayo Vallecano',8]],{tr:'André Ramm – Rayo Vallecano',gk:'Andrio Aguiar (11 gols sofridos)',di:'Trianon (0 amarelo)'});
+  R(2014,'Principal','Prata','Boca Jr.','Restoio',null,[['Vilson Alex Mesquita','Restoio',20]],{tr:'Marcelo Marques – Trianon Sub-20',gk:'Cleo Blank – Restoio (16 gols sofridos)',di:'Trianon Sub-20 (8 amarelos)'});
+  R(2014,'Principal','Ouro','Não Bóca','Estrela Azul',null,[['Rafael Roloff','Atalanta',26]],{tr:'Cristian Rosa – Não Bóca',gk:'James Wolter – Estrela Azul (25 gols sofridos)',di:'Mercado Horizonte (10 amarelos / 1 vermelho)'});
+  // 2015
+  R(2015,'Feminino','','Raio de Luz','Batom',null,[['Geni Blumb','Raio de Luz',8]],{tr:'Rodrigo Weege – Batom',gk:'Luciene Ribeiro – Batom (8 gols sofridos)',di:'Raio de Luz (2 amarelos)'});
+  R(2015,'Veterano','','Chelsea','Simca',null,[['Rodrigo Weege','Chelsea',12]],{tr:'André Ramm – Rayo Vallecano',gk:'Paulo Bergmann – Chelsea (10 gols sofridos)',di:'Chelsea (1 amarelo)'});
+  R(2015,'Principal','Bronze','Barcelona','Reponte',null,[['Jader Kurz','Barcelona',16]],{tr:'Gilson Kurz – Barcelona',gk:'Adriano Bergmann – Trevo da Esperança (9 gols sofridos)',di:'Borussia (2 amarelos)'},'Subiram para a Série Prata: Barcelona e Reponte.');
+  R(2015,'Principal','Prata','Integração','Crehnor',null,[['Emilton Domingues','Integração',16]],{tr:'Eliézer Neitzke – Nem Te Abala',gk:'Vinícius Pereira – Integração (14 gols sofridos)',di:'Crehnor (5 amarelos)'},'Subiram para a Série Ouro: Integração e Crehnor.');
+  R(2015,'Principal','Ouro','Moura Veículos','Não Bóca',null,[['Leonardo Fonseca','Moura Veículos',13]],{tr:'Daymir Leal – Moura Veículos',gk:'Tardele Behling – Rayo Vallecano (11 gols sofridos)',di:'Chelsea (4 amarelos)'},'Caíram para a Série Prata: Boca Jr., Chelsea e Vila Mesko.');
+  // 2016
+  R(2016,'Feminino','','Trianon','Esportivas',null,[['Lizandra Duarte','Trianon'],['Pâmela Mota','Trianon']],{tr:'Márcio Bierhals – Esportivas',gk:'Nanashara Martins – Trianon',di:'Surreal'});
+  R(2016,'Veterano','','E.C. Moura','Rayo Vallecano',null,[['Aldair Treichel','Força Jovem']],{tr:'Jader Cunha – E.C. Moura',gk:'Daimir Leal – E.C. Moura',di:'E.C. Moura'});
+  R(2016,'Principal','Bronze','Trevo da Esperança','Tétanos',null,[['Alexandre Thurow','Trevo da Esperança']],{tr:'Cristiano Bolke – Herval II',gk:'Laércio Siefert – Trevo da Esperança',di:'Galatasaray'});
+  R(2016,'Principal','Prata','Trianon','Barcelona',null,[['Matheus Fagundes','Chelsea / Gás & Cia']],{tr:'Claiton Ferreira – Trianon/Vila Mesko',gk:'Lucas Behling – Trianon/Vila Mesko',di:'Spartak'},'Campeão listado como Trianon (Trianon/Vila Mesko).');
+  R(2016,'Principal','Ouro','Estrela Azul','Não Bóca',null,[['Éder Stiffter','Estrela Azul'],['Fábio Luis da Silva','Não Bóca']],{tr:'Renato Schiavon – Estrela Azul',gk:'James Wolter – Estrela Azul',di:'Não Bóca'});
+  // 2017
+  R(2017,'Feminino','','Borracharia VB','Esportivas',null,[['Ana Jaqueline Schellin','Esportivas']],{tr:'Alberto da Silveira – Borracharia VB',at:'Daniela Rodrigues – Borracharia VB',gk:'Daniela Rodrigues – Borracharia VB',di:'Esportivas'});
+  R(2017,'Veterano','','E.C. Moura','Parceria',null,[['Fábio Luis da Silva (Fábio Alemão)','Vila Izabel']],{tr:'Eliezer Neitzke – E.C. Moura',at:'Piero Camargo – E.C. Moura',gk:'Ivan Timm – E.C. Moura',di:'Integração'});
+  R(2017,'Principal','Bronze','Herval II','Google',null,[['Jonas Oliveira (Jonas Mergulhão)','Google']],{tr:'Cristiano Bolke – Herval II',at:'Marciano Radtke – Herval II',gk:'Richard Borges – Google',di:'União Palmeiras'},'Subiram para a Série Prata: Google e Herval II.');
+  R(2017,'Principal','Prata','Rayo Vallecano','Tétanos',null,[['Odair Ludtke','Tétanos']],{tr:'André Ramm – Rayo Vallecano',at:'Marcelo Marques – Tétanos',gk:'Ritieli Guiot – Tétanos',di:'Trevo da Esperança'},'Subiram para a Série Ouro: Tétanos e Rayo Vallecano.');
+  R(2017,'Principal','Ouro','Estrela Azul','Crehnor',null,[['Tiago Duarte (Tuchinha)','Crehnor']],{tr:'Anderson Oliveira – Restoio',at:'Maurício Dall’Agnol – Estrela Azul',gk:'Jean Pierre Oliveira – Crehnor',di:'Crehnor'},'Caíram para a Série Prata: Atalanta e Arsenal.');
+  // 2018
+  R(2018,'Feminino','','Esportivas','Borracharia VB',['Esportivas',3,2,'Borracharia VB'],[['Raquel da Silva','Borracharia VB']],{tr:'Elias Weege – Esportivas',at:'Daniela Wilke – Esportivas',gk:'Aline Dutra – Trem Bala',di:'Esportivas'});
+  R(2018,'Veterano','','Independente','Mercado Santa Izabel',['Mercado Santa Izabel',2,5,'Independente'],[['Fábio Luis da Silva (Fábio Alemão)','Mercado Santa Izabel']],{tr:'Marcelo Pellegrinotti – Independente',at:'Fernando Viola – Independente',gk:'Fernando Viola – Independente',di:'Estrada F.C.'});
+  R(2018,'Principal','Bronze','TTN','Juventus',['TTN',4,2,'Juventus'],[['Willian Kauã Silva','Sporting Resenha']],{tr:'Thiarles Bergmann – TTN',at:'Duílio Pereira – TTN',gk:'Daimir Leal – TTN',di:'Roma'},'Subiram para a Série Prata: TTN e Juventus.');
+  R(2018,'Principal','Prata','Trevo da Esperança','Google',['Google',3,3,'Trevo da Esperança',0,1],[['Fabrício Radtke','Trevo da Esperança']],{tr:'Sandro de Souza – Trevo da Esperança',at:'Fabrício Radtke – Trevo da Esperança',gk:'Taison Bohlke – Boca Jr.',di:'Atalanta'},'Subiram para a Série Ouro: Trevo da Esperança e Google.');
+  R(2018,'Principal','Ouro','Estrela Azul','ACF/Crehnor',['Estrela Azul',4,3,'ACF/Crehnor'],[['Fábio Luis da Silva (Fábio Alemão)','ACF/Crehnor']],{tr:'Bento Renato Schiavon – Estrela Azul',at:'Jardel Soares (Deco) – Estrela Azul',gk:'James Wolter – Estrela Azul',di:'Rayo Vallecano'});
+  // 2019
+  R(2019,'Feminino','','Bico Fino','Esportivas',['Bico Fino',2,2,'Esportivas',3,2],[['Lizandra Duarte','Bico Fino']],{tr:'Octávio Silva – Bico Fino',at:'Adriana Morales – Esportivas',gk:'Antonielle Blaas – Borracharia VB',di:'Esportivas'});
+  R(2019,'Veterano','','E.C. Moura','Estrada F.C.',['Estrada F.C.',2,7,'E.C. Moura'],[['Fábio Luis da Silva (Fábio Alemão)','E.C. Moura']],{tr:'Alex Morales – E.C. Moura',at:'Fábio Luis da Silva – E.C. Moura',gk:'Ivan Timm – E.C. Moura',di:'Força Jovem'});
+  R(2019,'Principal','Bronze','Sporting Resenha','Borussia',['Borussia',2,3,'Sporting Resenha'],[['Willian Kauã Silva','Sporting Resenha']],{tr:'Gilmar Silva – Borussia',at:'Taigler Bilhalva – Sporting Resenha',gk:'Everton Lucas Serpa – Sporting Resenha',di:'Milan'},'Subiram para a Série Prata: Borussia e Sporting Resenha.');
+  R(2019,'Principal','Prata','Mercado Horizonte','Herval II',['Mercado Horizonte',3,2,'Herval II'],[['Tiales Kruger','Reponte / Liverpool']],{tr:'Elias Renato Bersch – Mercado Horizonte',at:'Vinicius Kohn – Mercado Horizonte',gk:'Leonardo Siefert – Herval II',di:'Herval II'},'Subiram para a Série Ouro: Herval II e Mercado Horizonte.');
+  R(2019,'Principal','Ouro','Estrela Azul','Rayo Vallecano',['Rayo Vallecano',3,4,'Estrela Azul'],[['Diego Ludtke','Estrela Azul'],['Patrício Grutzmann','Bayern']],{tr:'Bento Renato Schiavon – Estrela Azul',at:'James Wolter – Estrela Azul',gk:'James Wolter – Estrela Azul',di:'Estrela Azul'});
+  // 2º documento "2019" do PDF (sem Feminino/Veterano) – ano a confirmar
+  const nt='Segundo documento intitulado “2019” no PDF. Confirme o ano (a contagem de edições sugere 2020 ou 2021).';
+  R(2019,'Principal','Bronze','Red Bull','Vila Mesko',['Vila Mesko',1,2,'Red Bull'],[['Vitor Ribeiro','Vila Mesko']],{at:'Alex Knabach – Red Bull',gk:'Mairon Maia – Red Bull',di:'Red Bull'},nt).chk=true;
+  R(2019,'Principal','Prata','Bayern','Sporting Resenha',['Bayern',2,1,'Sporting Resenha'],[['William Kauã Silva','Sporting Resenha']],{at:'Leandro Vahl – Bayern',gk:'Vinícius Pereira – Bayern',di:'Arsenal'},nt).chk=true;
+  R(2019,'Principal','Ouro','Não Bóca','A.C.F.',['A.C.F.',2,2,'Não Bóca',7,8],[['Roberto Adam Jr.','A.C.F.'],['Gustavo Milech','Mercado Horizonte']],{at:'Rangel Lourençon – Não Bóca',gk:'James Wolter – Estrela Azul',di:'Google'},nt).chk=true;
+  // 2022
+  R(2022,'Feminino','','Borracharia VB','Esportivas',['Borracharia VB',4,1,'Esportivas'],[['Lizandra Duarte','Borracharia VB',11],['Flávia Weirich','Valência',11]],{tr:'Viviane Bones – Borracharia VB',at:'Raquel Vargas – Borracharia VB',gk:'Antonielle Blaas – Borracharia VB',di:'Valência / Napoli / Esportivas (0 cartões)'});
+  R(2022,'Veterano','','Estrada F.C.','Independente',['Independente',4,6,'Estrada F.C.'],[['Alex Westfall','Estrada F.C.']],{tr:'Renato Fischer – Estrada F.C.',at:'Jardel Soares – Estrada F.C.',gk:'Marcelo Ribeiro – Juventus',di:'Trianon'});
+  R(2022,'Principal','Bronze','Brilhante','Real Madrid',['Real Madrid',3,5,'Brilhante'],[['Cristian Porto','Brilhante']],{tr:'Diego Quintana – Brilhante',at:'Cristian Porto – Brilhante',gk:'Dinael Nornberg – Real Madrid',di:'Spartak / GDV'},'Subiram para a Série Prata: Real Madrid e Brilhante.');
+  R(2022,'Principal','Prata','Borussia CGU','TTN',['Borussia CGU',4,1,'TTN'],[['Sérgio Nunes','Borussia CGU']],{tr:'Gilmar Silva – Borussia CGU',at:'Renan Schwochow – Borussia CGU',gk:'Rodrigo Ribeiro – Borussia CGU / Mairon Maia – Red Bull',di:'Juventus'},'Subiram para a Série Ouro: Borussia CGU e TTN.');
+  R(2022,'Principal','Ouro','Estrela Azul','Google',['Google',1,3,'Estrela Azul'],[['Roberto Adam Jr.','Google']],{tr:'Pedro S. Borges – Estrela Azul',at:'Pablo Cardoso – Estrela Azul',gk:'James Wolter – Estrela Azul',di:'Sporting Resenha'});
+  // 2023 (10ª edição)
+  R(2023,'Feminino','','Borracharia VB','Athlétic da Vila',['Borracharia VB',5,1,'Athlétic da Vila'],[['Andressa Silveira','Borracharia VB',8]],{tr:'Viviane Bones – Borracharia VB',at:'Lizandra Duarte – Borracharia VB',gk:'Antonielle Blaas – Borracharia VB (7 jogos / 2 gols)',di:'Esportivas (0 cartão / 6 jogos)'});
+  R(2023,'Veterano','','E.C. Moura','Rayo Vallecano',['E.C. Moura',2,1,'Rayo Vallecano'],[['Maurício V. Terra','E.C. Moura',7]],{tr:'Carlos Eduardo Martins – E.C. Moura',at:'Maurício V. Terra – E.C. Moura',gk:'Ivan T. Ramson – E.C. Moura (4 jogos / 7 gols)',di:'Estrada F.C. (1 cartão / 3 jogos)'});
+  R(2023,'Principal','Bronze','Bar Sem Lona','Tottenham',['Bar Sem Lona',7,5,'Tottenham'],[['Darlen Schmalfuss','Bar Sem Lona',18]],{tr:'Tiago Voigt – Bar Sem Lona',at:'Darlen Schmalfuss – Bar Sem Lona',gk:'Taison Neuenfeld – Boca Jrs (5 jogos / 7 gols)',di:'Banca Osório (1 cartão / 5 jogos)'});
+  R(2023,'Principal','Prata','Vila Mesko','Liverpool',['Vila Mesko',4,3,'Liverpool'],[['Gabriel Garcia','Liverpool',14]],{tr:'Volmir Timm – Liverpool',at:'William Kauã Silva – Vila Mesko',gk:'Patrick Kopp – Vila Mesko (11 jogos / 6 gols)',di:'Tétanos (1 cartão / 4 jogos)'});
+  R(2023,'Principal','Ouro','Sporting Resenha','Borussia CGU',['Borussia CGU',3,6,'Sporting Resenha'],[['Welber Silveira','Sporting Resenha',8]],{tr:'Leonardo Gularte – Sporting Resenha',at:'Douglas Neumann – Sporting Resenha',gk:'Richard Schneider – Google (12 jogos / 5 gols)',di:'Rayo Vallecano (3 cartões / 5 jogos)'});
+  // 2024 (11ª edição)
+  R(2024,'Principal','Ouro','Estrela Azul','Rayo Vallecano',['Estrela Azul',5,3,'Rayo Vallecano'],[['Anderson Jr.','Rayo Vallecano']],{tr:'Mauricio Fagundes – Estrela Azul',at:'Luis G. dos Santos – Estrela Azul',gk:'Rodrigo Ribeiro – Google',di:'Não Bóca'});
+  R(2024,'Principal','Prata','Red Bull','Tétanos',['Red Bull',12,1,'Tétanos'],[['Leonardo Fonseca','E.C. Moura']],{tr:'Paulo C. Reichow – Red Bull',at:'Maicon Hartwig – Red Bull',gk:'Vitor de Andrades – Red Bull',di:'Bar Sem Lona'});
+  R(2024,'Principal','Bronze','Alegrense','Tijuana',['Tijuana',3,8,'Alegrense'],[['Felipe Talawitz','Alegrense']],{tr:'Josué Isquierdo – Alegrense',at:'Wellington Santos – Alegrense',gk:'Taison Bohlke – Boca Jrs',di:'Restoio e Canguçu Velho'});
+  R(2024,'Veterano','','Gaúcho','E.C. Moura',['Gaúcho',7,3,'E.C. Moura'],[['Tiago Vieira','Gaúcho']],{tr:'Carlos E. Martins – E.C. Moura',at:'Miguel Oswald – Gaúcho',gk:'James Wolter – Estrada',di:'Barcelona'});
+  R(2024,'Feminino','','Gurias da Vila','Hawai',['Hawai',1,3,'Gurias da Vila'],[['Andressa Silveira','Gurias da Vila']],{tr:'Francine Garcia – Gurias da Vila',at:'Lilian Leitzke – Gurias da Vila',gk:'Daniele Gomes – Hawai',di:'Hawai'});
+  R(2024,'Sub-15','','Trianon','Xavante',['Trianon',5,1,'Xavante'],[['Janer Ropke','Trianon']],{tr:'Anderson Romer – Trianon',at:'Janer Ropke – Trianon',gk:'Guilherme Dietrich – Trianon',di:'Canguçuense'});
+  R(2024,'Sub-13','','Trianon','Xavante',['Xavante',0,3,'Trianon'],[['Pyetro Plamer','Trianon']],{tr:'Deiwid de Oliveira – Trianon',at:'Matheus Schellin – Trianon',gk:'Guilherme Fonseca – Trianon',di:'Canguçuense'});
+  R(2024,'Sub-11','','Trianon','Xavante',['Trianon',3,2,'Xavante'],[['Vítor Radmann','Canguçuense']],{tr:'Deiwide de Oliveira – Trianon',at:'Rafael Nunes – Trianon',gk:'Rafael Nunes – Trianon',di:'Show de Bola'});
+  R(2024,'Sub-9','','Xavante','Canguçuense',['Xavante',3,2,'Canguçuense'],[['Augusto de Oliveira','Canguçuense']],{tr:'Gilsom Morales – Xavante',at:'Vicente Dittgen – Xavante',gk:'Bernardo Megiato – Canguçuense',di:'Canguçuense'});
+  return out;
+})();
+// ============ HISTÓRICO (campeonatos antigos) ============
+const nk=s=>String(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
+const histAll=()=>Object.values(S.champs).filter(isHist);
+const H_DIVS=['Ouro','Prata','Bronze'];
+const H_CATS=['Principal','Veterano','Feminino','Sub-17','Sub-15','Sub-13','Sub-11','Sub-9'];
+const hCatRank=c=>{const i=H_CATS.indexOf(c);return i<0?50:i};
+const hDivRank=d=>{const i=H_DIVS.indexOf(d);return i<0?9:i};
+const hCmp=(a,b)=>(b.year-a.year)||(hCatRank(a.cat)-hCatRank(b.cat))||(hDivRank(a.div)-hDivRank(b.div))||String(a.cat).localeCompare(String(b.cat),'pt-BR');
+const hLabel=r=>r.cat+(r.div?' · '+r.div:'');
+function hTeams(recs){
+  const m=new Map();
+  const add=n=>{const k=nk(n);if(k&&!m.has(k))m.set(k,String(n).trim())};
+  recs.forEach(r=>{add(r.champ);add(r.vice);if(r.fin){add(r.fin.a);add(r.fin.b)}(r.sc||[]).forEach(s=>String(s.t||'').split('/').forEach(add))});
+  return[...m.entries()].sort((a,b)=>a[1].localeCompare(b[1],'pt-BR'));
+}
+const hHasTeam=(r,k)=>[r.champ,r.vice,r.fin&&r.fin.a,r.fin&&r.fin.b,...(r.sc||[]).flatMap(s=>String(s.t||'').split('/'))].some(n=>nk(n)===k);
+function hFinal(r,plain){
+  const f=r.fin;if(!f||f.ga==null||f.gb==null)return plain?'':'<span class="s">—</span>';
+  const w=nk(r.champ),a=nk(f.a)===w,b=nk(f.b)===w;
+  const pens=(f.pa!=null&&f.pb!=null)?` (pênaltis ${f.pa} × ${f.pb})`:'';
+  if(plain)return`${f.a} ${f.ga} × ${f.gb} ${f.b}${pens}`;
+  return`<span style="${a?'font-weight:800':''}">${esc(f.a)}</span> <b style="white-space:nowrap">${f.ga} × ${f.gb}</b> <span style="${b?'font-weight:800':''}">${esc(f.b)}</span>${pens?`<br><span class="s">${esc(pens.trim())}</span>`:''}`;
+}
+function hScorers(r,plain){
+  const l=(r.sc||[]).filter(s=>s.p);if(!l.length)return plain?'':'<span class="s">—</span>';
+  return l.map(s=>plain?`${s.p}${s.t?' ('+s.t+')':''}${s.g!=null?' – '+s.g+' gols':''}`:`<div>${esc(s.p)}${s.t?` <span class="s">· ${esc(s.t)}</span>`:''}${s.g!=null?` <b>(${s.g})</b>`:''}</div>`).join(plain?'; ':'');
+}
+function hRank(recs){
+  const m=new Map();
+  const add=(n,k)=>{const key=nk(n);if(!key)return;let o=m.get(key);if(!o){o={n:String(n).trim(),t:0,v:0};m.set(key,o)}o[k]++};
+  recs.forEach(r=>{add(r.champ,'t');add(r.vice,'v')});
+  return[...m.values()].filter(o=>o.t>0).sort((a,b)=>b.t-a.t||b.v-a.v||a.n.localeCompare(b.n,'pt-BR'));
+}
+function hRankHtml(recs){
+  const divs=[...new Set(recs.map(r=>r.div||''))].sort((a,b)=>hDivRank(a)-hDivRank(b));
+  return divs.map(d=>{
+    const rk=hRank(recs.filter(r=>(r.div||'')===d)).slice(0,8);
+    if(!rk.length)return'';
+    return`<div class="hrank">${d?`<span class="dv">${esc(d)}</span>`:`<span class="dv">Títulos</span>`}${rk.map(o=>`<span class="pill"><b>${o.t}×</b> ${esc(o.n)}${o.v?` <span class="s">· ${o.v} vice${o.v>1?'s':''}</span>`:''}</span>`).join('')}</div>`;
+  }).join('');
+}
+function histView(){
+  const all=histAll(),f=S.hf=S.hf||{cat:'',div:'',team:''};
+  const cats=[...new Set(all.map(r=>r.cat))].sort((a,b)=>hCatRank(a)-hCatRank(b)||a.localeCompare(b,'pt-BR'));
+  if(f.cat&&!cats.includes(f.cat))f.cat='';
+  const divs=[...new Set(all.filter(r=>!f.cat||r.cat===f.cat).map(r=>r.div).filter(Boolean))].sort((a,b)=>hDivRank(a)-hDivRank(b));
+  if(f.div&&!divs.includes(f.div))f.div='';
+  const teams=hTeams(all);
+  if(f.team&&!teams.some(t=>t[0]===f.team))f.team='';
+  const opt=(v,l,c)=>`<option value="${esc(v)}" ${v===c?'selected':''}>${esc(l)}</option>`;
+  const acts=ED()?`<div class="acts">${all.length?'':`<button class="btn yel" data-act="histSeed">Carregar histórico 2013–2024 (do PDF)</button>`}<button class="btn red" data-act="histNew">+ Adicionar resultado</button></div>`:'';
+  let recs=all.filter(r=>(!f.cat||r.cat===f.cat)&&(!f.div||r.div===f.div)&&(!f.team||hHasTeam(r,f.team)));
+  let body;
+  if(!all.length){
+    body=emptyBlock('Nenhum campeonato antigo ainda',S.canEdit?'Ative o modo <b>Editar</b> e use <b>Carregar histórico 2013–2024</b> para trazer os dados do PDF dos campeões municipais, ou adicione resultados um a um.':'O histórico ainda não foi cadastrado.');
+  }else if(!recs.length){
+    body=emptyBlock('Nada encontrado','Mude os filtros para ver outros resultados.');
+  }else{
+    const cs=[...new Set(recs.map(r=>r.cat))].sort((a,b)=>hCatRank(a)-hCatRank(b)||a.localeCompare(b,'pt-BR'));
+    body=cs.map(cat=>{
+      const rs=recs.filter(r=>r.cat===cat).sort(hCmp);
+      const hasDiv=rs.some(r=>r.div);
+      const rows=rs.map(r=>`<tr data-act="hrec" data-id="${esc(r.id)}"><td><b>${r.year}</b>${r.chk?'<span class="hchk" title="Ano a confirmar">confirmar</span>':''}</td>${hasDiv?`<td>${esc(r.div||'')}</td>`:''}<td class="l"><b>${esc(r.champ)}</b></td><td class="l">${esc(r.vice||'—')}</td><td class="l">${hFinal(r)}</td><td class="l">${hScorers(r)}</td></tr>`).join('');
+      return`<div class="card"><div class="th">${esc(cat)}<small>${rs.length} registro${rs.length>1?'s':''}</small></div><div style="padding:10px 14px 0">${hRankHtml(rs)}</div><div style="overflow-x:auto"><table class="hist"><thead><tr><th>Ano</th>${hasDiv?'<th>Divisão</th>':''}<th class="l">Campeão</th><th class="l">Vice</th><th class="l">Final</th><th class="l">Goleador</th></tr></thead><tbody>${rows}</tbody></table></div></div>`;
+    }).join('');
+  }
+  const filt=all.length?`<div class="hf"><label>Categoria<select data-hf="cat">${opt('','Todas',f.cat)}${cats.map(c=>opt(c,c,f.cat)).join('')}</select></label>${divs.length?`<label>Divisão<select data-hf="div">${opt('','Todas',f.div)}${divs.map(d=>opt(d,d,f.div)).join('')}</select></label>`:''}<label>Equipe<select data-hf="team">${opt('','Todas',f.team)}${teams.map(t=>opt(t[0],t[1],f.team)).join('')}</select></label></div>`:'';
+  const first=all.length?Math.min(...all.map(r=>r.year)):null,last=all.length?Math.max(...all.map(r=>r.year)):null;
+  return`<button class="back" data-act="home">← Todos os campeonatos</button><section class="hero"><div><h1>Histórico</h1><p>Campeões, vices, finais e goleadores de campeonatos antigos${first?` (${first}–${last})`:''}, separados por categoria. As divisões Ouro, Prata e Bronze fazem parte da mesma categoria.</p></div>${acts}</section>${filt}${body}`;
+}
+function hRecModal(id){
+  const r=S.champs[id];if(!isHist(r))return;
+  const ex=r.ex||{};
+  const li=(k,v)=>v?`<div class="sh-li" style="display:flex;justify-content:space-between;gap:12px;padding:6px 0;border-bottom:1px solid var(--line)"><span class="s">${k}</span><span style="text-align:right">${esc(v)}</span></div>`:'';
+  const html=`<div style="margin:0 0 8px"><b style="font-size:18px">${r.year} · ${esc(hLabel(r))}</b>${r.chk?'<span class="hchk">ano a confirmar</span>':''}</div>
+  ${li('Campeão',r.champ)}${li('Vice-campeão',r.vice)}${li('Resultado da final',hFinal(r,true))}
+  ${(r.sc||[]).filter(s=>s.p).length?li('Goleador(es)',hScorers(r,true)):''}
+  ${li('Treinador destaque',ex.tr)}${li('Atleta destaque da final',ex.at)}${li('Melhor goleiro',ex.gk)}${li('Equipe disciplina',ex.di)}
+  ${r.note?`<p class="hint" style="margin:10px 0 0">${esc(r.note)}</p>`:''}`;
+  infoModal(r.name||'Histórico',html,ED()?`<button class="btn" data-act="histEdit" data-id="${esc(id)}">Editar</button><button class="btn danger" data-act="histDel" data-id="${esc(id)}">Excluir</button>`:'');
+}
+function histForm(id){
+  const old=id?S.champs[id]:null;if(id&&!isHist(old))return;
+  const all=histAll(),f=S.hf||{};
+  const r=old||{year:all.length?Math.max(...all.map(x=>x.year))+1:new Date().getFullYear(),cat:f.cat||'Principal',div:f.div||'',champ:'',vice:'',fin:null,sc:[],ex:{},note:''};
+  const fn=r.fin||{},ex=r.ex||{},sc=r.sc||[];
+  const known=new Map();[...hTeams(all),...champsAll().flatMap(c=>c.teams.map(t=>[nk(t.name),t.name]))].forEach(([k,n])=>{if(k&&!known.has(k))known.set(k,n)});
+  const cats=[...new Set([...H_CATS,...all.map(x=>x.cat)])];
+  const v=x=>esc(x==null?'':x);
+  const srow=i=>{const s=sc[i]||{};return`<div class="g3"><label>${i?'Outro goleador':'Goleador'}<input name="sp${i}" maxlength="60" value="${v(s.p)}"></label><label>Equipe<input name="st${i}" list="dlT" maxlength="50" value="${v(s.t)}"></label><label>Gols<input name="sg${i}" type="number" min="0" max="200" value="${v(s.g)}"></label></div>`};
+  const body=`<datalist id="dlT">${[...known.values()].sort((a,b)=>a.localeCompare(b,'pt-BR')).map(n=>`<option value="${esc(n)}">`).join('')}</datalist>
+  <datalist id="dlC">${cats.map(c=>`<option value="${esc(c)}">`).join('')}</datalist><datalist id="dlD">${H_DIVS.map(c=>`<option value="${c}">`).join('')}</datalist>
+  <div class="g3"><label>Ano<input name="year" type="number" min="1900" max="2100" required value="${v(r.year)}"></label><label>Categoria<input name="cat" list="dlC" maxlength="30" required value="${v(r.cat)}" placeholder="Principal, Veterano, Feminino, Sub-15…"></label><label>Divisão (opcional)<input name="div" list="dlD" maxlength="20" value="${v(r.div)}" placeholder="Ouro, Prata, Bronze"></label></div>
+  <div class="g2"><label>Campeão<input name="champ" list="dlT" maxlength="50" value="${v(r.champ)}"></label><label>Vice-campeão<input name="vice" list="dlT" maxlength="50" value="${v(r.vice)}"></label></div>
+  <div class="sh-sec" style="margin:8px 0 6px">Resultado da final (opcional)</div>
+  <div class="g2"><label>Equipe A<input name="fa" list="dlT" maxlength="50" value="${v(fn.a)}"></label><label>Equipe B<input name="fb" list="dlT" maxlength="50" value="${v(fn.b)}"></label></div>
+  <div class="g2"><label>Gols A<input name="fga" type="number" min="0" max="99" value="${v(fn.ga)}"></label><label>Gols B<input name="fgb" type="number" min="0" max="99" value="${v(fn.gb)}"></label></div>
+  <div class="g2"><label>Pênaltis A (se houve)<input name="fpa" type="number" min="0" max="99" value="${v(fn.pa)}"></label><label>Pênaltis B<input name="fpb" type="number" min="0" max="99" value="${v(fn.pb)}"></label></div>
+  ${srow(0)}${srow(1)}
+  <details style="margin:4px 0 10px"><summary style="cursor:pointer;font-weight:600;color:var(--mut)">Outros prêmios (opcional)</summary>
+  <label style="margin-top:8px">Treinador destaque<input name="xtr" maxlength="80" value="${v(ex.tr)}"></label><label>Atleta destaque da final<input name="xat" maxlength="80" value="${v(ex.at)}"></label><label>Melhor goleiro<input name="xgk" maxlength="80" value="${v(ex.gk)}"></label><label>Equipe disciplina<input name="xdi" maxlength="80" value="${v(ex.di)}"></label></details>
+  <label>Observação (opcional)<input name="note" maxlength="200" value="${v(r.note)}" placeholder="Ex.: subiram para a Série Ouro…"></label>`;
+  formModal(old?'Editar resultado':'Adicionar resultado',body,'Salvar',fd=>{
+    const g=k=>String(fd.get(k)||'').trim(),ni=k=>{const t=g(k);return t===''?null:Math.max(0,Math.round(+t))};
+    const year=+g('year');
+    if(!(year>=1900&&year<=2100))return'Informe o ano.';
+    if(!g('cat'))return'Informe a categoria.';
+    let champ=g('champ'),vice=g('vice');
+    const fin=(g('fa')||g('fb')||ni('fga')!=null||ni('fgb')!=null)?{a:g('fa'),b:g('fb'),ga:ni('fga'),gb:ni('fgb'),pa:ni('fpa'),pb:ni('fpb')}:null;
+    if(fin&&(!fin.a||!fin.b))return'Para o resultado da final, informe as duas equipes.';
+    if(fin&&!champ&&fin.ga!=null&&fin.gb!=null){
+      let w=fin.ga>fin.gb?'a':fin.ga<fin.gb?'b':(fin.pa!=null&&fin.pb!=null&&fin.pa!==fin.pb?(fin.pa>fin.pb?'a':'b'):'');
+      if(w){champ=w==='a'?fin.a:fin.b;if(!vice)vice=w==='a'?fin.b:fin.a}
+    }
+    if(!champ)return'Informe o campeão (ou o resultado da final com vencedor).';
+    const scs=[0,1].map(i=>({p:g('sp'+i),t:g('st'+i),g:ni('sg'+i)})).filter(s=>s.p);
+    const rec=Object.assign(old||{id:uid('h'),kind:'hist',name:'Campeonato Municipal de Futsal de Canguçu',createdAt:Date.now()},{year,cat:g('cat'),div:g('div'),champ,vice,fin,sc:scs,ex:{tr:g('xtr'),at:g('xat'),gk:g('xgk'),di:g('xdi')},note:g('note')});
+    if(old)delete rec.chk;
+    S.champs[rec.id]=rec;commit(rec);toast('Resultado salvo no histórico.');
+  });
+}
+function histSeed(){
+  if(histAll().length)return toast('O histórico já tem dados.');
+  HIST_SEED.forEach(r=>{const x=JSON.parse(JSON.stringify(r));x.createdAt=x.updatedAt=Date.now();S.champs[x.id]=x;queueSave(x.id)});
+  render();toast(`${HIST_SEED.length} resultados carregados (2013–2024).`);
+}
+// bloco do verso da ficha
+function sheetHist(c,th,ta,cfg){
+  const all=histAll();if(!all.length)return'';
+  const cat=cfg.hcat||'';
+  const rs=all.filter(r=>!cat||r.cat===cat);
+  const kA=nk(th.name),kB=nk(ta.name);
+  const yrs=l=>l.sort(hCmp).map(r=>`${r.year}${r.div?' '+r.div:''}${cat?'':' ('+r.cat+')'}`).join(' · ');
+  const block=(t,k)=>{
+    const ti=rs.filter(r=>nk(r.champ)===k),vi=rs.filter(r=>nk(r.vice)===k);
+    const sc=rs.filter(r=>(r.sc||[]).some(s=>String(s.t||'').split('/').some(n=>nk(n)===k)));
+    if(!ti.length&&!vi.length&&!sc.length)return`<div><div class="sh-sec" style="margin:0">Histórico · ${esc(t.name)}</div><div class="sh-none">Sem registros no histórico.</div></div>`;
+    return`<div><div class="sh-sec" style="margin:0">Histórico · ${esc(t.name)}</div><div class="sh-kp" style="grid-template-columns:repeat(3,1fr)"><div><b>${ti.length}</b><small>Títulos</small></div><div><b>${vi.length}</b><small>Vices</small></div><div><b>${sc.length}</b><small>Goleadores</small></div></div>${ti.length?`<div class="sh-li"><span class="n"><b>Títulos:</b> ${esc(yrs(ti))}</span></div>`:''}${vi.length?`<div class="sh-li"><span class="n"><b>Vices:</b> ${esc(yrs(vi))}</span></div>`:''}</div>`;
+  };
+  const fin=rs.filter(r=>[nk(r.champ),nk(r.vice)].includes(kA)&&[nk(r.champ),nk(r.vice)].includes(kB)).sort(hCmp);
+  const finH=fin.length?`<div><div class="sh-sec" style="margin:0">Finais entre as duas equipes</div>${fin.map(r=>`<div class="sh-li"><span class="n">${r.year} · ${esc(hLabel(r))}: <b>${esc(r.champ)}</b> campeão</span><span class="s">${esc(hFinal(r,true))}</span></div>`).join('')}</div>`:'';
+  return block(th,kA)+block(ta,kB)+finH;
+}
+Object.assign(actions,{
+  goHist:()=>{S.route={id:null,tab:null,sid:null,h:true};try{location.hash='h'}catch(e){}render();window.scrollTo(0,0)},
+  hrec:d=>hRecModal(d.id),
+  histNew:()=>histForm(null),
+  histEdit:d=>{closeModal();histForm(d.id)},
+  histDel:d=>{const r=S.champs[d.id];if(!isHist(r))return;confirmModal(`Excluir o resultado de ${r.year} (${hLabel(r)})?`,'Excluir',()=>{S.deleting[r.id]=true;delete S.champs[r.id];queueSave(r.id);render()})},
+  histSeed,
+});
 {const bl=$('#brandlogo');if(bl)bl.src=RC_LOGO;const fv=$('#favi');if(fv)fv.href=RC_LOGO}
 parseHash();renderTop();initStore();
 </script>
